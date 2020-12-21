@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "chat.html" %}
+{% block chat %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversation Annotate</title>
-</head>
+<h1>Chat Messages</h1>
+{% for conversation in conversations %}
+<!-- {{ conversation.topic_name }}<br>
+{{ conversation.rating}}<br>
+{{ conversation.annotate_status}}<br> -->
+{% for msg in conversation.messages %}
+({{ msg.timestamp }}) {{ msg.user }} : {{ msg.message }}<br>
 
-<body>
-    {% for conversation in conversations %}
-    {{ conversation.topic_name }}<br>
-    {{ conversation.rating}}<br>
-    {{ conversation.annotate_status}}<br>
-    {{ conversation.messages}}<br>
-    {% endfor %}
-</body>
+<!-- role : {{ msg.role }}<br> -->
+{% endfor %}
+{% endfor %}
 
-</html>
+{% endblock %}

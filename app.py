@@ -21,7 +21,7 @@ mongo = PyMongo(app)
 @app.route("/get_conversations")
 # def index():
 def get_conversations():
-    """Main Page with Start Button"""
+    """Conversation History"""
     conversations = mongo.db.conversations.find()
     return render_template("conversations.html", conversations=conversations)
     # return render_template("index.html", )
