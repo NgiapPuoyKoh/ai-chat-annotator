@@ -27,6 +27,30 @@ def get_conversations():
     # return render_template("index.html", )
 
 
+@app.route("/welcome")
+def welcome():
+    """Main Page Welcome"""
+    return render_template("welcome.html")
+
+
+@app.route("/topic")
+def topic():
+    """Topic Dashboard"""
+    return render_template("topic.html")
+
+
+@app.route("/room")
+def room():
+    """Room"""
+    return render_template("room.html")
+
+
+@app.route("/chat")
+def chat():
+    """Chat"""
+    return render_template("chat.html")
+
+
 if __name__ == "__main__":
     app.run(
         host=os.environ.get("IP", "0.0.0.0"),
