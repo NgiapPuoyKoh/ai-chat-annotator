@@ -79,13 +79,32 @@ def get_conversations():
     return render_template("conversations.html", conversations=conversations)
     # return render_template("index.html", )
 
-# @app.route("/login", methods=["GET", "POST"])
-# def login():
-#     if request.method == "POST":
-#         # store username in session
-#         session["name"] = request.form.get("name")
-#         return redirect("/")
-#     return render_template("login.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    # if request.method == "POST":
+    #     # store username in session
+    #     session["name"] = request.form.get("name")
+    #     return redirect("/")
+    if request.method == "POST":
+        # check to see if user exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+        if existing_user:
+            # ensure hashed password matches user input
+            if check_password_hash(
+                    existing_user["password"], request.form.get("password")):
+                session["user"] = request.form.get("username").lower()
+                flash("Welcome, {}".format(request.form.get("username")))
+            else:
+                # invalid password match
+                flash("Incorrect Username and/or Password")
+                return redirect(url_for("login"))
+        else:
+            flash("Incorrect Username and/or Password")
+            return redirect(url_for("login"))
+
+    return render_template("login.html")
 
 
 # @app.route("/logout")
@@ -103,19 +122,19 @@ def get_conversations():
     #     return render_template("register.html", name=request.form.get("first_name", "world"))
 
 
-@app.route("/topic")
+@ app.route("/topic")
 def topic():
     """Topic Dashboard"""
     return render_template("topic.html")
 
 
-@app.route("/room")
+@ app.route("/room")
 def room():
     """Room"""
     return render_template("room.html")
 
 
-@app.route("/chat")
+@ app.route("/chat")
 def chat():
     """Chat"""
     return render_template("chat.html")
