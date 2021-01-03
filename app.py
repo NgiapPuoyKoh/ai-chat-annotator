@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -29,27 +30,48 @@ mongo = PyMongo(app)
 # message_history = {}
 
 
+# @app.route("/")
+# def index():
+#     """Main Page Welcome"""
+#     # if not session.get("name"):
+#     #     return redirect("/login")
+#     return render_template("welcome.html")
+
 @app.route("/")
-def index():
-    """Main Page Welcome"""
-    # if not session.get("name"):
-    #     return redirect("/login")
-    return render_template("welcome.html")
-
-
 @app.route("/welcome")
 def welcome():
     """Main Page Welcome"""
     return render_template("welcome.html")
 
 
-@ app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """Register User"""
+    if request.method == "POST":
+        # check if username exists
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+
+        if existing_user:
+            flash("User Name already exists")
+            return redirect(url_for("register"))
+
+        # consider adding secondary password confirmation field
+        # consider customizing the hash and slat methods
+        register = {
+            "username": request.form.get("username").lower(),
+            "password": generate_password_hash(request.form.get("password"))
+        }
+        mongo.db.users.insert_one(register)
+
+        # capture username for session
+        session["user"] = request.form.get("username").lower()
+        flash("Registration Successful")
+
     return render_template("register.html")
 
 
-@ app.route("/get_conversations")
+@app.route("/get_conversations")
 # def index():
 def get_conversations():
     """Conversation History"""
@@ -81,22 +103,49 @@ def get_conversations():
     #     return render_template("register.html", name=request.form.get("first_name", "world"))
 
 
-@ app.route("/topic")
+@app.route("/topic")
 def topic():
     """Topic Dashboard"""
     return render_template("topic.html")
 
 
-@ app.route("/room")
+@app.route("/room")
 def room():
     """Room"""
     return render_template("room.html")
 
 
-@ app.route("/chat")
+@app.route("/chat")
 def chat():
     """Chat"""
     return render_template("chat.html")
+
+
+# messages = []
+
+
+# def add_messages(username, message):
+#     """Add Messages to messages list"""
+#     now = datetime.now().strftime( %H:%M:%S")
+#     messages.append("({})) {}: {}".format(now, username, message))
+
+
+# def get_all_messages():
+#     """Get all of the messages and separate then with a 'br'"""
+#     return "br".join(messages)
+
+
+# @app.route("/<username>")
+# def user(username):
+#     """Display chat message"""
+#     return "<h1>Welcome, {0}</h1> {1}".format(username, get_all_messages())
+
+
+# @app.route("/<username>/,message>")
+# def send_message(username, message):
+#     """Create a new message and redirect back to the chat page"""
+#     add_messages(username, message)
+#     return redirect("/" + username)
 
 
 # request arguments and default values
