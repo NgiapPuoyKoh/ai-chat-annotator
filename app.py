@@ -6,7 +6,6 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
-from bson import ObjectId
 
 if os.path.exists("env.py"):
     import env
@@ -58,7 +57,7 @@ def register():
             return redirect(url_for("register"))
 
         # consider adding secondary password confirmation field
-        # consider customizing the hash and slat methods
+        # consider customizing the hash and salt methods
         register = {
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get("password"))
@@ -68,6 +67,7 @@ def register():
         # capture username for session
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful")
+        # TO DO! Redirect to another page after successful registration!
 
     return render_template("register.html")
 
@@ -128,22 +128,61 @@ def logout():
     #     return render_template("register.html", name=request.form.get("first_name", "world"))
 
 
-@ app.route("/topic")
+@app.route("/topic")
 def topic():
     """Topic Dashboard"""
-    return render_template("topic.html")
+    return render_template("topics.html")
 
 
-@ app.route("/room")
+@app.route("/gettopics")
+def gettopics():
+    """Get Topics"""
+    # get topics form database
+    topics = list(mongo.db.topics.find().sort("topic_name", 1))
+    # pass topics to template
+    return render_template("topics.html", topics=topics)
+
+
+@app.route("/room")
 def room():
     """Room"""
     return render_template("room.html")
 
 
-@ app.route("/chat")
+@app.route("/chat")
 def chat():
     """Chat"""
     return render_template("chat.html")
+
+
+@app.route("/chatroom", methods=["GET", "POST"])
+def chatroom():
+    """Chat Room"""
+
+    # initiate chat session
+    starttime = datetime.now().strftime("%H:%M:%S")
+
+    # render topics from database for selection
+    topics = list(mongo.db.topics.find().sort("topic_name", 1))
+
+    if request.method == "POST":
+        conversation = {
+            "topic_name": request.form.get("topic_name"),
+            "username": session["user"],
+            "timestamp": starttime
+        }
+
+        # initiate conversation
+        initconv = mongo.db.conversations.insert_one(conversation)
+
+        # capture conversationid
+        initconvId = initconv.inserted_id
+        print(initconvId)
+
+        flash("Conversation Initiated Pending Moderator")
+        return redirect(url_for("chatroom"))
+
+    return render_template("chatroom.html", topics=topics)
 
 
 # initial session message array display for all users to see
@@ -248,9 +287,9 @@ def add_messages(username, message):
         # Test add message to element array of conversation
         mongo.db.conversations.find_one_and_update(
             {"_id": ObjectId('6004a0152b26c9e08a93bee8')},
-            {"$push": {"msg": [{"timestamp": now,
-                                "username": username,
-                                "msgtxt": message}]
+            {"$push": {"msg": {"timestamp": now,
+                               "username": username,
+                               "msgtxt": message}
                        }})
 
         # test messages for conversation are captured in global messages array
@@ -396,13 +435,13 @@ def add_messages(username, message):
         #     return "br".join(messages)
 
 
-@ app.route("/<username>")
+@app.route("/<username>")
 def user(username):
     """Display chat message"""
     return render_template("chat.html", username=username, messages=messages)
 
 
-@ app.route("/<username>/<message>")
+@app.route("/<username>/<message>")
 def send_message(username, message):
     """Create a new message and redirect back to the chat page"""
     add_messages(username, message)
@@ -415,7 +454,8 @@ def send_message(username, message):
 #
 # @app.route("/user", methods=["GET", "POST"])
 # def user():
-#     return render_template("index.html", name=requrest.form.get("first_name", "world"))
+# return render_template("index.html", \
+# name=requrest.form.get("first_name", "world"))
 
 if __name__ == "__main__":
     app.run(

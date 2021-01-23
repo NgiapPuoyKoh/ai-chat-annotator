@@ -1,8 +1,18 @@
-// document.addEventListener('DOMContentLoaded', function () {
-//     var elems = document.querySelectorAll('.sidenav');
-//     var instances = M.Sidenav.init(elems, options);
-// });
-
-$(document).ready(function () {
-    $('.sidenav').sidenav({ edge: "right" });
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, { edge: "right" });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.tooltipped');
+    var instances = M.Tooltip.init(elems);
+});
+
+// $(document).ready(function () {
+//     $('.sidenav').sidenav({ edge: "right" });
+// });
