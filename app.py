@@ -21,6 +21,17 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
+# Do we require unable to connect to DB function
+# def mono_connect(url):
+#     try:# def monfo_connect(url):
+# reyun conn#         conn = pymongo.MongClient(url)
+#         return conn
+
+# a p   pfig[(SESSION_PERcANENTt]t= FalsoDB: %s") % e
+
+
+# conn = mongo_connect(MONGO_URI)
+
 # app.config["SESSION_PERMANENT"] = False
 # app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
@@ -155,8 +166,9 @@ def chat():
     return render_template("chat.html")
 
 
-@app.route("/chatroom", methods=["GET", "POST"])
-def chatroom():
+@app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
+@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
+def chatroom(activeconv):
     """Chat Room"""
 
     # initiate chat session
@@ -165,11 +177,16 @@ def chatroom():
     # render topics from database for selection
     topics = list(mongo.db.topics.find().sort("topic_name", 1))
 
+    if activeconv != "":
+        activeconv = mongo.db.conversations.find_one(
+            {"_id": ObjectId(activeconv)})
+
     if request.method == "POST":
         conversation = {
             "topic_name": request.form.get("topic_name"),
             "username": session["user"],
-            "timestamp": starttime
+            "timestamp": starttime,
+            "status": "pending"
         }
 
         # initiate conversation
@@ -177,12 +194,28 @@ def chatroom():
 
         # capture conversationid
         initconvId = initconv.inserted_id
-        print(initconvId)
+        # custom session variable to capture conversationid
+        # session['convId'] = initconvId
+        # print(initconvId)
+
+        # render messages from database for conversation
+        # activeconv = mongo.db.conversations.find_one({"_id": initconvId})
+
+        # print("activeconv: ")
+        # print(activeconv)
 
         flash("Conversation Initiated Pending Moderator")
-        return redirect(url_for("chatroom"))
+        return redirect(url_for("chatroom", activeconv=initconvId))
 
-    return render_template("chatroom.html", topics=topics)
+    return render_template("chatroom.html",
+                           topics=topics,
+                           activeconv=activeconv)
+
+
+@app.route("/chatlist", methods=["GET", "POST"])
+def chatlist():
+    """Chat List"""
+    return render_template("chatlist.html")
 
 
 # initial session message array display for all users to see

@@ -32,6 +32,7 @@
                     {% if session.user|lower == "admin"|lower %}
                     <li><a href="{{ url_for('gettopics') }}">Manage Topic</a></li>
                     {% endif %}
+                    <li><a href="{{ url_for('chatlist') }}">Chat List</a></li>
                     <li><a href="{{ url_for('chatroom') }}">Room</a></li>
                     <li><a href="#">Chat</a></li>
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
@@ -54,6 +55,9 @@
             <li><a href="#">Topic</a></li>
             {% if session.user|lower == "admin"|lower %}
             <li><a href="{{ url_for('gettopics') }}">Manage Topic</a></li>
+            {% endif %}
+            {% if session.user|lower == "moderator"|lower %}
+            <li><a href="{{ url_for('chatlist') }}">Chat List</a></li>
             {% endif %}
             <li><a href="{{ url_for('chatroom') }}">Room</a></li>
             <li><a href="#">Chat</a></li>
