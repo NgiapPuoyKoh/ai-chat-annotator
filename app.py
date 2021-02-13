@@ -78,7 +78,8 @@ def register():
         # capture username for session
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful")
-        # TO DO! Redirect to another page after successful registration!
+        # Redirect to profile page after successful registration
+        return redirect(url_for("profile", username=session["user"]))
 
     return render_template("register.html")
 
@@ -107,7 +108,11 @@ def login():
             if check_password_hash(
                     existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
-                flash("Welcome, {}".format(request.form.get("username")))
+                flash("Welcome, {}".format(
+                    request.form.get("username")))
+                # Redirect to profile page after successful registration
+                return redirect(url_for(
+                    "profile", username=session["user"]))
             else:
                 # invalid password match
                 flash("Incorrect Username and/or Password")
@@ -136,7 +141,15 @@ def logout():
     #     return render_template("register.html", message="Missing First Name")
 
     # if not request.form.get("first_name"):
-    #     return render_template("register.html", name=request.form.get("first_name", "world"))
+    #     return render_template("re
+
+
+@app.route("/profile/<username>", methods=["GET", "POST"])
+def profile(username):
+    # get the session user's name from the database
+    username = mongo.db.users.find_one(
+        {"username": session["user"]})["username"]
+    return render_template("profile.html", username=username)
 
 
 @app.route("/topic")
