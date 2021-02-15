@@ -240,11 +240,22 @@ def chatlist():
     # pendlist = get list of pending get_conversations
     conversations = list(
         mongo.db.conversations.find())
-
+    # display pending chats
     for conversation in conversations:
+        initconvId = conversation['_id']
+        print(str(conversation['_id']))
         timestamp = conversation['_id'].generation_time
         # if conversation.status == "pending":
         print(timestamp)
+    # button to respond to pending conversation
+    # if request.method == "POST":
+    #     mongo.db.conversations.find_one_and_update(
+    #         {"_id": conversation['_id']},
+    #         {"$set": {"status": "active",
+    #                   "moderator": session["user"]
+    #                   }})
+    #     return redirect(url_for("chatroom", activeconv=initconvId))
+
     # pass conversations to template
     return render_template("chatlist.html", conversations=conversations)
 
