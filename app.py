@@ -149,7 +149,11 @@ def profile(username):
     # get the session user's name from the database
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
-    return render_template("profile.html", username=username)
+
+    if session["user"]:
+        return render_template("profile.html", username=username)
+
+    return redirect(url_for("login"))
 
 
 @app.route("/topic")
@@ -190,6 +194,11 @@ def chatroom(activeconv):
     # render topics from database for selection
     topics = list(mongo.db.topics.find().sort("topic_name", 1))
 
+    # if active chat session active
+    # display chat messages and conversation status flash message
+    if 'convId' in session:
+        activeconv = session.get('convId')
+
     if activeconv != "":
         activeconv = mongo.db.conversations.find_one(
             {"_id": ObjectId(activeconv)})
@@ -207,12 +216,11 @@ def chatroom(activeconv):
 
         # capture conversationid
         initconvId = initconv.inserted_id
-        # custom session variable to capture conversationid
-        # session['convId'] = initconvId
-        # print(initconvId)
 
-        # render messages from database for conversation
-        # activeconv = mongo.db.conversations.find_one({"_id": initconvId})
+        # custom session variable to capture
+        # conversationid and conversation status
+        session['convId'] = str(initconvId)
+        session['convstatus'] = "pending"
 
         # print("activeconv: ")
         # print(activeconv)
@@ -229,6 +237,10 @@ def chatroom(activeconv):
 def chatlist():
     """Chat List"""
     return render_template("chatlist.html")
+
+    # pendlist = get list of pending get_conversations
+
+    # return render_template("chatlist.html", pendlist = pendlist)
 
 
 # initial session message array display for all users to see
