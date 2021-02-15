@@ -236,9 +236,17 @@ def chatroom(activeconv):
 @app.route("/chatlist", methods=["GET", "POST"])
 def chatlist():
     """Chat List"""
-    return render_template("chatlist.html")
 
     # pendlist = get list of pending get_conversations
+    conversations = list(
+        mongo.db.conversations.find())
+
+    for conversation in conversations:
+        timestamp = conversation['_id'].generation_time
+        # if conversation.status == "pending":
+        print(timestamp)
+    # pass conversations to template
+    return render_template("chatlist.html", conversations=conversations)
 
     # return render_template("chatlist.html", pendlist = pendlist)
 
@@ -493,13 +501,13 @@ def add_messages(username, message):
         #     return "br".join(messages)
 
 
-@app.route("/<username>")
+@ app.route("/<username>")
 def user(username):
     """Display chat message"""
     return render_template("chat.html", username=username, messages=messages)
 
 
-@app.route("/<username>/<message>")
+@ app.route("/<username>/<message>")
 def send_message(username, message):
     """Create a new message and redirect back to the chat page"""
     add_messages(username, message)
