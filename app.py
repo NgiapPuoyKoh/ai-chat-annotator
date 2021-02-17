@@ -233,10 +233,21 @@ def chatroom(activeconv):
                            activeconv=activeconv)
 
 
-@app.route("/chatlist", methods=["GET", "POST"])
-def chatlist():
+@app.route("/chatlist", defaults={"activeconv": ""}, methods=["GET", "POST"])
+@app.route("/chatlist/<activeconv>", methods=["GET", "POST"])
+def chatlist(activeconv):
     """Chat List"""
 
+    # if active chat session active
+    # display chat messages and conversation status flash message
+    # if 'convId' in session:
+    #     activeconv = session.get('convId')
+
+    # display chat messages for active conversation
+    # return redirect(url_for("chatlist", activeconv=activeconv))
+
+    # else:
+    # if request.method == "POST":
     # pendlist = get list of pending get_conversations
     conversations = list(
         mongo.db.conversations.find())
@@ -247,19 +258,40 @@ def chatlist():
         timestamp = conversation['_id'].generation_time
         # if conversation.status == "pending":
         print(timestamp)
-    # button to respond to pending conversation
-    # if request.method == "POST":
-    #     mongo.db.conversations.find_one_and_update(
-    #         {"_id": conversation['_id']},
-    #         {"$set": {"status": "active",
-    #                   "moderator": session["user"]
-    #                   }})
-    #     return redirect(url_for("chatroom", activeconv=initconvId))
 
-    # pass conversations to template
-    return render_template("chatlist.html", conversations=conversations)
+    # response button function to respond to pending conversation
+    # update status and add moderator
+
+    if activeconv != "":
+
+        activeconv = mongo.db.conversations.find_one(
+            {"_id": ObjectId(activeconv)})
+        print(activeconv)
+
+        if activeconv["status"] == "pending":
+            mongo.db.conversations.find_one_and_update(
+                {"_id": ObjectId(activeconv["_id"])},
+                {"$set": {"moderator": session["user"], "status": 'active'}})
+
+            flash("Moderator Responded")
+            # custom session variable to capture
+            # conversationid and conversation status
+            session['convId'] = str(initconvId)
+            session['convstatus'] = "active"
+
+    return render_template(
+        "chatlist.html", activeconv=activeconv, conversations=conversations)
 
     # return render_template("chatlist.html", pendlist = pendlist)
+
+    # @app.route("/respond_chat/<convId>", methods=["GET", "POST"])
+    # def respond_chat(convId):
+    #     conversation = mongo.db.conversations.find_one(
+    #         {"_id": ObjectId(convId)})
+
+    #     topics = mongo.db.conversations.find().sort("topic_name", 1)
+    #     return render_template(
+    #         "respond_chat.html", conversation=conversation, topics=topics)
 
 
 # initial session message array display for all users to see
