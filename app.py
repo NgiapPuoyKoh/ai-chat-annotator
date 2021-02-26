@@ -71,12 +71,13 @@ def register():
         # consider customizing the hash and salt methods
         register = {
             "username": request.form.get("username").lower(),
-            "password": generate_password_hash(request.form.get("password"))
-        }
+            "password": generate_password_hash(request.form.get("password")),
+            "roletype": "user"}
         mongo.db.users.insert_one(register)
 
         # capture username for session
         session["user"] = request.form.get("username").lower()
+        session["roletype"] = 'user'
         flash("Registration Successful")
         # Redirect to profile page after successful registration
         return redirect(url_for("profile", username=session["user"]))
@@ -110,6 +111,12 @@ def login():
                 session["user"] = request.form.get("username").lower()
                 flash("Welcome, {}".format(
                     request.form.get("username")))
+                # set session variables
+                session["roletype"] = existing_user["roletype"]
+                print("Login")
+                print(existing_user["roletype"])
+                print(session.get("activeconv"))
+
                 # Redirect to profile page after successful registration
                 return redirect(url_for(
                     "profile", username=session["user"]))
@@ -177,10 +184,10 @@ def room():
     return render_template("room.html")
 
 
-@app.route("/chat")
-def chat():
-    """Chat"""
-    return render_template("chat.html")
+# @app.route("/chat")
+# def chat():
+#     """Chat"""
+#     return render_template("chat.html")
 
 
 @app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
@@ -196,8 +203,8 @@ def chatroom(activeconv):
 
     # if active chat session active
     # display chat messages and conversation status flash message
-    if 'convId' in session:
-        activeconv = session.get('convId')
+    # if 'convId' in session:
+    #     activeconv = session.get('convId')
 
     if activeconv != "":
         activeconv = mongo.db.conversations.find_one(
@@ -219,14 +226,16 @@ def chatroom(activeconv):
 
         # custom session variable to capture
         # conversationid and conversation status
-        session['convId'] = str(initconvId)
-        session['convstatus'] = "pending"
+        session['activeconv'] = str(initconvId)
+        session['convstatus'] = "active"
+
+        activeconv = initconvId
 
         # print("activeconv: ")
         # print(activeconv)
 
         flash("Conversation Initiated Pending Moderator")
-        return redirect(url_for("chatroom", activeconv=initconvId))
+        return redirect(url_for("chat", activeconv=activeconv))
 
     return render_template("chatroom.html",
                            topics=topics,
@@ -249,24 +258,34 @@ def chatlist(activeconv):
     # else:
     # if request.method == "POST":
     # pendlist = get list of pending get_conversations
+
+    # set session[roletype] for moderator
+    # mod = mongo.db.users.find_one(
+    # {"username": session["user"]})
+    # print(mod["roletype"])
+    # session["roletype"] = mod["roletype"]
+
     conversations = list(
         mongo.db.conversations.find())
     # display pending chats
     for conversation in conversations:
         initconvId = conversation['_id']
-        print(str(conversation['_id']))
+        # print(str(conversation['_id']))
         timestamp = conversation['_id'].generation_time
         # if conversation.status == "pending":
-        print(timestamp)
+        # print(timestamp)
 
     # response button function to respond to pending conversation
     # update status and add moderator
 
+    print("Review Chat List")
+
     if activeconv != "":
+        print("Review Chat List")
+        # print("session["activeconv"])
 
         activeconv = mongo.db.conversations.find_one(
             {"_id": ObjectId(activeconv)})
-        print(activeconv)
 
         if activeconv["status"] == "pending":
             mongo.db.conversations.find_one_and_update(
@@ -276,24 +295,74 @@ def chatlist(activeconv):
             flash("Moderator Responded")
             # custom session variable to capture
             # conversationid and conversation status
-            session['convId'] = str(initconvId)
+            session['activeconv'] = str(initconvId)
             session['convstatus'] = "active"
+            session['roletype'] = "moderator"
+            # activeconvid = initconvId
+            # print(activeconvid)
+            return redirect(url_for(
+                "chat", activeconv=activeconv))
 
     return render_template(
         "chatlist.html", activeconv=activeconv, conversations=conversations)
 
     # return render_template("chatlist.html", pendlist = pendlist)
 
-    # @app.route("/respond_chat/<convId>", methods=["GET", "POST"])
-    # def respond_chat(convId):
-    #     conversation = mongo.db.conversations.find_one(
-    #         {"_id": ObjectId(convId)})
 
-    #     topics = mongo.db.conversations.find().sort("topic_name", 1)
+@app.route("/chat", defaults={"activeconv": ""}, methods=["GET", "POST"])
+@app.route("/chat/<activeconv>", methods=["GET", "POST"])
+def chat(activeconv):
+    """ Chat conversation """
+    print("Enter Chat")
+    print(session.get("activeconv"))
+
+    if activeconv != "":
+        print("Display Active Chat")
+        if session["roletype"] == "user" and session['convstatus'] == "active":
+            print(session['activeconv'])
+            print(session['roletype'])
+            print(session['convstatus'])
+            return render_template(
+                "chat.html", activeconv=activeconv)
+        elif (session["roletype"] == "moderator") and (
+                session['convstatus'] == "active"):
+            return render_template(
+                "chat.html", activeconv=activeconv)
+    else:
+        # if session["roletype"] == "moderator":
+        #     print("Display moderator Active Chat")
+        #     flash("Active Chat")
+        #     print(session['activeconv'])
+        #     return render_template(
+        #         "chat.html", activeconv=activeconv)
+        # else:
+        if session["roletype"] == "moderator":
+            print("no active chat redirect to chatlist")
+            flash("No Active Chat")
+            return redirect(url_for("chatlist"))
+        # elif session["roletype"] == "user":
+            # print("Display Active Chat")
+            # print(session['activeconv'])
+            # return render_template(
+            #     "chat.html", activeconv=activeconv)
+            # else:
+            # flash("No Active Chat")
+            # return redirect(url_for("chatroom"))
+
+    # if session.get("activeconv") == activeconv:
+    #     flash("Active Chat")
+    #     print(session['activeconv'])
     #     return render_template(
-    #         "respond_chat.html", conversation=conversation, topics=topics)
+    #         "chat.html", activeconv=activeconv)
 
 
+# @app.route("/respond_chat/<convId>", methods=["GET", "POST"])
+# def respond_chat(convId):
+#     conversation = mongo.db.conversations.find_one(
+#         {"_id": ObjectId(convId)})
+#     topics = mongo.db.conversations.find().sort("topic_name", 1)
+#     return render_template(
+#         "respond_chat.html", conversation=conversation, topics=topics)
 # initial session message array display for all users to see
 # need to refactor as private messages between user/moderator
 messages = []
@@ -544,17 +613,17 @@ def add_messages(username, message):
         #     return "br".join(messages)
 
 
-@ app.route("/<username>")
-def user(username):
-    """Display chat message"""
-    return render_template("chat.html", username=username, messages=messages)
+# @ app.route("/<username>")
+# def user(username):
+#     """Display chat message"""
+#     return render_template("chat.html", username=username, messages=messages)
 
 
-@ app.route("/<username>/<message>")
-def send_message(username, message):
-    """Create a new message and redirect back to the chat page"""
-    add_messages(username, message)
-    return redirect("/" + username)
+# @ app.route("/<username>/<message>")
+# def send_message(username, message):
+#     """Create a new message and redirect back to the chat page"""
+#     add_messages(username, message)
+#     return redirect("/" + username)
 
 
 # request arguments and default values
