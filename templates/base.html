@@ -32,12 +32,18 @@
                     <li><a href="{{ url_for('gettopics') }}">Manage Topic</a></li>
                     {% endif %}
                     {% if session.roletype|lower == "moderator"|lower %}
+                    {% if 'activeconv' not in session %}
                     <li><a href="{{ url_for('chatlist') }}">Chat List</a></li>
                     {% endif %}
+                    {% endif %}
                     {% if session.roletype|lower == "user"|lower %}
+                    {% if 'activeconv' not in session %}
                     <li><a href="{{ url_for('chatroom') }}">Room</a></li>
                     {% endif %}
-                    <li><a href="{{ url_for('chat') }}">Active Chat</a></li>
+                    {% endif %}
+                    {% if 'activeconv' in session %}
+                    <li><a href="{{ url_for('chat', activeconv=session['activeconv']) }}">Active Chat</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                     {% else %}
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
@@ -59,12 +65,18 @@
             <li><a href="{{ url_for('gettopics') }}">Manage Topic</a></li>
             {% endif %}
             {% if session.roletype|lower == "moderator"|lower %}
+            {% if 'activeconv' not in session %}
             <li><a href="{{ url_for('chatlist') }}">Chat List</a></li>
             {% endif %}
+            {% endif %}
             {% if session.roletype|lower == "user"|lower %}
+            {% if 'activeconv' not in session %}
             <li><a href="{{ url_for('chatroom') }}">Room</a></li>
             {% endif %}
-            <li><a href="{{ url_for('chat') }}">Active Chat</a></li>
+            {% endif %}
+            {% if 'activeconv' in session %}
+            <li><a href="{{ url_for('chat', activeconv=session['activeconv']) }}">Active Chat</a></li>
+            {% endif %}
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
             {% else %}
             <li><a href="{{ url_for('login') }}">Log In</a></li>
