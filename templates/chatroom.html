@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h1>{{activeconv}}</h1>
 <h3 class="center-align">Chat Room</h3>
 
 <div class="row card-panel grey lighten-5">
@@ -25,7 +26,7 @@
                 Start Chat <i class="far fa-comments"></i>
             </button>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <ul class="collection with-header">
                 <li class="collection-header">
                     <h4>Chat</h4>
@@ -37,7 +38,7 @@
                 </li>
                 {% endif %}
             </ul>
-        </div>
+        </div> -->
     </form>
 </div>
 {% endblock %}
