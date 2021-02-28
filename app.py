@@ -296,6 +296,7 @@ def chatlist(activeconv):
             # custom session variable to capture
             # conversationid and conversation status
             session['activeconv'] = str(initconvId)
+            # session['activeconv'] = activeconv["_id"]
             session['convstatus'] = "active"
             session['roletype'] = "moderator"
             # activeconvid = initconvId
@@ -314,18 +315,59 @@ def chatlist(activeconv):
 def chat(activeconv):
     """ Chat conversation """
     print("Enter Chat")
-    print(session.get("activeconv"))
+    # print(session["activeconv"])
+
+    # capture text messages and update conversation
+    if request.method == "POST":
+        print("Send Message")
+        print(session["activeconv"])
+
+        msgtime = datetime.now().strftime("%H:%M:%S")
+
+        # msg = [{
+        #     "timestamp": now,
+        #     "username": username,
+        #     "msgtxt": msgtxt
+        # }]
+
+        print(session["activeconv"])
+        print(session["user"])
+        print(request.form.get("msgtxt"))
+
+        mongo.db.conversations.find_one_and_update(
+            {"_id": ObjectId(session["activeconv"])},
+            {"$push": {"msg": {"timestamp": msgtime,
+                               "username": session["user"],
+                               "msgtxt": request.form.get("msgtxt")}}})
+
+        # # pass to chat template for rendering
+        activeconvinfo = mongo.db.conversations.find_one(
+            {"_id": ObjectId(session["activeconv"])})
+        print(activeconvinfo["_id"])
+
+        activeconv = session["activeconv"]
+
+        flash("Message Sent")
+        return redirect(url_for("chat", activeconv=activeconv))
 
     if activeconv != "":
         print("Display Active Chat")
+        # print(activconv)
+
         if session["roletype"] == "user" and session['convstatus'] == "active":
             print(session['activeconv'])
             print(session['roletype'])
             print(session['convstatus'])
+            # pass to chat template for rendering
+            activeconv = mongo.db.conversations.find_one(
+                {"_id": ObjectId(session["activeconv"])})
             return render_template(
                 "chat.html", activeconv=activeconv)
         elif (session["roletype"] == "moderator") and (
                 session['convstatus'] == "active"):
+            # pass to chat template for rendering
+            activeconv = mongo.db.conversations.find_one(
+                {"_id": ObjectId(session["activeconv"])})
             return render_template(
                 "chat.html", activeconv=activeconv)
     else:
@@ -349,6 +391,8 @@ def chat(activeconv):
             # flash("No Active Chat")
             # return redirect(url_for("chatroom"))
 
+        # return render_template(
+        #     "chat.html", activeconv=activeconv)
     # if session.get("activeconv") == activeconv:
     #     flash("Active Chat")
     #     print(session['activeconv'])
@@ -525,7 +569,8 @@ def add_messages(username, message):
         #                  "msgtxt": message})
 
         # print(messages_dict_add)
-        print("currentcoverid prior to find one and update to add message to conversation")
+        print("currentcoverid prior to find one " +
+              "and update to add message to conversation")
         print(currentconverid)
 
         mongo.db.conversations.find_one_and_update(
