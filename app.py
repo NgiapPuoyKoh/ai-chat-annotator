@@ -49,10 +49,19 @@ mongo = PyMongo(app)
 #     return render_template("welcome.html")
 
 @app.route("/")
-@app.route("/welcome")
-def welcome():
+@app.route("/features")
+def features():
     """Main Page Welcome"""
-    return render_template("welcome.html")
+    return render_template("features.html")
+
+
+@app.route("/getfeatures")
+def getfeatures():
+    """Get Features"""
+    # get features from database
+    features = list(mongo.db.features.find().sort("feature_name", 1))
+    # pass featurs to template
+    return render_template("features.html", features=features)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -319,36 +328,48 @@ def chat(activeconv):
 
     # capture text messages and update conversation
     if request.method == "POST":
-        print("Send Message")
-        print(session["activeconv"])
+        if request.form['submit_button'] == 'Send':
+            print("Send Message")
+            print(session["activeconv"])
 
-        msgtime = datetime.now().strftime("%H:%M:%S")
+            msgtime = datetime.now().strftime("%H:%M:%S")
 
-        # msg = [{
-        #     "timestamp": now,
-        #     "username": username,
-        #     "msgtxt": msgtxt
-        # }]
+            # msg = [{
+            #     "timestamp": now,
+            #     "username": username,
+            #     "msgtxt": msgtxt
+            # }]
 
-        print(session["activeconv"])
-        print(session["user"])
-        print(request.form.get("msgtxt"))
+            print(session["activeconv"])
+            print(session["user"])
+            print(request.form.get("msgtxt"))
 
-        mongo.db.conversations.find_one_and_update(
-            {"_id": ObjectId(session["activeconv"])},
-            {"$push": {"msg": {"timestamp": msgtime,
-                               "username": session["user"],
-                               "msgtxt": request.form.get("msgtxt")}}})
+            mongo.db.conversations.find_one_and_update(
+                {"_id": ObjectId(session["activeconv"])},
+                {"$push": {"msg": {"timestamp": msgtime,
+                                   "username": session["user"],
+                                   "msgtxt": request.form.get("msgtxt")}}})
 
-        # # pass to chat template for rendering
-        activeconvinfo = mongo.db.conversations.find_one(
-            {"_id": ObjectId(session["activeconv"])})
-        print(activeconvinfo["_id"])
+            # # pass to chat template for rendering
+            activeconvinfo = mongo.db.conversations.find_one(
+                {"_id": ObjectId(session["activeconv"])})
+            print(activeconvinfo["_id"])
 
-        activeconv = session["activeconv"]
+            activeconv = session["activeconv"]
 
-        flash("Message Sent")
-        return redirect(url_for("chat", activeconv=activeconv))
+            flash("Message Sent")
+            return redirect(url_for("chat", activeconv=activeconv))
+        elif request.form['submit_button'] == 'End':
+            flash("End Conversation")
+            mongo.db.conversations.find_one_and_update(
+                {"_id": ObjectId(session["activeconv"])},
+                {"$set": {"status": "done"}})
+            # pop session info
+            # session.pop('activeconv', None)
+            if session["roletype"] == "moderator":
+                return redirect(url_for("chatlist"))
+            else:
+                return redirect(url_for("chatroom"))
 
     if activeconv != "":
         print("Display Active Chat")
