@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>{{ activeconv }}</h1>
-<h2>{{ activeconv['timestamp'] }}</h2>
+<!-- <h1>{{ activeconv }}</h1> -->
+<!-- <h2>{{ activeconv['timestamp'] }}</h2> -->
 
 
 <h3 class="light-blue-text text-darken-4 center-align">Active Chat</h3>
@@ -19,7 +19,7 @@
                     [{{ activeconv.timestamp}}]: ({{ activeconv.topic_name }})
                     {{ activeconv.username }}<br>
                     {% for msg in activeconv.msg %}
-                    [{{msg.timestamp}}}]: ({{ msg.username }}) {{msg.msgtxt}}<br>
+                    [{{msg.timestamp}}]: ({{ msg.username }}) {{msg.msgtxt}}<br>
                     {% endfor %}
                 </li>
                 {% endif %}
@@ -31,21 +31,45 @@
                 <textarea id="msgtxt" name="msgtxt" class="materialize-textarea" data-length="120"></textarea>
                 <label for="msgtxt">Message</label>
             </div>
+            <!-- <div class="input-field col s1">
+                <a href="{{ url_for('chat') }}" class=" anchors"><i class="fas fa-sync"></i></a>
+            </div> -->
         </div>
         <!-- Submit message -->
         <div class="row">
-            <button type="submit" class="col s12 btn-large light-blue text-darken-4 tooltipped" data-position="right"
+            <button type="submit" name="submit_button" value="Send"
+                class="col s12 btn-large light-blue text-darken-4 tooltipped" data-position="right"
                 data-tooltip="Send Message">
                 Send <i class="fas fa-share-square"></i>
             </button>
         </div>
+        <!-- Done -->
+        <div class="row">
+            <button type="submit" name="submit_button" value="End"
+                class="col s12 btn-large light-blue text-darken-4 tooltipped" data-position="right"
+                data-tooltip="End Conversation">
+                End <i class="far fa-window-close"></i>
+            </button>
+        </div>
     </form>
 </div>
+{% endblock %}
 
-<!-- Long Polling -->
-<!-- <script> -->
-<!-- let timer = setTimeOut(function () { -->
-<!-- location.reload(); -->
-<!-- }, 5000) -->
-<!-- </script> -->
+{% block scripts %}
+<!-- Reuse code from flask chat mini project CI -->
+<script>
+    let msgtxt = document.getElementById("msgtxt")
+    let timer = setTimeout(function () {
+        location.reload();
+    }, 5000)
+
+    msgtxt.onkeydown = function (e) {
+
+        clearTimeout(timer)
+
+        timer = setTimeout(function () {
+            location.reload();
+        }, 8000)
+    }
+</script>
 {% endblock %}
