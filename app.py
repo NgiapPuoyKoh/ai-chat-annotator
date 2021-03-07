@@ -49,8 +49,8 @@ mongo = PyMongo(app)
 #     return render_template("welcome.html")
 
 @app.route("/")
-@app.route("/welcome")
-def welcome():
+@app.route("/features")
+def features():
     """Main Features Page"""
     return redirect(url_for("getfeatures"))
 
@@ -394,8 +394,8 @@ def chat(activeconv):
                 session['convstatus'] == "active"):
             activeconv = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
-            # if conversation status is done pop session info
             if activeconv["status"] == 'done':
+                # if conversation status is done pop session info
                 session.pop('activeconv', None)
                 return redirect(url_for("chatlist"))
             return render_template(
