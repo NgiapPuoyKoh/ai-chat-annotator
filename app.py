@@ -49,10 +49,10 @@ mongo = PyMongo(app)
 #     return render_template("welcome.html")
 
 @app.route("/")
-@app.route("/features")
-def features():
-    """Main Page Welcome"""
-    return render_template("features.html")
+@app.route("/welcome")
+def welcome():
+    """Main Features Page"""
+    return redirect(url_for("getfeatures"))
 
 
 @app.route("/getfeatures")
@@ -350,10 +350,12 @@ def chat(activeconv):
                                    "username": session["user"],
                                    "msgtxt": request.form.get("msgtxt")}}})
 
-            # # pass to chat template for rendering
+            # pass to chat template for rendering
             activeconvinfo = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
             print(activeconvinfo["_id"])
+
+            # session.pop('activeconv', None)
 
             activeconv = session["activeconv"]
 
@@ -365,7 +367,7 @@ def chat(activeconv):
                 {"_id": ObjectId(session["activeconv"])},
                 {"$set": {"status": "done"}})
             # pop session info
-            # session.pop('activeconv', None)
+            session.pop('activeconv', None)
             if session["roletype"] == "moderator":
                 return redirect(url_for("chatlist"))
             else:
@@ -382,13 +384,20 @@ def chat(activeconv):
             # pass to chat template for rendering
             activeconv = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
+            if activeconv["status"] == 'done':
+                # if conversation status is done pop session info
+                session.pop('activeconv', None)
+                return redirect(url_for("chatroom"))
             return render_template(
                 "chat.html", activeconv=activeconv)
         elif (session["roletype"] == "moderator") and (
                 session['convstatus'] == "active"):
-            # pass to chat template for rendering
             activeconv = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
+            # if conversation status is done pop session info
+            if activeconv["status"] == 'done':
+                session.pop('activeconv', None)
+                return redirect(url_for("chatlist"))
             return render_template(
                 "chat.html", activeconv=activeconv)
     else:
