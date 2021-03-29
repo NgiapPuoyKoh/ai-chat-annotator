@@ -44,11 +44,15 @@
                     {% if 'activeconv' in session %}
                     <li><a href="{{ url_for('chat', activeconv=session['activeconv']) }}">Active Chat</a></li>
                     {% endif %}
+                    {% if session.roletype|lower == "annotator"|lower %}
+                    <li><a href="{{ url_for('annotatechats') }}">Annotate Chats</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                     {% else %}
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
                     <li><a href="{{ url_for('register') }}">Register</a></li>
                     {% endif %}
+        
                 </ul>
             </div>
         </nav>
@@ -76,6 +80,9 @@
             {% endif %}
             {% if 'activeconv' in session %}
             <li><a href="{{ url_for('chat', activeconv=session['activeconv']) }}">Active Chat</a></li>
+            {% endif %}
+            {% if session.roletype|lower == "annotator"|lower %}
+            <li><a href="{{ url_for('annotatechats') }}">Annotate Chat</a></li>
             {% endif %}
             <li><a href="{{ url_for('logout') }}">Log Out</a></li>
             {% else %}
