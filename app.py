@@ -330,6 +330,58 @@ def chat(activeconv):
             return redirect(url_for("chatlist"))
 
 
+@app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
+@app.route("/annotatechats/<convid>", methods=["GET", "POST"])
+def annotatechats(convid):
+
+    # render ratings from database for selection
+    ratings = list(mongo.db.ratings.find().sort("rating", 1))
+
+    """Get Completed Chats"""
+    # get conversations from database
+    conversations = list(mongo.db.conversations.find().sort("topic_name", 1))
+    # pass conversation to template
+    if session["roletype"] == "annotator":
+
+        if convid == "":
+            print("List Conversations for Annotation")
+            return render_template("annotatechats.html",
+                                   conversations=conversations,
+                                   ratings=ratings)
+        else:
+            # capture rating when button pressed
+            if request.method == "POST":
+                print("POST Triggered")
+                print("before:" + convid)
+                if request.form['update_button'] == 'Update':
+                    selected_rating = request.form.get("rating_name")
+                    print("after:" + convid)
+                    print("Rating selected: " + selected_rating)
+                    print("Update Conversation")
+                    flash("Conversation Annotated")
+
+                    print("before update:" + convid)
+                    mongo.db.conversations.find_one_and_update(
+                        {"_id": ObjectId(convid)},
+                        {"$set": {"status": "annotated",
+                                  "rating": request.form.get("rating_name")
+                                  }})
+
+                    # mongo.db.conversations.find_one_and_update(
+                    #     {"_id": ObjectId(convid)},
+                    #     {"$set": {"rating": request.form.get("rating_name")}})
+
+                    # mongo.db.conversations.find_one_and_update(
+                    #     {"_id": activeconv},
+                    #     {"$set": {"status": 'annotated',
+                    #         "rating": request.form.get("rating_name")
+                    #     }}
+                    # )
+               # activeconv = ""
+                # if session["roletype"] == "annotator":
+                return redirect(url_for("annotatechats"))
+
+
 if __name__ == "__main__":
     app.run(
         host=os.environ.get("IP", "0.0.0.0"),
