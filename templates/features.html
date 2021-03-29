@@ -1,12 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h3 class="light-blue-text text-darken-4 center-align">Welcome to Chat Annotator</h3>
+<h3 class="light-blue-text text-darken-4 center-align">Chat Annotator Features</h3>
 
 <div class="row">
     {% for feature in features %}
     <div class="col s12 m4">
-        <div class="card light-blue darken-4 text-shadow center-align">
+        <div class="card medium light-blue darken-4 text-shadow center-align">
+            <div class="card-title activator white-text">
+              <span class="card-image">{{ feature.feature_name }}<i class="fas fa-ellipsis-v right"></i></span>
+              <!-- <img class="activator" src="images/office.jpg"> -->
+            </div>
+            <div class="card-content white-text">
+              <span class="card-title activator">{{ feature.feature_description }}</span>
+              <!-- <p><a href="#">This is a link</a></p> -->
+            </div>
+            <div class="card-reveal">
+              {% for instruction in feature.feature_instructions %}
+              <span class="card-title">{{ instruction }}</span><br>
+              {% endfor %}
+                <!-- <span class="card-title">{{ feature.feature_instructions }}</span> -->
+                <!-- <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span> -->
+              <!-- <p>Here is some more information about this product that is only revealed once clicked on.</p> -->
+            </div>
+          </div>
+        <!-- <div class="card light-blue darken-4 text-shadow center-align">
             <div class="card-content white-text">
                 <span class="card-title">{{ feature.feature_name }}</span>
             </div>
@@ -14,7 +32,7 @@
                 <a href="#" class="btn green accent-4">Select</a>
                 <a href="#" class="btn light-blue lighten-1">Info</a>
             </div>
-        </div>
+        </div> -->
     </div>
     {% endfor %}
 </div>
