@@ -12,6 +12,11 @@ if os.path.exists("env.py"):
 
 # from flask_session import Session
 
+# see data in thedatabase
+# @app.cli.command('db_seed')
+# def db_seed():
+
+
 # __name__ of the current file as a Flask instance
 app = Flask(__name__)
 
