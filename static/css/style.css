@@ -3,22 +3,27 @@
 } */
 
 .text-shadow {
-    text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .flashes h4 {
-    line-height: 2;
+  line-height: 2;
 }
 
 .btn-small {
-    margin: 5px;
+  margin: 5px;
 }
 
 .collapsible-header .col strong {
-    margin: 5px;
-    line-height: 42px;
+  margin: 5px;
+  line-height: 42px;
 }
 
 .brand-logo {
-    margin-left: 25px
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.card {
+  padding: 25px;
 }

@@ -382,6 +382,15 @@ def annotatechats(convid):
                 return redirect(url_for("annotatechats"))
 
 
+@app.route("/delchat/<delconvid>")
+def delchat(delconvid):
+    print("delete conversation")
+    print(delconvid)
+    mongo.db.conversations.remove({"_id": ObjectId(delconvid)})
+    flash("Conversation Sucessfully Deleted")
+    return redirect(url_for("annotatechats"))
+
+
 if __name__ == "__main__":
     app.run(
         host=os.environ.get("IP", "0.0.0.0"),
