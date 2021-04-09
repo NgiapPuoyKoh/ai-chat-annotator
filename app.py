@@ -391,6 +391,34 @@ def delchat(delconvid):
     return redirect(url_for("annotatechats"))
 
 
+# Custom Error Handling
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+
+# testing 500
+# @app.route('/')
+# def index():
+#     return 1/0
+
+
+@app.errorhandler(500)
+def internal_server(error):
+    return render_template('500.html'), 500
+
+
+# testing 405
+# @app.route('/', methods=["POST"]))
+# def index():
+#     return "Successful POST request"
+# if postman sends a get request it will invoke the 045 error
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return render_template('405.html'), 405
+
+
 if __name__ == "__main__":
     app.run(
         host=os.environ.get("IP", "0.0.0.0"),
