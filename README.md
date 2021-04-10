@@ -20,9 +20,9 @@ A chat application with conversation data prep to feed into an AI model (not inc
 - Chat Application will include feature description with instructions, self-service, user account creation, user role and access administration
 - MongoDB database schema is API ready for JASON extract for external AI modeling
 
-# Database Schema - Chat Annotator
+# Database Model - Chat Annotator
 
-## Collections
+## Flexible Schema - Collections
 
 | Collection    | Description                                                                  | Usage                                                                                                                |
 | ------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -31,3 +31,116 @@ A chat application with conversation data prep to feed into an AI model (not inc
 | Topics        | Category tag for a conversation                                              | User selects the topic to classify a conversation at initiation                                                      |
 | Ratings       | Rate the Quality of conversation                                             | Annotator review and rate the quality of the conversation for training chat-bots                                     |
 | Users         | Chat application user role type                                              | Access to application functions are granted based on the user's assigned role type                                   |
+
+## Document Structure
+
+### Embedded Data
+
+#### Conversations
+
+```
+{conversations:{
+    _id:,
+    topic_name:
+    username:
+    timestamp:
+    moderator:
+    status:
+    msg:[
+       {
+         timestamp:
+         username:
+         msgtxt:
+       },
+       {....
+       },
+       ....
+    ]
+```
+
+##### Conversation Embedded Sub-document for messages
+
+| Collection Sub-document | Data Stucture | Elements                                  |
+| ----------------------- | ------------- | ----------------------------------------- |
+| conversations.msg       | array.object  | ("timestamp", "username", "message text") |
+
+#### Features
+
+```
+features:{
+  _id:
+  feature_name:
+  feature_description:
+  feature_instructions:
+}
+```
+
+##### Features Embedded Sub-document for instructions
+
+| Feature              | Sub-Document | Elements |
+| -------------------- | ------------ | -------- |
+| feature_instructions | array.object | [#]      |
+
+### Single Document
+
+#### Users
+
+```
+users:{
+    _id:,
+    password:
+    roletype:
+}
+```
+
+#### Topics
+
+```
+topics:{
+  _id:,
+  topic_name
+}
+```
+
+#### Ratings
+
+```
+ratings:{
+  _id:,
+  rating_name
+}
+```
+
+### References Relaionship
+
+| Collection Name.Collection Element | Reference Collection.Element |
+| ---------------------------------- | ---------------------------- |
+| conversations.topic_name           | topics.topic_name            |
+| conversations.username             | users.\_id                   |
+| conversations.moderator            | users.\_id                   |
+| conversations.status               | users.\_id                   |
+| conversations.msg.username         | users.\_id                   |
+
+### Collection Element List of Values
+
+```
+Note: Collections created and seeded manually utilizing CRUD Operations via MongoDB Atlas
+```
+
+#### Conversation Status Indicator
+
+| Indicator Name      | Indicator Values              |
+| ------------------- | ----------------------------- |
+| Conversation Status | ("pending", "active", "done") |
+
+#### Rating
+
+| Rating Name | Rating Values                         |
+| ----------- | ------------------------------------- |
+| Rating      | ("Excellent", "Satisfactory", "Poor") |
+
+#### User Role Type
+
+| User Role Type | Roles                                       |
+| -------------- | ------------------------------------------- |
+| roletype       | ("moderator", "user", "annotator", "admin") |
