@@ -150,6 +150,19 @@ def gettopics():
     return render_template("topics.html", topics=topics)
 
 
+@app.route("/add_topic", methods=["GET", "POST"])
+def add_topic():
+    if request.method == "POST":
+        topic = {
+            "topic_name": request.form.get("topic_name")
+        }
+        mongo.db.topics.insert_one(topic)
+        flash("New Topic Added")
+        return redirect(url_for("gettopics"))
+
+    return render_template("add_topic.html")
+
+
 @app.route("/room")
 def room():
     """Room"""
