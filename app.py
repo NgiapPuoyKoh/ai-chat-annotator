@@ -31,11 +31,11 @@ mongo = PyMongo(app)
 @app.route("/features")
 def features():
     """Main Features Page"""
-    return redirect(url_for("getfeatures"))
+    return redirect(url_for("get_features"))
 
 
-@app.route("/getfeatures")
-def getfeatures():
+@app.route("/get_features")
+def get_features():
     """Get Features"""
     # get features from database
     features = list(mongo.db.features.find().sort("feature_name", 1))
@@ -141,8 +141,8 @@ def topic():
     return render_template("topics.html")
 
 
-@app.route("/gettopics")
-def gettopics():
+@app.route("/get_topics")
+def get_topics():
     """Get Topics"""
     # get topics form database
     topics = list(mongo.db.topics.find().sort("topic_name", 1))
@@ -158,19 +158,33 @@ def add_topic():
         }
         mongo.db.topics.insert_one(topic)
         flash("New Topic Added")
-        return redirect(url_for("gettopics"))
+        return redirect(url_for("get_topics"))
 
     return render_template("add_topic.html")
 
 
-@app.route("/room")
+@app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])
+def edit_topic(topic_id):
+    if request.method == "POST":
+        submit = {
+            "topic_name": request.form.get("topic_name")
+        }
+        mongo.db.topics.update({"_id": ObjectId(topic_id)}, submit)
+        flash("Topic Sucessfully Updated")
+        return redirect(url_for("get_topics"))
+
+    topic = mongo.db.topics.find_one({"_id": ObjectId(topic_id)})
+    return render_template("edit_topic.html", topic=topic)
+
+
+@ app.route("/room")
 def room():
     """Room"""
     return render_template("room.html")
 
 
-@app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
-@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
+@ app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
+@ app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
 def chatroom(activeconv):
     """Chat Room"""
 
