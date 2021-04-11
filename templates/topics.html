@@ -20,7 +20,21 @@
             </div>
             <div class="card-action">
                 <a href="{{ url_for('edit_topic', topic_id=topic._id) }}" class="btn green accent-4">Edit</a>
-                <a href="{{ url_for('delete_topic', topic_id=topic._id) }}" class="btn light-blue lighten-1">Delete</a>
+                <!-- Modal Trigger -->
+                <!-- <a href="{{ url_for('delete_topic', topic_id=topic._id) }}" class="btn light-blue lighten-1">Delete</a> -->
+                <a class="waves-effect waves-light btn modal-trigger" href="#deltopic{{ loop.index }}">Delete</a>
+                <!-- Modal Structure -->
+                <div id="deltopic{{ loop.index }}" class="modal">
+                    <div class="modal-content light-blue-text text-darken-4">
+                        <h4>Delete Topic</h4>
+                        <p>Are you sure to delete this topic?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url_for('get_topics') }}" class="modal-close btn-small red text-shadow ">Cancel <i class="fas fa-times-circle right"></i></a>
+                        {{ topic.topic_name }}
+                        <a href="{{ url_for('delete_topic', topic_id=topic._id) }}" class="modal-close btn-small light-blue lighten-1">Yes</a>
+                    </div>
+                </div>            
             </div>
         </div>
     </div>
