@@ -180,7 +180,7 @@ def edit_topic(topic_id):
 @app.route("/delete_topic/<topic_id>")
 def delete_topic(topic_id):
     mongo.db.topics.remove({"_id": ObjectId(topic_id)})
-    flash("Category Successfully Deleted")
+    flash("Topic Successfully Deleted")
     return redirect(url_for("get_topics"))
 
 
