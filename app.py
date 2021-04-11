@@ -177,6 +177,13 @@ def edit_topic(topic_id):
     return render_template("edit_topic.html", topic=topic)
 
 
+@app.route("/delete_topic/<topic_id>")
+def delete_topic(topic_id):
+    mongo.db.topics.remove({"_id": ObjectId(topic_id)})
+    flash("Category Successfully Deleted")
+    return redirect(url_for("get_topics"))
+
+
 @ app.route("/room")
 def room():
     """Room"""
