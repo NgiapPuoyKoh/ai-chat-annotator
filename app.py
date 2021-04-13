@@ -416,7 +416,22 @@ def annotatechats(convid):
                 return redirect(url_for("annotatechats"))
 
 
-@app.route("/delchat/<delconvid>")
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+
+    # render ratings from database for selection
+    ratings = list(mongo.db.ratings.find().sort("rating", 1))
+    # get conversations from database
+    conversations = list(mongo.db.conversations.find(
+        {"$text": {"$search": query}}))
+
+    return render_template("annotatechats.html",
+                           conversations=conversations,
+                           ratings=ratings)
+
+
+@ app.route("/delchat/<delconvid>")
 def delchat(delconvid):
     print("delete conversation")
     print(delconvid)
@@ -427,7 +442,7 @@ def delchat(delconvid):
 
 # Custom Error Handling
 
-@app.errorhandler(404)
+@ app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
@@ -437,7 +452,7 @@ def page_not_found(error):
 #     return 1/0
 
 
-@app.errorhandler(500)
+@ app.errorhandler(500)
 def internal_server(error):
     return render_template('500.html'), 500
 
@@ -448,7 +463,7 @@ def internal_server(error):
 #     return "Successful POST request"
 # if postman sends a get request it will invoke the 045 error
 
-@app.errorhandler(405)
+@ app.errorhandler(405)
 def method_not_allowed(error):
     return render_template('405.html'), 405
 
