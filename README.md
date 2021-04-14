@@ -34,21 +34,16 @@ Usable data to train AI models for specific contexts that are specific to a doma
 
 The focus of the project is on data and inspiration was from [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4). The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together.
 
-# Development Planes
+## Scope Plane
 
-## Strategy Plane - User Needs and Business Objective
+### Personas
 
-The primary goal of the application is to capture and annotate actual conversations for training AI conversational models for chatbots. The conversation domain is specific to an organization that utilizes chatbots to assist with providing support and responses to questions from the user community.
+- Chat User initiates conversations
+- Chat Moderator respond to conversations
+- Chat Conversation Annotator review and rates conversations
+- Chat Application Admin manages conversation topics
 
-The user will be able to get information for a specific product or service. The business will be able to provide accurate and relevant information to the customer with a high rating.
-
-Generic AI models for chatbot conversations do not capture the specific context of a business and the profile of target customers. There will contribute toward the development of explainable AI models.
-
-Usable data to train AI models for specific contexts that are specific to a domain and fine-tune to a specific business use case is likely to yield the best results.
-
-## Identify Business Goals and Objectives
-
-The scope and focus of the project are on data and inspiration was from [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4).
+### Release 1(Current) Features with Database updates
 
 - Chat applications using Flask session and routing to support private conversations between a user and a moderator
 - Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
@@ -56,11 +51,11 @@ The scope and focus of the project are on data and inspiration was from [Python 
 - Access to application functionality will be base on user role type, specifically, user, moderator, annotator, and application administrator
 - The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together
 
-Support Future Enhancements:
+### Extended Features for future releases
 
-- Replace Flask session with Flask SocketIO to improve reliability and security
+- Replace Flask session with Flask SocketIO to improve reliability, responsiveness, and security
 - Data extraction JASON API for training AI Machine Learning models
-- CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values.
+- CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values
 
 # Database Model - Chat Annotator
 
@@ -206,9 +201,13 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 
 #### Conversation Status Indicator
 
-| Indicator Name      | Indicator Values              |
-| ------------------- | ----------------------------- |
-| Conversation Status | ("pending", "active", "done") |
+Usage:
+
+| Conversation Status | Usage                                                                        |
+| ------------------- | ---------------------------------------------------------------------------- |
+| pending             | User selected topic and initiated conversation queued for moderator response |
+| active              | Moderator responded conversation is active                                   |
+| done                | Conversation completed pending annotation                                    |  |  | annotated | Annotator reviewed and rated conversation |
 
 ---
 
@@ -226,9 +225,11 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 
 #### User Role Type
 
-| User Role Type | Roles                                       |
-| -------------- | ------------------------------------------- |
-| roletype       | ("moderator", "user", "annotator", "admin") |
+| User Role Type | Roles                                               |
+| -------------- | --------------------------------------------------- |
+| user           | User is the initiator of conversations              |  |  | moderator | Respond to user conversations |
+| annotator      | Reviews completed conversations and assigns ranking |
+| admin          | Manages Topics                                      |
 
 ---
 
