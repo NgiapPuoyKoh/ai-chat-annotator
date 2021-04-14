@@ -20,6 +20,69 @@ A chat application with conversation data prep to feed into an AI model (not inc
 - Chat Application will include feature description with instructions, self-service, user account creation, user role and access administration
 - MongoDB database schema is API ready for JASON extract for external AI modeling
 
+## User Experience (UX)
+
+The purpose is to provide a simple user interface that is intuitive with only the necessary functions for a chat application.
+
+## User Stories
+
+### User Chat
+
+1. As a User, I want to be able to select a topic for a conversation to speak with an expert
+1. As a User, I want to be able to have a real-time conversation session
+1. As a User, I want to be able to review the entire conversation during the session
+1. As a User, I want to be notified of a Moderator is online and available for a conversation
+1. As a User, I want to be able to end a conversation when completed
+1. As a User, I want to be able to handle one active session at any time
+1. As a new User, I want to be able to register as a user for the application to participate in a conversation
+1. As a retuning User, I want to be to access the application using registered credentials
+
+_Future Enhancment_
+
+- As a returning user, I want to reset my password
+- As a User, I want to be able to rate the conversation to provide feedback on whether it was satisfactory
+- As a User, I want to be able to provide feedback on the conversation experience
+
+### Moderator
+
+1. As a Moderator, I want to be able to respond to questions from a user in real-time to assist the user
+1. As a Moderator, I want to be able to conduct one active conversation session one at any time
+1. As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session
+
+_Future Enhancment_
+
+1. As a moderator, I want to be able to select to respond to users by topic name
+
+### Chat Conversation Annotator
+
+Review and Rate Conversations
+
+1. As an Annotator, I want to be able to review and annotate conversation to be used for training AI bot
+1. As an Annotator, I want to check to see if any new conversations need annotation
+1. As an Annotator, I want to be able to search by conversations by topic name for the annotation
+1. As an Annotator, I want to be able to rate the quality of the conversation
+
+_Future Enhancement_
+
+1. As an Annotator, I want to be able to reclassify the conversation to the correct topic for training Ai Bot
+1. As an Annotator, I want to be able to add a new topic to the list of topics
+1. As an Annotator, I want to modify the conversation to deliver an accurate response to questions
+1. As an Annotator, I want to confirm if user rating aligns with annotation rating
+
+### Chat Application Administrator
+
+Manage Topic Tags
+
+1. As an Administrator, I want to add new topic tags to categorize conversations
+1. As an Administrator, I want to update topic tags to
+
+_Future Enhancements_
+
+- Implement restrictions so that topic tags cannot be deleted when used to tag conversation
+- As an Administrator, I can deactivate any user to revoke access to the application
+- As an Administrator, I can assign roles to a user
+- As an Administrator, I can delete any conversation if requested by the user to comply with GDPR regulation
+
 # Development Planes
 
 ## Strategy Plane - User Needs and Business Objective
@@ -53,7 +116,7 @@ The focus of the project is on data and inspiration was from [Python Chat Bot Tu
 
 ### Extended Features for future releases
 
-- Replace Flask session with Flask SocketIO to improve reliability, responsiveness, and security
+- Replace Flask session with [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) to improve reliability, responsiveness, and security
 - Data extraction JASON API for training AI Machine Learning models
 - CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values
 
@@ -234,41 +297,15 @@ Usage:
 ---
 
 <br />
-## Contents
-
-- [Chat with Converation Annotator](#Chat-with-Conversation-Annotator-for-Chatbot)
-  - [UX](#ux)
-    - [User Stories](#user-stories)
-  - [Development Planes](#development-planes)
-    - [Strategy Plane - User Needs and Business Objective](#strategy-plane---user-needs-and-business-objective)
-    - [Identify Business Goals and Objectives](#identify-business-goals-and-objectives)
-    - [Scope Plane](#scope-plane)
-      - [User Stories (Future)](#user-stories--future-)
-    - [Structure Plane](#structure-plane)
-    - [Skeleton Plane](#skeleton-plane)
-      - [Existing Features](#existing-features)
-      - [Features Left to Implement](#features-left-to-implement)
-    - [Future feature idea](#future-feature-idea)
-    - [Surface Plane - Visual Design](#surface-plane---visual-design)
-    - [Database Model - Chat Annotator](#Database-schema-chat-annotator)
-  - [Technologies Used](#technologies-used)
-  - [Testing](#testing)
-  - [Deployment](#deployment)
-  - [References](#references)
-  - [Content](#content)
-  - [Credits](#credits)
-  - [Acknowledgements](#acknowledgements)
-  - [Disclaimer](#disclaimer)
-
-## References
-
-### DataModel
+<details>
+<summary>
+References: Data Model
+</summary>
+<p>
 
 - [Data Model Design](https://docs.mongodb.com/manual/core/data-model-design/#std-label-data-modeling-referencing)
 - [Perfrom CRUD Operations in Atlas](https://docs.atlas.mongodb.com/data-explorer/)
 - [Manage Documents in Data Explorer](https://docs.atlas.mongodb.com/data-explorer/documents/)
 - [Operational Factors and Data Models](https://docs.mongodb.com/manual/core/data-model-operations/)
 
-# Development Planes
-
-# Chat Process and CRUD Functionality
+</details>
