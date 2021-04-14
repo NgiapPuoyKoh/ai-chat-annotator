@@ -28,7 +28,7 @@
                     <li><a href="{{ url_for('get_features') }}">Features</a></li>
                     {% if session.user %}
                     <li><a href="{{ url_for('profile', username=session['user']) }}">Profile</a></li>
-                    {% if session.user|lower == "admin"|lower %}
+                    {% if session.roletype|lower == "admin"|lower %}
                     <li><a href="{{ url_for('get_topics') }}">Manage Topic</a></li>
                     {% endif %}
                     {% if session.roletype|lower == "moderator"|lower %}
@@ -65,7 +65,7 @@
             <li><a href="{{ url_for('get_features') }}">Features</a></li>
             {% if session.user %}
             <li><a href="{{ url_for('profile', username=session['user']) }}">Profile</a></li>
-            {% if session.user|lower == "admin"|lower %}
+            {% if session.roletype|lower == "admin"|lower %}
             <li><a href="{{ url_for('get_topics') }}">Manage Topic</a></li>
             {% endif %}
             {% if session.roletype|lower == "moderator"|lower %}
