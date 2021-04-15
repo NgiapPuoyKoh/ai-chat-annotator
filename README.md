@@ -267,10 +267,10 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 Usage:
 
 | Conversation Status | Usage                                                                        |
-| ------------------- | ---------------------------------------------------------------------------- |
+| ------------------- | ---------------------------------------------------------------------------- | --- | --- | --------- | ----------------------------------------- |
 | pending             | User selected topic and initiated conversation queued for moderator response |
 | active              | Moderator responded conversation is active                                   |
-| done                | Conversation completed pending annotation                                    |  |  | annotated | Annotator reviewed and rated conversation |
+| done                | Conversation completed pending annotation                                    |     |     | annotated | Annotator reviewed and rated conversation |
 
 ---
 
@@ -289,8 +289,8 @@ Usage:
 #### User Role Type
 
 | User Role Type | Roles                                               |
-| -------------- | --------------------------------------------------- |
-| user           | User is the initiator of conversations              |  |  | moderator | Respond to user conversations |
+| -------------- | --------------------------------------------------- | --- | --- | --------- | ----------------------------- |
+| user           | User is the initiator of conversations              |     |     | moderator | Respond to user conversations |
 | annotator      | Reviews completed conversations and assigns ranking |
 | admin          | Manages Topics                                      |
 
@@ -309,6 +309,73 @@ References: Data Model
 - [Operational Factors and Data Models](https://docs.mongodb.com/manual/core/data-model-operations/)
 
 </details>
+
+## Structure Plane
+
+The project utilizes the Flask framework based on the Model-View-Controller (MVC) architecture
+
+### MVC Architecture
+
+![MVC Architecture](static/images/MVCArchitecture.png)
+Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.org/news/model-view-architecture/)
+
+### Access to Functions and Navigation by Role Type
+
+| Role      | Features | Register | Login | Logout |
+| --------- | -------- | -------- | ----- | ------ | --- |
+| All roles | Yes      | Yes      | Yes   | Yes    | Yes |
+
+---
+
+<br />
+
+| Role      | Active Chat | Room | Chat List | Manage Topic | Annotate Chat |
+| --------- | ----------- | ---- | --------- | ------------ | ------------- |
+| User      | Yes         | Yes  | No        | No           | No            |
+| Moderator | Yes         | No   | Yes       | No           | No            |
+| Annotator | No          | No   | No        | No           | Yes           |
+| Admin     | No          | No   | No        | Yes          | No            |
+
+---
+
+<br />
+### Navigation Routes
+
+The concept of routes and attempt at the art of routing has been a challenge and there is still much to learn to truly understand routing.
+
+```
+Build smart routes to accommodate dynamic applications and APIs
+
+Routes refer to URL patterns e.g. myapp.com/home or myapp.com/about
+Views refer to content to be served at these URLs
+
+@app.route("/") Python decorator that assigns URLs to functions
+
+Python decorators are essentially logic which wraps other function and always match the syntax of the link above the function
+
+Name of the view functions hold significance in Flask
+```
+
+Tip: We can handle multiple routes with a single function by simply stacking additional route decorators above any route!
+
+```
+@app.route("/")
+@app.route("/home")
+@app.route("/index")
+def home():
+return "Hello World!"
+```
+
+```
+Mapping URLs to actions
+Reserve URL path associate with a page template (with business logic)
+
+Apps are a medium for data such as user profiles/post
+
+Routes define the ways of access data which is always changing
+```
+
+Source: [The Art of Routing in Flask](https://hackersandslackers.com/flask-routes/)
 
 ## Tutorials
 
@@ -335,6 +402,7 @@ Tutorials
 - [Awesome Python Awesome A curated list of awesome Python frameworks, libraries, software and resources.](https://awesome-python.com/)
 
 </details>
+<br />
 
 ## References
 
@@ -407,17 +475,17 @@ References
 </details>
 <br />
 
-## Content
+### Content
 
 - All content was written by the developer.
 - Psychological properties of colors text in the README.md was found [here](http://www.colour-affects.co.uk/psychological-properties-of-colours)
 
-## Media
+### Media
 
 - [Dreamstime chatbot icon](https://thumbs.dreamstime.com/b/chatbot-icon-virtual-assistant-vector-143083940.jpg)
 - All images were created by the developer
 
-## Acknowledgements
+### Acknowledgements
 
 - My Mentor Guido Cecilio for his feedback.
 - Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
@@ -427,3 +495,147 @@ References
 ## Disclaimer
 
 This project is for educational use only
+
+## Heroku Deployment
+
+```
+HIGH LEVEL STEPS:
+1. Create a Hroku App
+2. Connct Git remote
+3. Add 'requirments.txt'
+4. Add Procfile
+```
+
+<details>
+<summary>
+Heroku Deployment
+</summary>
+<p>
+
+#### Create a Heroku Account
+
+- Navigate to Heroku.com
+- Click on "Sign Up" and create a new account
+- Fill out the form provide a first name, last name ,and email address
+- Select Python as the Primary Development Language
+- Confirm that you are not a Robot
+- Click "Create Free Account"
+- Heroku will send you a confirmation email
+- Copy the link provided in the email and paste it into a new tab
+- You will be prompted to set a password
+- You may skip selecting if you like to receive occasional updates
+- Click "Set Password and Log in"
+
+#### Heroku Dashboard
+
+- Click on Python as the language
+- The Heroku Dev center will be rendered
+- Click on the browser back button
+- Click on "Create New App" button
+- Name must not be used by anyone else
+- Provide App Name (Note name does not allow space so use hyphens)
+- Select region closes to you
+- Click on "Create App"
+
+#### Heroku Toolbelt - CLI with gitpod terminal
+
+- Go to your Gitpod project terminal
+- Install
+  ```
+  npm install -g heroku
+  ```
+- login to Heroku using your account details
+  ```
+  heroku login -i
+  ```
+- List heroku apps
+  ```
+  Apps
+  ```
+- Rename app and reference it
+  (NoteL replace <app name> with the app name)
+  ```
+  heroku apps:rename <app name> --app <app name>
+  ```
+- Confirm that your app was successfully renamed
+  ```
+  Apps
+  ```
+
+#### Open App Heroku Dashboard
+
+- Click on "Open App"
+- Note the URL for the app is
+  ```
+  https://APP-NAME.herokuapp.com
+  ```
+
+#### Pushing code to Heroku from CLI
+
+- Add a requirements.txt file
+  Contains python dependencies
+
+  ```
+  pip3 freeze --local > requirements.txt
+  git add -a requirements.txt
+  git commit -m "Add requirements.txt"
+  git push -u heroku main
+  ```
+
+- Add a Procfile
+  Tells Heroku how to run project
+
+```
+  echo web: python app.py > Procfile
+  git add - Procfile
+  git commit -m "Add Procfile"
+  git push -u heroku main
+```
+
+#### Add Heroku Config Vars
+
+- Naviagte to Heroku dashboard
+- Click on Settings
+  Note: SECRET KEY and KEY string without the quotes in found in env.py file
+
+  ```
+  IP 0.0.0.0
+  PORT 5000
+  SECRET_KEY <copy from env.py>
+  KEY <copy from env.py>
+  ```
+
+- Click on "More" and "View Logs"
+- Alternatively select "Restart all Dynos" to restart the app
+
+#### Link GitHub Repository to Heroku for automatic deployment from HitHub
+
+- Navigate to Heroku
+- Click on Deploy tab
+- Deployment Method Click Github
+- Paste github repository name and click "Search"(the github repo name from github)
+- Click on "Connect"
+- Click "Enable Automatic Deploys" from the master branch
+- Click "Deploy Branch"
+
+#### Push Code from Gitpod
+
+- in Gitpod navigate to project folder
+  ```
+  git remote -v
+  git status
+  git remote rm heroku
+  git remote -v
+  git status
+  git add - A
+  git commit -m "Push to GitHub"
+  git push orign master
+  ```
+- Go to github repo and check that the recent push worked
+
+### Validate Deploymnent on Heroku
+
+- Navigate to Heroku
+- Click on "Deploy Branch
+- Click on "Activity" Tab and "View Build Log"
+- Open the app to check that it opens
