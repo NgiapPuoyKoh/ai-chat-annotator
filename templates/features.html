@@ -6,43 +6,21 @@
 <div class="row">
     {% for feature in features %}
     <div class="col s12 m6">
-        <div class="card medium light-blue darken-4 text-shadow center-align">
+        <div class="card medium light-blue darken-4 center-align">
             <div class="card-title activator white-text">
               <span class="card-image">{{ feature.feature_name }}<i class="fas fa-ellipsis-v right"></i></span>
-              <!-- <img class="activator" src="images/office.jpg"> -->
             </div>
             <div class="card-content white-text">
               <span class="card-title activator">{{ feature.feature_description }}</span>
-              <!-- <p><a href="#">This is a link</a></p> -->
             </div>
             <div class="card-reveal">
               {% for instruction in feature.feature_instructions %}
               <span class="card-title">{{ instruction }}</span><br>
               {% endfor %}
-                <!-- <span class="card-title">{{ feature.feature_instructions }}</span> -->
-                <!-- <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span> -->
-              <!-- <p>Here is some more information about this product that is only revealed once clicked on.</p> -->
             </div>
           </div>
-        <!-- <div class="card light-blue darken-4 text-shadow center-align">
-            <div class="card-content white-text">
-                <span class="card-title">{{ feature.feature_name }}</span>
-            </div>
-            <div class="card-action">
-                <a href="#" class="btn green accent-4">Select</a>
-                <a href="#" class="btn light-blue lighten-1">Info</a>
-            </div>
-        </div> -->
     </div>
     {% endfor %}
 </div>
 
 {% endblock %}
-
-<!-- {% if session.name %} -->
-<!-- <h1>Welcome! {{session.name}}</h1> -->
-<!-- <a href="/logout">Log Out</a> -->
-<!-- {% else %} -->
-<!-- <h1>Welcome!</h1> -->
-<!-- <a href="/login">Log In</a> -->
-<!-- {% endif %} -->
