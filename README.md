@@ -262,15 +262,14 @@ Note: Collections storing the Element list of values are created and seeded manu
 Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 ```
 
-#### Conversation Status Indicator
-
-Usage:
+### Conversation Status Indicator
 
 | Conversation Status | Usage                                                                        |
-| ------------------- | ---------------------------------------------------------------------------- | --- | --- | --------- | ----------------------------------------- |
+| ------------------- | ---------------------------------------------------------------------------- |
 | pending             | User selected topic and initiated conversation queued for moderator response |
 | active              | Moderator responded conversation is active                                   |
-| done                | Conversation completed pending annotation                                    |     |     | annotated | Annotator reviewed and rated conversation |
+| done                | Conversation completed pending annotation                                    |
+| annotated           | Annotator reviewed and rated conversation                                    |
 
 ---
 
@@ -288,11 +287,12 @@ Usage:
 
 #### User Role Type
 
-| User Role Type | Roles                                               |
-| -------------- | --------------------------------------------------- | --- | --- | --------- | ----------------------------- |
-| user           | User is the initiator of conversations              |     |     | moderator | Respond to user conversations |
-| annotator      | Reviews completed conversations and assigns ranking |
-| admin          | Manages Topics                                      |
+| Role Type | Role Description                                    |
+| --------- | --------------------------------------------------- |
+| user      | User is the initiator of conversations              |
+| moderator | Response to user initiated conversations            |
+| annotator | Reviews completed conversations and assigns ranking |
+| admin     | Manages conversation topics                         |
 
 ---
 
