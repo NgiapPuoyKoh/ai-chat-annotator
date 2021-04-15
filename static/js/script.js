@@ -23,6 +23,3 @@ document.addEventListener('DOMContentLoaded', function() {
     var instances = M.Modal.init(elems);
   });
 
-// $(document).ready(function () {
-//     $('.sidenav').sidenav({ edge: "right" });
-// });
