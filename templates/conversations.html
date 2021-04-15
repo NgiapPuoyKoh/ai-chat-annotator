@@ -3,13 +3,8 @@
 
 <h1>Chat Messages</h1>
 {% for conversation in conversations %}
-<!-- {{ conversation.topic_name }}<br>
-{{ conversation.rating}}<br>
-{{ conversation.annotate_status}}<br> -->
 {% for msg in conversation.messages %}
-({{ msg.timestamp }}) {{ msg.user }} : {{ msg.message }}<br>
-
-<!-- role : {{ msg.role }}<br> -->
+    ({{ msg.timestamp }}) {{ msg.user }} : {{ msg.message }}<br>
 {% endfor %}
 {% endfor %}
 
