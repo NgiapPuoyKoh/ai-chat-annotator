@@ -26,7 +26,7 @@ The purpose is to provide a simple user interface that is intuitive with only th
 
 ## User Stories
 
-### User Chat
+### User Chat Session
 
 1. As a User, I want to be able to select a topic for a conversation to speak with an expert
 1. As a User, I want to be able to have a real-time conversation session
@@ -124,14 +124,14 @@ The focus of the project is on data and inspiration was from [Python Chat Bot Tu
 
 ```
 Design Principle - Atomicity and Transactions
-
 In most cases, multi-document transaction incurs a greater performance cost over single document writes,and the availability of multi-document transactions should not be a replacement for effective schema design.
 
-For many scenarios, the denormalized data model (embedded documents and arrays) will continue to be optimal for your data and use cases. That is, for many scenarios, modeling your data appropriately will minimize the need for multi-document transactions.
+For many scenarios, the denormalized data model (embedded documents and arrays) will continue to be optimal for your data and use cases.
 
-Source:[Atomicity and Transactions](https://docs.mongodb.com/manual/core/write-operations-atomicity/)
-
+That is, for many scenarios, modeling your data appropriately will minimize the need for multi-document transactions.
 ```
+
+Source: [Atomicity and Transactions](https://docs.mongodb.com/manual/core/write-operations-atomicity/)
 
 ## Flexible Schema - Collections
 
@@ -309,3 +309,121 @@ References: Data Model
 - [Operational Factors and Data Models](https://docs.mongodb.com/manual/core/data-model-operations/)
 
 </details>
+
+## Tutorials
+
+<br />
+<details>
+<summary>
+Tutorials
+</summary>
+<p>
+
+- [Build a Simple CRUD App with Python, Flask, and React](https://developer.okta.com/blog/2018/12/20/crud-app-with-python-flask-react)
+- [Node.js: Real-Time Web with Socket.IO](https://www.lynda.com/Node-js-tutorials/Course-prerequisites/633868/685558-4.html?srchtrk=index%3a14%0alinktypeid%3a2%0aq%3aflask_socketio%0apage%3a1%0as%3arelevance%0asa%3atrue%0aproducttypeid%3a2)
+- [Building your first Chat Application using Flask in 7 minutes](https://codeburst.io/building-your-first-chat-application-using-flask-in-7-minutes-f98de4adfa5d)
+- [Simple boilerplate for ChatterBot using Flask](https://xscode.com/chamkank/flask-chatterbot)
+- [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4)
+- [Livechat Bot Transfer users from a bot to a live agent](https://www.appypie.com/chatbot/livechat-bot)
+- [Creating a Discord Bot from Scratch and Connecting to MongoDB](https://towardsdatascience.com/creating-a-discord-bot-from-scratch-and-connecting-to-mongodb-828ad1c7c22e)
+- [How To Make A Chatbot In Python?](https://www.edureka.co/blog/how-to-make-a-chatbot-in-python/)
+- [1.1: fetch() - Working With Data & APIs in JavaScript](https://www.youtube.com/watch?v=tc8DU14qX6I&feature=youtu.be)
+- [How to use Fetch with JavaScript](https://www.youtube.com/watch?v=tVQgfKqbX3M&feature=youtu.be)
+- [JavaScript this Keyword Explained In 3 Minutes](https://www.youtube.com/watch?v=Pi3QC_fVaD0)
+- [JavaScript Promise in 100 Seconds](https://www.youtube.com/watch?v=RvYYCGs45L4)
+- [Intro To JavaScript Unit Testing & BDD (2 Hour+ Course)](https://www.youtube.com/watch?v=u5cLK1UrFyQ&feature=youtu.be)
+- [Awesome Python Awesome A curated list of awesome Python frameworks, libraries, software and resources.](https://awesome-python.com/)
+
+</details>
+
+## References
+
+<br />
+
+<details>
+<summary>
+References
+</summary>
+<p>
+
+- [ChatterBot](https://chatterbot.readthedocs.io/en/stable/)
+
+- [The MongoDB 4.2 Manual](https://docs.mongodb.com/v4.2/)
+
+- [Let’s Build an Intelligent Chatbot](https://www.kdnuggets.com/2019/12/build-intelligent-chatbot.html)
+
+#### Database schema
+
+- [Data Model Design](https://docs.mongodb.com/manual/core/data-model-design/)
+- [Operational Factors and Data Models](https://docs.mongodb.com/manual/core/data-model-operations/)
+- [Model Data for Atomic Operations Pattern](https://docs.mongodb.com/manual/tutorial/model-data-for-atomic-operations/#data-modeling-atomic-operation)
+- [MongoEngine](http://docs.mongoengine.org/tutorial.html)
+
+#### MONGODB CRUD
+
+- [Transactions and Operations](https://docs.mongodb.com/manual/core/transactions-operations/#transactions-operations-crud)
+- [Query an Array](https://docs.mongodb.com/manual/tutorial/query-arrays/#read-operations-arrays)
+- [Query on Embedded/Nested Documents](https://docs.mongodb.com/manual/tutorial/query-embedded-documents/#read-operations-embedded-documents)
+- [Model Data to Support Keyword Search](https://docs.mongodb.com/manual/tutorial/model-data-for-keyword-search/)
+
+#### SocketIO
+
+- [Polling vs WebSockets vs Socket.IO (Simple Explanation) - Chat App Part11](https://www.youtube.com/watch?v=sUEq35F-ELY)
+- [Create Chat Applicaton Using Flask-SocketIO - Chat App Part12](https://www.youtube.com/watch?v=zQDzNNt6xd4)
+- [Node.js:Real-Time Web Socket.IO](https://www.lynda.com/Node-js-tutorials/Node-js-Real-Time-Web-Socket-IO/633868-2.html)
+
+#### Flask-Login
+
+- [Flask-login](https://flask-login.readthedocs.io/en/latest/)
+
+#### Flask-Session
+
+- [Flask-Session](https://flask-session.readthedocs.io/en/latest/#version-0-4)
+
+#### Documentation
+
+- [Demo your App in your GitHub README with an Animated GIF](https://dev.to/kelli/demo-your-app-in-your-github-readme-with-an-animated-gif-2o3c)
+
+- [How to use JSDoc - Basics & Introduction](https://www.youtube.com/watch?v=Nqv6UkTROak)
+- [Code Institue Sample ReadMe](https://github.com/Code-Institute-Solutions/SampleREADME)
+
+#### UX
+
+- [Chatbot Design](https://dribbble.com/tags/chatbot?page=19&s=latest)
+- [8 beautiful chatbot UI examples that will definitely inspire you](https://www.digital22.com/insights/beautiful-chatbot-ui-examples-that-will-definitely-inspire-you#a6)
+
+##### UX Sources Credits
+
+- [Chat UI Welcome Screen from Vlad Tyzum](https://www.digital22.com/insights/beautiful-chatbot-ui-examples-that-will-definitely-inspire-you#a6)
+- [Dashboard and Chat](https://dribbble.com/shots/10978875-Insurance-app-dashboard-Chat)
+- [Direct Messaging](https://dribbble.com/shots/10831579-013-Direct-Messaging-UI-Challenge)
+
+##### Alternate UX Sources
+
+- [Chatbot](https://dribbble.com/shots/10997646-Chatbot-for-US-police-departments)
+- [Create Chat Bots](https://dribbble.com/shots/10810904-Chat-Bots)
+- [Corporate Chat Widget](https://dribbble.com/shots/10770064-Corporate-chat-widget)
+
+</details>
+<br />
+
+## Content
+
+- All content was written by the developer.
+- Psychological properties of colors text in the README.md was found [here](http://www.colour-affects.co.uk/psychological-properties-of-colours)
+
+## Media
+
+- [Dreamstime chatbot icon](https://thumbs.dreamstime.com/b/chatbot-icon-virtual-assistant-vector-143083940.jpg)
+- All images were created by the developer
+
+## Acknowledgements
+
+- My Mentor Guido Cecilio for his feedback.
+- Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
+- Fellow learner Mihaela Sandrea took the time to provide user acceptance feedback and testing
+- Slack community members who provided support to survive the learning journey
+
+## Disclaimer
+
+This project is for educational use only
