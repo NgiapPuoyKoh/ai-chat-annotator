@@ -3,6 +3,7 @@
 
 <h3 class="light-blue-text text-darken-4 center-align">Annotate Chats </h3>
 
+<!-- Search Conversations by Topic Name -->
 <div class="row card-panel grey lighten-5">
 <form action="{{ url_for('search') }}" method="post" class="col s12">
     <row class="row valign-wraper center-align">
@@ -31,10 +32,7 @@
                         <div class="collapsible-header white-text light-blue darken-4 text-shadow">
                             <div class="col s12">
                                 <i class="fas fa-caret-down"></i>
-                                <!-- button trigger python function to respond to annotate Chat -->
-                                <!-- <a href="{{ url_for('annotatechats', activeconv = conversation._id)}}"
-                                    class="btn-small light-blue lighten-1">Annotate</a> -->
-                                <a href="" class="btn-small light-blue lighten-1">Annotate</a>
+                                <div class="btn-small light-blue lighten-1">Annotate</div>
                                 <!-- Modal Trigger -->
                                 <a class="waves-effect waves-light btn modal-trigger" href="#delchat{{ loop.index }}">Delete</a>
           
@@ -46,7 +44,6 @@
                                     </div>
                                     <div class="modal-footer">
                                         <a href="#!" class="modal-close btn-small light-blue lighten-1">Cancel</a>
-                                        <!-- {{ conversation._id }} -->
                                         <a href="{{ url_for('delchat', delconvid = conversation._id) }}" class="modal-close btn-small light-blue lighten-1">Yes</a>
                                     </div>
                                 </div>                                
@@ -69,7 +66,6 @@
                             </div>
                             <!-- annotate button -->
                             <div class="row">
-                                <!-- <h1>{{ conversation._id }}</h1> -->
                                 <button type="submit" name="update_button" value="Update"
                                     class="col s12 btn-large light-blue text-darken-4 tooltipped" data-position="right"
                                     data-tooltip="Annotate Conversations">
@@ -87,6 +83,7 @@
                             [{{msg.timestamp}}]: ({{ msg.username }}) {{msg.msgtxt}}<br>
                             {% endfor %}
                             </div>
+                        </div>
                     </li>
                 </ul>
     </form>
