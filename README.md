@@ -338,7 +338,7 @@ Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.
 ### Access to Functions and Navigation by Role Type
 
 | Role      | Features | Register | Login | Logout |
-| --------- | -------- | -------- | ----- | ------ |
+| --------- | -------- | -------- | ----- | ------ | --- |
 | All roles | Yes      | Yes      | Yes   | Yes    | Yes |
 
 ---
@@ -430,22 +430,20 @@ Mobile
 
 ![Annotate Conversation](static/images/annotateConversations.png)
 
-![pythonGrid][assets/images/pythongrid.png]
-Soruce: [PythonGRid](https://pythongrid.com/)
-
 ##### Mobile Application Administration
 
 ![pythonGrid](static/images/pythonGrid.png)
-Soruce: [PythonGRid](https://pythongrid.com/)
+Source: [PythonGrid](https://pythongrid.com/)
 
-#### Error Message nPages
+#### Error Message Pages
 
 ##### 404 Not Found Page
 
 ![404 Page](static/images/404Page.png)
 
-Soruce: [Python Flask Tutorial: Full-Featured Web App Part 12 - Custom Error Pages]https://www.youtube.com/watch?v=uVNfQDohYNI
-https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/
+Source: [Python Flask Tutorial: Full-Featured Web App Part 12 - Custom Error Pages](https://www.youtube.com/watch?v=uVNfQDohYNI)
+
+[Flask Custom Error pages](https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/)
 
 ##### 403 Do Not Have Permission
 
@@ -462,47 +460,50 @@ https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/
 
 <details>
 <summary>
-Computer and Large Devicesl
+Computer and Large Devices
 </summary>
 <p>
 
 ##### Chat Welcome Page
 
-![Mobile Chat Welcome Page](assets/images/chatWelcome.png)
+![Mobile Chat Welcome Page](static/images/chatWelcome.png)
 
 ##### Chat Dashboard
 
-![Chat Dashboard](assets/images/chatDashboard.png)
+![Chat Dashboard](static/images/chatDashboard.png)
 
 ##### Chat Panel
 
-![Chat Panel](assets/images/chatPanel.png)
+![Chat Panel](static/images/chatPanel.png)
 
 ##### Data Processing and Annotate Conversations
 
-![pythonGrid][assets/images/pythongrid.png]
-Soruce: [PythonGRid](https://pythongrid.com/)
+![pythonGrid](static/images/pythonGrid.png)
+
+Source: [PythonGRid](https://pythongrid.com/)
 
 ##### Application Administration
 
-![pythonGrid](assets/images/pythonGrid.png)
+![pythonGrid](static/images/pythonGrid.png)
 
-Soruce: [PythonGRid'(https://pythongrid.com/)
+Source: [PythonGRid](https://pythongrid.com/)
 
-##### Topic Values Maintenance
+##### Topic Category Values
 
 - Category
 - Rating
+
+![Rating](static/images/rating.png)
 
 #### Support pages
 
 ##### 404 Not Found Page
 
-![404 Page](assets/images/404Page.png)
+![404 Page](static/images/404Page.png)
 
 ##### Contact Us Page Wireframe
 
-[Contact Us] (assets/images/contactUs.png)
+![Contact Us](static/images/contactUs.png)
 
 Source:
 [25 Best Contact Us Page Examples to Inspire Yours (Updated for 2020)](https://www.impactplus.com/blog/best-contact-us-page-examples)
