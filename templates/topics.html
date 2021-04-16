@@ -31,7 +31,6 @@
                     </div>
                     <div class="modal-footer">
                         <a href="{{ url_for('get_topics') }}" class="modal-close btn-small red text-shadow ">Cancel <i class="fas fa-times-circle right"></i></a>
-                        {{ topic.topic_name }}
                         <a href="{{ url_for('delete_topic', topic_id=topic._id) }}" class="modal-close btn-small light-blue lighten-1">Yes</a>
                     </div>
                 </div>            
