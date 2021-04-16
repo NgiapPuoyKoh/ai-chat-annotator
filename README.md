@@ -297,6 +297,22 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 ---
 
 <br />
+
+#### Topics
+
+| Topic (Initial Values) | Description                |
+| ---------------------- | -------------------------- |
+| Create Workspace       | Gitpod workspace           |
+| Invoke Terminal        | Gitpod Teminal Session     |
+| Git                    | Git commands               |
+| Open Workspace         | Gidpod Workspace           |
+| Javascript             | Javascript language        |
+| Jinja2                 | Jinja templating lanagiage |
+| Wirefram               | UX wireframing             |
+
+---
+
+<br />
 <details>
 <summary>
 References: Data Model
@@ -322,7 +338,7 @@ Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.
 ### Access to Functions and Navigation by Role Type
 
 | Role      | Features | Register | Login | Logout |
-| --------- | -------- | -------- | ----- | ------ | --- |
+| --------- | -------- | -------- | ----- | ------ |
 | All roles | Yes      | Yes      | Yes   | Yes    | Yes |
 
 ---
@@ -378,16 +394,132 @@ Routes define the ways of access data which is always changing
 
 Source: [The Art of Routing in Flask](https://hackersandslackers.com/flask-routes/)
 
+## Skeleton Plane
+
+### Wireframes
+
+#### Mobile
+
+<details>
+<summary>
+Mobile
+</summary>
+<p>
+ 
+##### Welcome Page - [View](https://github.com/)
+
+![Mobile  Chat Welcome Page](static/images/ChatUIWelcome.gif)
+
+##### Mobile Chat Dashboard
+
+![Mobile Chat Dashboard](static/images/mobileChatDashboard.png)
+
+##### Mobile Chat Widget
+
+![Mobile Chat Panel](static/images/mobileChatPanel.png)
+
+##### Mobile Rating Conversation
+
+![Rating](static/images/rating.png)
+
+##### Mobile Chat Admin
+
+![Admin Panel](static/images/adminPanel.png)
+
+##### Mobile Annotate Conversations
+
+![Annotate Conversation](static/images/annotateConversations.png)
+
+![pythonGrid][assets/images/pythongrid.png]
+Soruce: [PythonGRid](https://pythongrid.com/)
+
+##### Mobile Application Administration
+
+![pythonGrid](static/images/pythonGrid.png)
+Soruce: [PythonGRid](https://pythongrid.com/)
+
+#### Error Message nPages
+
+##### 404 Not Found Page
+
+![404 Page](static/images/404Page.png)
+
+Soruce: [Python Flask Tutorial: Full-Featured Web App Part 12 - Custom Error Pages]https://www.youtube.com/watch?v=uVNfQDohYNI
+https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/
+
+##### 403 Do Not Have Permission
+
+![403 Page](static/images/404Page.png)
+
+##### 500 Internal Server
+
+![500 Page](static/images/500Page.png)
+
+</details>
+<br />
+
+#### Computers and Tablets Pages
+
+<details>
+<summary>
+Computer and Large Devicesl
+</summary>
+<p>
+
+##### Chat Welcome Page
+
+![Mobile Chat Welcome Page](assets/images/chatWelcome.png)
+
+##### Chat Dashboard
+
+![Chat Dashboard](assets/images/chatDashboard.png)
+
+##### Chat Panel
+
+![Chat Panel](assets/images/chatPanel.png)
+
+##### Data Processing and Annotate Conversations
+
+![pythonGrid][assets/images/pythongrid.png]
+Soruce: [PythonGRid](https://pythongrid.com/)
+
+##### Application Administration
+
+![pythonGrid](assets/images/pythonGrid.png)
+
+Soruce: [PythonGRid'(https://pythongrid.com/)
+
+##### Topic Values Maintenance
+
+- Category
+- Rating
+
+#### Support pages
+
+##### 404 Not Found Page
+
+![404 Page](assets/images/404Page.png)
+
+##### Contact Us Page Wireframe
+
+[Contact Us] (assets/images/contactUs.png)
+
+Source:
+[25 Best Contact Us Page Examples to Inspire Yours (Updated for 2020)](https://www.impactplus.com/blog/best-contact-us-page-examples)
+
+</details>
+<br />
+
 ## Heroku Deployment
 
 ```
-HIGH LEVEL STEPS:
+HIGH-LEVEL STEPS:
 1. Create a Heroku App
 2. Connect Git remote
 3. Add requirements.txt
 4. Add Procfile
 
-Note: Includes Fork Github Repository
+Note: Includes Forking Github Repository
 ```
 
 <details>
@@ -467,7 +599,7 @@ Heroku Deployment
   ```
 
 - Add a Procfile
-  Tells Heroku how to run project
+  Tells Heroku how to run a project
 
 ```
   echo web: python app.py > Procfile
@@ -490,7 +622,7 @@ Heroku Deployment
   ```
 
 - Click on "More" and "View Logs"
-- Alternatively select "Restart all Dynos" to restart the app
+- Alternatively, select "Restart all Dynos" to restart the app
 
 #### Link GitHub Repository to Heroku for automatic deployment from HitHub
 
