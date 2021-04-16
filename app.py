@@ -10,9 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
 
-# from flask_session import Session
-
-# see data in thedatabase
+# Future enhancement: consider seed data in the database
 # @app.cli.command('db_seed')
 # def db_seed():
 
@@ -26,6 +24,9 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
+# Render feature description and where to start
+# based on user access role type
+
 
 @app.route("/")
 @app.route("/features")
@@ -34,6 +35,7 @@ def features():
     return redirect(url_for("get_features"))
 
 
+# Read Feature description and details steps from database
 @app.route("/get_features")
 def get_features():
     """Get Features"""
@@ -41,6 +43,8 @@ def get_features():
     features = list(mongo.db.features.find().sort("feature_name", 1))
     # pass featurs to template
     return render_template("features.html", features=features)
+
+# User Registration
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -55,6 +59,7 @@ def register():
             flash("User Name already exists")
             return redirect(url_for("register"))
 
+        # Future Enhancements
         # consider adding secondary password confirmation field
         # consider customizing the hash and salt methods
         register = {
@@ -73,6 +78,7 @@ def register():
     return render_template("register.html")
 
 
+# Read and render conversation messages
 @app.route("/get_conversations")
 # def index():
 def get_conversations():
@@ -82,6 +88,7 @@ def get_conversations():
     # return render_template("index.html", )
 
 
+# User Login utilized hash passwords
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -97,6 +104,7 @@ def login():
                     request.form.get("username")))
                 # set session variables
                 session["roletype"] = existing_user["roletype"]
+                # log session info
                 print("Login")
                 print(existing_user["roletype"])
                 print(session.get("activeconv"))
@@ -115,6 +123,7 @@ def login():
     return render_template("login.html")
 
 
+# User Logout
 @app.route("/logout")
 def logout():
     # remove user from session cookies
@@ -123,6 +132,7 @@ def logout():
     return redirect(url_for("login"))
 
 
+# Read Session User Profile Name from database
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     # get the session user's name from the database
@@ -135,21 +145,24 @@ def profile(username):
     return redirect(url_for("login"))
 
 
+# Render topic dashboard
 @app.route("/topic")
 def topic():
     """Topic Dashboard"""
     return render_template("topics.html")
 
 
+# Read topics from database
 @app.route("/get_topics")
 def get_topics():
     """Get Topics"""
-    # get topics form database
+    # get topics from database
     topics = list(mongo.db.topics.find().sort("topic_name", 1))
     # pass topics to template
     return render_template("topics.html", topics=topics)
 
 
+# Create new topic
 @app.route("/add_topic", methods=["GET", "POST"])
 def add_topic():
     if request.method == "POST":
@@ -163,6 +176,7 @@ def add_topic():
     return render_template("add_topic.html")
 
 
+# Update topic
 @app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])
 def edit_topic(topic_id):
     if request.method == "POST":
@@ -177,6 +191,7 @@ def edit_topic(topic_id):
     return render_template("edit_topic.html", topic=topic)
 
 
+# Delete topic from database
 @app.route("/delete_topic/<topic_id>")
 def delete_topic(topic_id):
     mongo.db.topics.remove({"_id": ObjectId(topic_id)})
@@ -184,12 +199,9 @@ def delete_topic(topic_id):
     return redirect(url_for("get_topics"))
 
 
-@ app.route("/room")
-def room():
-    """Room"""
-    return render_template("room.html")
-
-
+# Chatroom where User selects a topic and
+# initiatie and engages in active conversation
+# Create conversations and insert messages into database
 @ app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
 @ app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
 def chatroom(activeconv):
@@ -224,10 +236,8 @@ def chatroom(activeconv):
         session['activeconv'] = str(initconvId)
         session['convstatus'] = "active"
 
+        # set up parameter for redirect
         activeconv = initconvId
-
-        # print("activeconv: ")
-        # print(activeconv)
 
         flash("Conversation Initiated Pending Moderator")
         return redirect(url_for("chat", activeconv=activeconv))
@@ -237,6 +247,7 @@ def chatroom(activeconv):
                            activeconv=activeconv)
 
 
+# Chatlist for moderator response to user initiated conversations
 @app.route("/chatlist", defaults={"activeconv": ""}, methods=["GET", "POST"])
 @app.route("/chatlist/<activeconv>", methods=["GET", "POST"])
 def chatlist(activeconv):
@@ -247,19 +258,11 @@ def chatlist(activeconv):
     # display pending chats
     for conversation in conversations:
         initconvId = conversation['_id']
-        # print(str(conversation['_id']))
-        timestamp = conversation['_id'].generation_time
-        # if conversation.status == "pending":
-        # print(timestamp)
 
     # response button function to respond to pending conversation
     # update status and add moderator
-
-    print("Review Chat List")
-
     if activeconv != "":
         print("Review Chat List")
-        # print("session["activeconv"])
 
         activeconv = mongo.db.conversations.find_one(
             {"_id": ObjectId(activeconv)})
@@ -283,25 +286,23 @@ def chatlist(activeconv):
         "chatlist.html", activeconv=activeconv, conversations=conversations)
 
 
+# Display active conversation with messages
 @app.route("/chat", defaults={"activeconv": ""}, methods=["GET", "POST"])
 @app.route("/chat/<activeconv>", methods=["GET", "POST"])
 def chat(activeconv):
     """ Chat conversation """
-    print("Enter Chat")
-    # print(session["activeconv"])
-
     # capture text messages and update conversation
     if request.method == "POST":
         if request.form['submit_button'] == 'Send':
-            print("Send Message")
-            print(session["activeconv"])
-
+            # time stamp
             msgtime = datetime.now().strftime("%H:%M:%S")
 
+            # log session info
             print(session["activeconv"])
             print(session["user"])
             print(request.form.get("msgtxt"))
 
+            # insert message to conversation
             mongo.db.conversations.find_one_and_update(
                 {"_id": ObjectId(session["activeconv"])},
                 {"$push": {"msg": {"timestamp": msgtime,
@@ -312,14 +313,16 @@ def chat(activeconv):
             activeconvinfo = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
 
+            # log active conversatin info
             print(activeconvinfo["_id"])
 
             activeconv = session["activeconv"]
 
             flash("Message Sent")
             return redirect(url_for("chat", activeconv=activeconv))
+        # user or moderator ends conversation
         elif request.form['submit_button'] == 'End':
-            flash("End Conversation")
+            flash("Ended Conversation")
             mongo.db.conversations.find_one_and_update(
                 {"_id": ObjectId(session["activeconv"])},
                 {"$set": {"status": "done"}})
@@ -335,6 +338,7 @@ def chat(activeconv):
         # print(activconv)
 
         if session["roletype"] == "user" and session['convstatus'] == "active":
+            # log session info
             print(session['activeconv'])
             print(session['roletype'])
             print(session['convstatus'])
@@ -358,12 +362,14 @@ def chat(activeconv):
             return render_template(
                 "chat.html", activeconv=activeconv)
     else:
+        # handle no pending chats
         if session["roletype"] == "moderator":
             print("no active chat redirect to chatlist")
             flash("No Active Chat")
             return redirect(url_for("chatlist"))
 
 
+# Annotate Chats
 @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
 @app.route("/annotatechats/<convid>", methods=["GET", "POST"])
 def annotatechats(convid):
@@ -385,6 +391,7 @@ def annotatechats(convid):
         else:
             # capture rating when button pressed
             if request.method == "POST":
+                # log POST triggered
                 print("POST Triggered")
                 print("before:" + convid)
                 if request.form['update_button'] == 'Update':
@@ -393,29 +400,17 @@ def annotatechats(convid):
                     print("Rating selected: " + selected_rating)
                     print("Update Conversation")
                     flash("Conversation Annotated")
-
+                    # log before update
                     print("before update:" + convid)
                     mongo.db.conversations.find_one_and_update(
                         {"_id": ObjectId(convid)},
                         {"$set": {"status": "annotated",
                                   "rating": request.form.get("rating_name")
                                   }})
-
-                    # mongo.db.conversations.find_one_and_update(
-                    #     {"_id": ObjectId(convid)},
-                    #     {"$set": {"rating": request.form.get("rating_name")}})
-
-                    # mongo.db.conversations.find_one_and_update(
-                    #     {"_id": activeconv},
-                    #     {"$set": {"status": 'annotated',
-                    #         "rating": request.form.get("rating_name")
-                    #     }}
-                    # )
-               # activeconv = ""
-                # if session["roletype"] == "annotator":
                 return redirect(url_for("annotatechats"))
 
 
+# Search Conversations by Topic Name for Annotation
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
@@ -431,37 +426,32 @@ def search():
                            ratings=ratings)
 
 
+# Delete Conversation
 @ app.route("/delchat/<delconvid>")
 def delchat(delconvid):
+    # log delete conversation
     print("delete conversation")
     print(delconvid)
     mongo.db.conversations.remove({"_id": ObjectId(delconvid)})
-    flash("Conversation Sucessfully Deleted")
+    flash("Conversation Successfully Deleted")
     return redirect(url_for("annotatechats"))
 
 
 # Custom Error Handling
-
+# 404 Error Page not found
 @ app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
-# testing 500
-# @app.route('/')
-# def index():
-#     return 1/0
+# 500 Error Server Error
 
 
 @ app.errorhandler(500)
 def internal_server(error):
     return render_template('500.html'), 500
 
+# 405 Error Method
 
-# testing 405
-# @app.route('/', methods=["POST"]))
-# def index():
-#     return "Successful POST request"
-# if postman sends a get request it will invoke the 045 error
 
 @ app.errorhandler(405)
 def method_not_allowed(error):
