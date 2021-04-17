@@ -187,8 +187,14 @@ def edit_topic(topic_id):
         flash("Topic Sucessfully Updated")
         return redirect(url_for("get_topics"))
 
-    topic = mongo.db.topics.find_one({"_id": ObjectId(topic_id)})
-    return render_template("edit_topic.html", topic=topic)
+    if request.method == "GET":
+        print(topic_id)
+        if ObjectId.is_valid(topic_id):
+            topic = mongo.db.topics.find_one({"_id": ObjectId(topic_id)})
+            return render_template("edit_topic.html", topic=topic)
+        # if topic id is invalid valid else return a 404
+        else:
+            return render_template('404.html'), 404
 
 
 # Delete topic from database
@@ -427,7 +433,7 @@ def search():
 
 
 # Delete Conversation
-@ app.route("/delchat/<delconvid>")
+@app.route("/delchat/<delconvid>")
 def delchat(delconvid):
     # log delete conversation
     print("delete conversation")
@@ -439,21 +445,21 @@ def delchat(delconvid):
 
 # Custom Error Handling
 # 404 Error Page not found
-@ app.errorhandler(404)
+@app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
 # 500 Error Server Error
 
 
-@ app.errorhandler(500)
+@app.errorhandler(500)
 def internal_server(error):
     return render_template('500.html'), 500
 
 # 405 Error Method
 
 
-@ app.errorhandler(405)
+@app.errorhandler(405)
 def method_not_allowed(error):
     return render_template('405.html'), 405
 
