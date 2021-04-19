@@ -181,15 +181,20 @@ def get_topics():
 # Create new topic
 @app.route("/add_topic", methods=["GET", "POST"])
 def add_topic():
-    if request.method == "POST":
-        topic = {
-            "topic_name": request.form.get("topic_name")
-        }
-        mongo.db.topics.insert_one(topic)
-        flash("New Topic Added")
-        return redirect(url_for("get_topics"))
-
-    return render_template("add_topic.html")
+    """ Add Topic """
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'admin'):
+        if request.method == "POST":
+            topic = {
+                "topic_name": request.form.get("topic_name")
+            }
+            mongo.db.topics.insert_one(topic)
+            flash("New Topic Added")
+            return redirect(url_for("get_topics"))
+        return render_template("add_topic.html")
+    flash("You do not have privileges to Add Topic")
+    return redirect(url_for("features"))
 
 
 # Update topic
