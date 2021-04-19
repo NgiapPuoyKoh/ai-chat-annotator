@@ -227,16 +227,22 @@ def edit_topic(topic_id):
 # Delete topic from database
 @app.route("/delete_topic/<topic_id>")
 def delete_topic(topic_id):
-    mongo.db.topics.remove({"_id": ObjectId(topic_id)})
-    flash("Topic Successfully Deleted")
-    return redirect(url_for("get_topics"))
+    """ Delete Topic """
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'admin'):
+        mongo.db.topics.remove({"_id": ObjectId(topic_id)})
+        flash("Topic Successfully Deleted")
+        return redirect(url_for("get_topics"))
+    flash("You do not have privileges to Delete Topic")
+    return redirect(url_for("features"))
 
 
 # Chatroom where User selects a topic and
 # initiatie and engages in active conversation
 # Create conversations and insert messages into database
-@ app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
-@ app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
+@app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
+@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
 def chatroom(activeconv):
     """Chat Room"""
 
