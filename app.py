@@ -135,14 +135,15 @@ def logout():
 # Read Session User Profile Name from database
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
-    # get the session user's name from the database
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
 
-    if session["user"]:
+    if "user" in session:
+        # get the session user's name from the database
+        username = mongo.db.users.find_one_or_404(
+            {"username": session["user"]})["username"]
         return render_template("profile.html", username=username)
-
-    return redirect(url_for("login"))
+    else:
+        flash('No active session')
+        return redirect(url_for("login"))
 
 
 # Render topic dashboard
