@@ -150,7 +150,6 @@ def profile(username):
         flash('No active session')
         return redirect(url_for("login"))
 
-
 # Render topic dashboard
 @app.route("/topic")
 def topic():
