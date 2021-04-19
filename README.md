@@ -1,6 +1,6 @@
 # <h1 align="center">Chat with Conversation Annotator for Chatbot </h1>
 
-[View the live project here.](http://flask-ai-chat-annotate.herokuapp.com/getfeatures)
+[View the live project here.](http://flask-ai-chat-annotate.herokuapp.com/)
 
 This is a chat application interface with a conversation data annotation feature. It is designed to capture actual conversations via the chatbot with annotation to improve the accuracy and quality of the bot conversations.
 Data annotators will have access to annotate chat conversations for training AI chatbot for greater accuracy of Chatbot conversations
@@ -620,6 +620,8 @@ Heroku Deployment
   PORT 5000
   SECRET_KEY <copy from env.py>
   KEY <copy from env.py>
+  MONGO_URI <copy from env.py>
+  MONGO_DBNAME <chat_annotate>
   ```
 
 - Click on "More" and "View Logs"
