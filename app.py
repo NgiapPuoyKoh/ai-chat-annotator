@@ -166,12 +166,15 @@ def topic():
 @app.route("/get_topics")
 def get_topics():
     """Get Topics"""
-    if 'user' in session:
+    if 'user' in session and (
+        'roletype' in session) and (
+            session['roletype'] == 'admin'):
         # get topics from database
         topics = list(mongo.db.topics.find().sort("topic_name", 1))
         # pass topics to template
         return render_template("topics.html", topics=topics)
-    return redirect(url_for("login"))
+    flash("You do not have privileges to Access Topics")
+    return redirect(url_for("features"))
 
 
 # Create new topic
