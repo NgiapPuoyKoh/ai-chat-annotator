@@ -412,40 +412,48 @@ def chat(activeconv):
 @app.route("/annotatechats/<convid>", methods=["GET", "POST"])
 def annotatechats(convid):
 
-    # render ratings from database for selection
-    ratings = list(mongo.db.ratings.find().sort("rating", 1))
+    if ('user' in session) and (
+            'roletype' in session) and (
+                session['roletype'] == 'annotator'):
 
-    """Get Completed Chats"""
-    # get conversations from database
-    conversations = list(mongo.db.conversations.find().sort("topic_name", 1))
-    # pass conversation to template
-    if session["roletype"] == "annotator":
+        # render ratings from database for selection
+        ratings = list(mongo.db.ratings.find().sort("rating", 1))
 
-        if convid == "":
-            print("List Conversations for Annotation")
-            return render_template("annotatechats.html",
-                                   conversations=conversations,
-                                   ratings=ratings)
-        else:
-            # capture rating when button pressed
-            if request.method == "POST":
-                # log POST triggered
-                print("POST Triggered")
-                print("before:" + convid)
-                rating_name = request.form.get("rating_name")
-                if request.form['update_button'] == 'Update':
-                    print("after:" + convid)
-                    print("Rating selected: " + rating_name)
-                    print("Update Conversation")
-                    flash("Conversation Annotated")
-                    # log before update
-                    print("before update:" + convid)
-                    mongo.db.conversations.find_one_and_update(
-                        {"_id": ObjectId(convid)},
-                        {"$set": {"status": "annotated",
-                                  "rating": rating_name
-                                  }})
-                return redirect(url_for("annotatechats"))
+        """Get Completed Chats"""
+        # get conversations from database
+        conversations = list(mongo.db.conversations.find().sort(
+            "topic_name", 1))
+        # pass conversation to template
+        if session["roletype"] == "annotator":
+
+            if convid == "":
+                print("List Conversations for Annotation")
+                return render_template(
+                    "annotatechats.html",
+                    conversations=conversations,
+                    ratings=ratings)
+            else:
+                # capture rating when button pressed
+                if request.method == "POST":
+                    # log POST triggered
+                    print("POST Triggered")
+                    print("before:" + convid)
+                    rating_name = request.form.get("rating_name")
+                    if request.form['update_button'] == 'Update':
+                        print("after:" + convid)
+                        print("Rating selected: " + rating_name)
+                        print("Update Conversation")
+                        flash("Conversation Annotated")
+                        # log before update
+                        print("before update:" + convid)
+                        mongo.db.conversations.find_one_and_update(
+                            {"_id": ObjectId(convid)},
+                            {"$set": {"status": "annotated",
+                                      "rating": rating_name
+                                      }})
+                    return redirect(url_for("annotatechats"))
+    flash("You do not have privileges to Annotate Chats")
+    return redirect(url_for("features"))
 
 
 # Search Conversations by Topic Name for Annotation
