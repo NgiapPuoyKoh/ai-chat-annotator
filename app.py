@@ -159,7 +159,8 @@ def topic():
         'roletype' in session) and (
             session['roletype'] == 'admin'):
         return render_template("topics.html")
-    return redirect(url_for("logon"))
+    flash("You do not have privileges to Access Topics")
+    return redirect(url_for("features"))
 
 
 # Read topics from database
