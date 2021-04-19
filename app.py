@@ -261,9 +261,8 @@ def chatlist(activeconv):
 
     conversations = list(
         mongo.db.conversations.find())
-    # display pending chats
-    for conversation in conversations:
-        initconvId = conversation['_id']
+    # get chats for chatlist to display pending and active chats
+    initconvId = conversations[len(conversations)-1]['_id']
 
     # response button function to respond to pending conversation
     # update status and add moderator
