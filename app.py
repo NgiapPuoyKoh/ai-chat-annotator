@@ -51,9 +51,12 @@ def get_features():
 def register():
     """Register User"""
     if request.method == "POST":
+
+        username = request.form.get("username").lower()
+
         # check if username exists
         existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
+            {"username": username})
 
         if existing_user:
             flash("User Name already exists")
@@ -63,13 +66,13 @@ def register():
         # consider adding secondary password confirmation field
         # consider customizing the hash and salt methods
         register = {
-            "username": request.form.get("username").lower(),
+            "username": username,
             "password": generate_password_hash(request.form.get("password")),
             "roletype": "user"}
         mongo.db.users.insert_one(register)
 
         # capture username for session
-        session["user"] = request.form.get("username").lower()
+        session["user"] = username
         session["roletype"] = 'user'
         flash("Registration Successful")
         # Redirect to profile page after successful registration
@@ -92,16 +95,18 @@ def get_conversations():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
+
+        username = request.form.get("username").lower()
+
         # check to see if user exists in db
         existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
+            {"username": username})
         if existing_user:
             # ensure hashed password matches user input
             if check_password_hash(
                     existing_user["password"], request.form.get("password")):
-                session["user"] = request.form.get("username").lower()
-                flash("Welcome, {}".format(
-                    request.form.get("username")))
+                session["user"] = username
+                flash("Welcome, {}".format(username))
                 # set session variables
                 session["roletype"] = existing_user["roletype"]
                 # log session info
