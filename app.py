@@ -432,10 +432,10 @@ def annotatechats(convid):
                 # log POST triggered
                 print("POST Triggered")
                 print("before:" + convid)
+                rating_name = request.form.get("rating_name")
                 if request.form['update_button'] == 'Update':
-                    selected_rating = request.form.get("rating_name")
                     print("after:" + convid)
-                    print("Rating selected: " + selected_rating)
+                    print("Rating selected: " + rating_name)
                     print("Update Conversation")
                     flash("Conversation Annotated")
                     # log before update
@@ -443,7 +443,7 @@ def annotatechats(convid):
                     mongo.db.conversations.find_one_and_update(
                         {"_id": ObjectId(convid)},
                         {"$set": {"status": "annotated",
-                                  "rating": request.form.get("rating_name")
+                                  "rating": rating_name
                                   }})
                 return redirect(url_for("annotatechats"))
 
