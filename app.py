@@ -141,7 +141,7 @@ def logout():
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
 
-    if "user" in session:
+    if 'user' in session:
         # get the session user's name from the database
         username = mongo.db.users.find_one_or_404(
             {"username": session["user"]})["username"]
@@ -150,21 +150,28 @@ def profile(username):
         flash('No active session')
         return redirect(url_for("login"))
 
+
 # Render topic dashboard
 @app.route("/topic")
 def topic():
     """Topic Dashboard"""
-    return render_template("topics.html")
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'admin'):
+        return render_template("topics.html")
+    return redirect(url_for("logon"))
 
 
 # Read topics from database
 @app.route("/get_topics")
 def get_topics():
     """Get Topics"""
-    # get topics from database
-    topics = list(mongo.db.topics.find().sort("topic_name", 1))
-    # pass topics to template
-    return render_template("topics.html", topics=topics)
+    if 'user' in session:
+        # get topics from database
+        topics = list(mongo.db.topics.find().sort("topic_name", 1))
+        # pass topics to template
+        return render_template("topics.html", topics=topics)
+    return redirect(url_for("login"))
 
 
 # Create new topic
