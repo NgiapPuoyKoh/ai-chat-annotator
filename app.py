@@ -200,22 +200,28 @@ def add_topic():
 # Update topic
 @app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])
 def edit_topic(topic_id):
-    if request.method == "POST":
-        submit = {
-            "topic_name": request.form.get("topic_name")
-        }
-        mongo.db.topics.update({"_id": ObjectId(topic_id)}, submit)
-        flash("Topic Sucessfully Updated")
-        return redirect(url_for("get_topics"))
+    """ Edit Topic """
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'admin'):
+        if request.method == "POST":
+            submit = {
+                "topic_name": request.form.get("topic_name")
+            }
+            mongo.db.topics.update({"_id": ObjectId(topic_id)}, submit)
+            flash("Topic Sucessfully Updated")
+            return redirect(url_for("get_topics"))
 
-    if request.method == "GET":
-        print(topic_id)
-        if ObjectId.is_valid(topic_id):
-            topic = mongo.db.topics.find_one({"_id": ObjectId(topic_id)})
-            return render_template("edit_topic.html", topic=topic)
-        # if topic id is invalid valid else return a 404
-        else:
-            return render_template('404.html'), 404
+        if request.method == "GET":
+            print(topic_id)
+            if ObjectId.is_valid(topic_id):
+                topic = mongo.db.topics.find_one({"_id": ObjectId(topic_id)})
+                return render_template("edit_topic.html", topic=topic)
+            # if topic id is invalid valid else return a 404
+            else:
+                return render_template('404.html'), 404
+    flash("You do not have privileges to Edit Topic")
+    return redirect(url_for("features"))
 
 
 # Delete topic from database
