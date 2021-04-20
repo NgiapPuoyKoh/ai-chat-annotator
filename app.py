@@ -133,16 +133,18 @@ def logout():
 
 
 # Read Session User Profile Name from database
-@app.route("/profile/<username>", methods=["GET", "POST"])
-def profile(username):
+@app.route("/profile", methods=["GET"])
+def profile():
 
     if 'user' in session:
         # get the session user's name from the database
         username = mongo.db.users.find_one_or_404(
             {"username": session["user"]})["username"]
-        return render_template("profile.html", username=username)
+
+        if session["user"]:
+            return render_template("profile.html", username=username)
     else:
-        flash('No active session')
+        flash('You are currently not logged in')
         return redirect(url_for("login"))
 
 
