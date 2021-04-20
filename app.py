@@ -360,10 +360,23 @@ def chat(activeconv):
             return redirect(url_for("chat", activeconv=activeconv))
         # user or moderator ends conversation
         elif request.form['submit_button'] == 'End':
+
+            # time stamp
+            msgtime = datetime.now().strftime("%H:%M:%S")
+
             flash("Ended Conversation")
+
+            # insert final message of conversation
+            mongo.db.conversations.find_one_and_update(
+                {"_id": ObjectId(session["activeconv"])},
+                {"$push": {"msg": {"timestamp": msgtime,
+                                   "username": session["user"],
+                                   "msgtxt": request.form.get("msgtxt")}}})
+
             mongo.db.conversations.find_one_and_update(
                 {"_id": ObjectId(session["activeconv"])},
                 {"$set": {"status": "done"}})
+
             # pop session info
             session.pop('activeconv', None)
             if session["roletype"] == "moderator":
@@ -405,7 +418,7 @@ def chat(activeconv):
             print("no active chat redirect to chatlist")
             flash("No Active Chat")
             return redirect(url_for("chatlist"))
-
+ 
 
 # Annotate Chats
 @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
