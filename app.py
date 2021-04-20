@@ -44,9 +44,8 @@ def get_features():
     # pass featurs to template
     return render_template("features.html", features=features)
 
+
 # User Registration
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register User"""
@@ -79,16 +78,6 @@ def register():
         return redirect(url_for("profile", username=session["user"]))
 
     return render_template("register.html")
-
-
-# Read and render conversation messages
-@app.route("/get_conversations")
-# def index():
-def get_conversations():
-    """Conversation History"""
-    conversations = mongo.db.conversations.find()
-    return render_template("conversations.html", conversations=conversations)
-    # return render_template("index.html", )
 
 
 # User Login utilized hash passwords
@@ -131,10 +120,16 @@ def login():
 # User Logout
 @app.route("/logout")
 def logout():
+
+    # If not user in session Redirect to Features
+    if 'user' not in session:
+        flash("You are currently not logged in")
+        return redirect(url_for('features'))
+
     # remove user from session cookies
     flash("You have been logged out")
     session.pop("user")
-    return redirect(url_for("login"))
+    return redirect(url_for("features"))
 
 
 # Read Session User Profile Name from database
