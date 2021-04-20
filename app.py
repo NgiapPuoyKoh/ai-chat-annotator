@@ -428,6 +428,11 @@ def chat(activeconv):
 @app.route("/annotatechats/<convid>", methods=["GET", "POST"])
 def annotatechats(convid):
 
+    # If not user in session Redirect to Features
+    if 'user' not in session:
+        flash("You are currently not logged in")
+        return redirect(url_for('features'))
+
     if ('user' in session) and (
             'roletype' in session) and (
                 session['roletype'] == 'annotator'):
