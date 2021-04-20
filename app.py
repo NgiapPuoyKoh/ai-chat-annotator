@@ -364,26 +364,26 @@ def chat(activeconv):
             # time stamp
             msgtime = datetime.now().strftime("%H:%M:%S")
 
-            flash("Ended Conversation")
-
-            # insert final message of conversation
+            # capture message text and set status
             mongo.db.conversations.find_one_and_update(
                 {"_id": ObjectId(session["activeconv"])},
                 {"$push": {"msg": {"timestamp": msgtime,
                                    "username": session["user"],
-                                   "msgtxt": request.form.get("msgtxt")}}})
+                                   "msgtxt": request.form.get("msgtxt")}},
+                 "$set": {"status": "done"}})
 
-            mongo.db.conversations.find_one_and_update(
-                {"_id": ObjectId(session["activeconv"])},
-                {"$set": {"status": "done"}})
+            # Redirect and flash message for ended conversation
+            if session["roletype"] == "moderator":
+                flash("Ended Conversation")
+                return redirect(url_for("chatlist"))
+            else:
+                flash("Ended Conversation")
+                return redirect(url_for("chatroom"))
 
             # pop session info
             session.pop('activeconv', None)
-            if session["roletype"] == "moderator":
-                return redirect(url_for("chatlist"))
-            else:
-                return redirect(url_for("chatroom"))
 
+    # Active conversation in progress
     if activeconv != "":
         print("Display Active Chat")
         # print(activconv)
@@ -397,6 +397,7 @@ def chat(activeconv):
             activeconv = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
             if activeconv["status"] == 'done':
+                flash("Ended Conversation")
                 # if conversation status is done pop session info
                 session.pop('activeconv', None)
                 return redirect(url_for("chatroom"))
@@ -407,6 +408,7 @@ def chat(activeconv):
             activeconv = mongo.db.conversations.find_one(
                 {"_id": ObjectId(session["activeconv"])})
             if activeconv["status"] == 'done':
+                flash("Ended Conversation")
                 # if conversation status is done pop session info
                 session.pop('activeconv', None)
                 return redirect(url_for("chatlist"))
@@ -418,7 +420,7 @@ def chat(activeconv):
             print("no active chat redirect to chatlist")
             flash("No Active Chat")
             return redirect(url_for("chatlist"))
- 
+
 
 # Annotate Chats
 @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
