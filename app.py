@@ -292,36 +292,46 @@ def chatroom(activeconv):
 def chatlist(activeconv):
     """Chat List"""
 
-    conversations = list(
-        mongo.db.conversations.find())
-    # get chats for chatlist to display pending and active chats
-    initconvId = conversations[len(conversations)-1]['_id']
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'moderator'):
 
-    # response button function to respond to pending conversation
-    # update status and add moderator
-    if activeconv != "":
-        print("Review Chat List")
+        conversations = list(
+            mongo.db.conversations.find())
+        # get chats for chatlist to display pending and active chats
+        initconvId = conversations[len(conversations)-1]['_id']
 
-        activeconv = mongo.db.conversations.find_one(
-            {"_id": ObjectId(activeconv)})
+        # response button function to respond to pending conversation
+        # update status and add moderator
+        if activeconv != "":
+            print("Review Chat List")
 
-        if activeconv["status"] == "pending":
-            mongo.db.conversations.find_one_and_update(
-                {"_id": ObjectId(activeconv["_id"])},
-                {"$set": {"moderator": session["user"], "status": 'active'}})
+            activeconv = mongo.db.conversations.find_one(
+                {"_id": ObjectId(activeconv)})
 
-            flash("Moderator Responded")
-            # custom session variable to capture
-            # conversationid and conversation status
-            session['activeconv'] = str(initconvId)
-            session['convstatus'] = "active"
-            session['roletype'] = "moderator"
-            print('Moderator Responded (activeconv):' + session["activeconv"])
-            return redirect(url_for(
-                "chat", activeconv=activeconv))
+            if activeconv["status"] == "pending":
+                mongo.db.conversations.find_one_and_update(
+                    {"_id": ObjectId(activeconv["_id"])},
+                    {"$set": {"moderator": session["user"], "status": 'active'}})
 
-    return render_template(
-        "chatlist.html", activeconv=activeconv, conversations=conversations)
+                flash("Moderator Responded")
+                # custom session variable to capture
+                # conversationid and conversation status
+                session['activeconv'] = str(initconvId)
+                session['convstatus'] = "active"
+                session['roletype'] = "moderator"
+                print('Moderator Responded (activeconv):' +
+                      session["activeconv"])
+                return redirect(url_for(
+                    "chat", activeconv=activeconv))
+
+        return render_template(
+            "chatlist.html", activeconv=activeconv,
+            conversations=conversations)
+
+    else:
+        flash("You do not have privileges to Annotate Chats")
+        return redirect(url_for("features"))
 
 
 # Display active conversation with messages
