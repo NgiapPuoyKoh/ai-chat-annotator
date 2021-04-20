@@ -324,6 +324,12 @@ def chatlist(activeconv):
 @app.route("/chat/<activeconv>", methods=["GET", "POST"])
 def chat(activeconv):
     """ Chat conversation """
+
+    # If not user in session Redirect to Features
+    if 'user' not in session:
+        flash("You are currently not logged in")
+        return redirect(url_for('features'))
+
     # capture text messages and update conversation
     if request.method == "POST":
         if request.form['submit_button'] == 'Send':
