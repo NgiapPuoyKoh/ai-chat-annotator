@@ -241,6 +241,11 @@ def delete_topic(topic_id):
 def chatroom(activeconv):
     """Chat Room"""
 
+    # If not user in session Redirect to Features
+    if 'user' not in session:
+        flash("You are currently not logged in")
+        return redirect(url_for('features'))
+
     # initiate chat session
     starttime = datetime.now().strftime("%H:%M:%S")
 
