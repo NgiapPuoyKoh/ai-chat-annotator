@@ -520,16 +520,22 @@ def search():
 # Delete Conversation
 @app.route("/delchat/<delconvid>")
 def delchat(delconvid):
-    # log delete conversation
-    print("delete conversation")
-    print(delconvid)
-    mongo.db.conversations.remove({"_id": ObjectId(delconvid)})
-    flash("Conversation Successfully Deleted")
-    return redirect(url_for("annotatechats"))
-
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'annotator'):
+        # log delete conversation
+        print("delete conversation")
+        print(delconvid)
+        mongo.db.conversations.remove({"_id": ObjectId(delconvid)})
+        flash("Conversation Successfully Deleted")
+        return redirect(url_for("annotatechats"))
+    flash("You do not have privileges to Delete conversations")
+    return redirect(url_for("features"))
 
 # Custom Error Handling
 # 404 Error Page not found
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404

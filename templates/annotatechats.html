@@ -14,7 +14,7 @@
         </div>
         <div class="col s12 m4">
             <a href="{{ url_for('annotatechats') }}" class="red btn text-shadow">Reset</a>
-            <button type="submit" class="light-blue darken-1 btn test-shadow">
+            <button type="submit" class="light-blue darken-1 btn text-shadow">
                 <i class="fas fa-search le"></i>Search
             </button>
         </div>
@@ -29,7 +29,7 @@
     <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('annotatechats',convid=conversation._id)}}">
             <ul class="collapsible">
                     <li>
-                        <div class="collapsible-header white-text light-blue darken-4 text-shadow">
+                        <div class="collapsible-header white-text light-blue darken-4">
                             <div class="col s12">
                                 <i class="fas fa-caret-down"></i>
                                 <div class="btn-small light-blue lighten-1">Annotate</div>
