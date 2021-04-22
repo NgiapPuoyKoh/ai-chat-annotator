@@ -455,8 +455,8 @@ def chat(activeconv):
 
 
 # Annotate Chats
-@ app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
-@ app.route("/annotatechats/<convid>", methods=["GET", "POST"])
+@app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
+@app.route("/annotatechats/<convid>", methods=["GET", "POST"])
 def annotatechats(convid):
 
     # If not user in session Redirect to Features
@@ -509,19 +509,26 @@ def annotatechats(convid):
 
 
 # Search Conversations by Topic Name for Annotation
-@ app.route("/search", methods=["GET", "POST"])
+@app.route("/search", methods=["GET", "POST"])
 def search():
-    query = request.form.get("query")
+    if ('user' in session) and (
+        'roletype' in session) and (
+            session['roletype'] == 'annotator'):
 
-    # render ratings from database for selection
-    ratings = list(mongo.db.ratings.find().sort("rating", 1))
-    # get conversations from database
-    conversations = list(mongo.db.conversations.find(
-        {"$text": {"$search": query}}))
+        query = request.form.get("query")
 
-    return render_template("annotatechats.html",
-                           conversations=conversations,
-                           ratings=ratings)
+        # render ratings from database for selection
+        ratings = list(mongo.db.ratings.find().sort("rating", 1))
+        # get conversations from database
+        conversations = list(mongo.db.conversations.find(
+            {"$text": {"$search": query}}))
+
+        return render_template("annotatechats.html",
+                               conversations=conversations,
+                               ratings=ratings)
+    else:
+        flash("You do not have privileges to Annotate conversations")
+        return redirect(url_for("features"))
 
 
 # Delete Conversation
