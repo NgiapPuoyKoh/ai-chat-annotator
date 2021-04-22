@@ -428,17 +428,24 @@ def chat(activeconv):
                 return redirect(url_for("chatroom"))
             return render_template(
                 "chat.html", activeconv=activeconv)
-        elif (session["roletype"] == "moderator") and (
-                session['convstatus'] == "active"):
-            activeconv = mongo.db.conversations.find_one(
-                {"_id": ObjectId(session["activeconv"])})
-            if activeconv["status"] == 'done':
-                flash("Ended Conversation")
-                # if conversation status is done pop session info
-                session.pop('activeconv', None)
+        elif (session["roletype"] == "moderator"):
+            # if moderator has an active chat session
+            if ('convstatus' in session) and (
+                    session['convstatus'] == "active"):
+
+                activeconv = mongo.db.conversations.find_one_or_404(
+                    {"_id": ObjectId(session["activeconv"])})
+
+                if activeconv["status"] == 'done':
+                    flash("Ended Conversation")
+                    # if conversation status is done pop session info
+                    session.pop('activeconv', None)
+                    return redirect(url_for("chatlist"))
+                return render_template(
+                    "chat.html", activeconv=activeconv)
+            else:
+                flash("No Active Chat Session")
                 return redirect(url_for("chatlist"))
-            return render_template(
-                "chat.html", activeconv=activeconv)
     else:
         # handle no pending chats
         if session["roletype"] == "moderator":
@@ -448,8 +455,8 @@ def chat(activeconv):
 
 
 # Annotate Chats
-@app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
-@app.route("/annotatechats/<convid>", methods=["GET", "POST"])
+@ app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"])
+@ app.route("/annotatechats/<convid>", methods=["GET", "POST"])
 def annotatechats(convid):
 
     # If not user in session Redirect to Features
@@ -502,7 +509,7 @@ def annotatechats(convid):
 
 
 # Search Conversations by Topic Name for Annotation
-@app.route("/search", methods=["GET", "POST"])
+@ app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
 
