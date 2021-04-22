@@ -3,7 +3,12 @@
 [View the live project here.](http://flask-ai-chat-annotate.herokuapp.com/)
 
 This is a chat application interface with a conversation data annotation feature. It is designed to capture actual conversations via the chatbot with annotation to improve the accuracy and quality of the bot conversations.
+
 Data annotators will have access to annotate chat conversations for training AI chatbot for greater accuracy of Chatbot conversations
+
+This application is intended to be lightweight, low maintenance, easy to implement and, easy to use. It enables a business to collect conversations as part of its services operations.
+
+The goal is to provide a tool for actualizing a digital transformation strategy that includes implementing AI and chatbots to optimize operations.
 
 <h2 align="center"><img src="https://thumbs.dreamstime.com/b/chatbot-icon-virtual-assistant-vector-143083940.jpg" alt="chatbot Icon" width=200" height="200"></h2>
 
@@ -43,11 +48,13 @@ _Future Enhancment_
 - As a User, I want to be able to rate the conversation to provide feedback on whether it was satisfactory
 - As a User, I want to be able to provide feedback on the conversation experience
 
-### Moderator
+### Moderator Response to User
 
 1. As a Moderator, I want to be able to respond to questions from a user in real-time to assist the user
 1. As a Moderator, I want to be able to conduct one active conversation session one at any time
 1. As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session
+1. As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond
+1. As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators
 
 _Future Enhancment_
 
@@ -64,14 +71,12 @@ Review and Rate Conversations
 
 _Future Enhancement_
 
-1. As an Annotator, I want to be able to reclassify the conversation to the correct topic for training Ai Bot
+1. As an Annotator, I want to be able to reclassify the conversation to the correct topic for training AI Bot
 1. As an Annotator, I want to be able to add a new topic to the list of topics
 1. As an Annotator, I want to modify the conversation to deliver an accurate response to questions
 1. As an Annotator, I want to confirm if user rating aligns with annotation rating
 
-### Chat Application Administrator
-
-Manage Topic Tags
+### Chat Administrator Manage Conversation Topic Tags
 
 1. As an Administrator, I want to add new topic tags to categorize conversations
 1. As an Administrator, I want to update topic tags to
@@ -308,7 +313,7 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 | Open Workspace         | Gidpod Workspace           |
 | Javascript             | Javascript language        |
 | Jinja2                 | Jinja templating lanagiage |
-| Wirefram               | UX wireframing             |
+| Wireframe              | UX wireframing             |
 
 ---
 
@@ -325,6 +330,7 @@ References: Data Model
 - [Operational Factors and Data Models](https://docs.mongodb.com/manual/core/data-model-operations/)
 
 </details>
+<br />
 
 ## Structure Plane
 
@@ -334,12 +340,15 @@ The project utilizes the Flask framework based on the Model-View-Controller (MVC
 
 ![MVC Architecture](static/images/MVCArchitecture.png)
 Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.org/news/model-view-architecture/)
+<br />
 
 ### Access to Functions and Navigation by Role Type
 
+<br />
+
 | Role      | Features | Register | Login | Logout |
-| --------- | -------- | -------- | ----- | ------ | --- |
-| All roles | Yes      | Yes      | Yes   | Yes    | Yes |
+| --------- | -------- | -------- | ----- | ------ |
+| All roles | Yes      | Yes      | Yes   | Yes    |
 
 ---
 
@@ -357,6 +366,8 @@ Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.
 <br />
 
 ### Navigation Routes
+
+<br />
 
 The concept of routes and attempt at the art of routing has been a challenge and there is still much to learn to understand routing.
 
@@ -393,6 +404,26 @@ Routes define the ways of access data which is always changing
 ```
 
 Source: [The Art of Routing in Flask](https://hackersandslackers.com/flask-routes/)
+
+| Business Function     | Routes                                                                                                                                                                                                                   | Decorator                                                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| Features              | @app.route("/") </br> @app.route("/features") </br> @app.route("/get_features")                                                                                                                                          |
+| Register              | @app.route("/register", methods=["GET", "POST"])                                                                                                                                                                         | def features(): </br> def get_features():                                                                           |
+| Login                 | @app.route("/login", methods=["GET", "POST"])                                                                                                                                                                            | def login():                                                                                                        |
+| Logout                | @app.route("/logout")                                                                                                                                                                                                    | def register():                                                                                                     |
+| Profile               | @app.route("/profile", methods=["GET"])                                                                                                                                                                                  | def profile():                                                                                                      |
+| Topic                 | @app.route("/topic") </br> @app.route("/get_topics")</br> @app.route("/add_topic", methods=["GET", "POST"])</br>@app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])</br>@app.route("/delete_topic/<topic_id>") | def topic(): </br> def get_topics(): </br>def add_topic():</br>edit_topic(topic_id):<br>def delete_topic(topic_id): |
+| Chatroom              | @app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])                                                                          | def chatroom(activeconv):                                                                                           |
+| Chatlist              | @app.route("/chatlist", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatlist/<activeconv>", methods=["GET", "POST"])                                                                          | def chatlist(activeconv):                                                                                           |
+| Chat                  | @app.route("/chat", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chat/<activeconv>", methods=["GET", "POST"])                                                                                  | def chat(activeconv):                                                                                               |
+| Annotate Chats        | @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"]) </br>@app.route("/annotatechats/<convid>", methods=["GET", "POST"])                                                                       | def annotatechats(convid):                                                                                          |
+| Search by Topic       | @app.route("/search", methods=["GET", "POST"])                                                                                                                                                                           | def search():                                                                                                       |
+| Delete Topic          | @app.route("/delchat/<delconvid>")                                                                                                                                                                                       | def delchat(delconvid):                                                                                             |
+| Custom Error Handling | @app.errorhandler(404)<br>@app.errorhandler(500)<br>@app.errorhandler(405)                                                                                                                                               | def page_not_found(error):</br>def internal_server(error):</br>def method_not_allowed(error):                       |
+
+---
+
+</br>
 
 ## Skeleton Plane
 
@@ -510,6 +541,48 @@ Source:
 
 </details>
 <br />
+
+## Surface Plane
+
+### Defensive Design
+
+#### Flash Messages
+
+#### Input Validation
+
+all input data is validated (e.g. presence check, format check, range check)
+
+- Edit_topic decorator fucntion does not handle invalid ObjectId
+
+Issue: Invalid ObjectId renders bson-errors.invalidid
+Resolution:
+bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d6c9')
+=> True
+bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d')
+=> False
+
+![Not a valid ObjectID](static/images/notValidObjectId.png)
+
+Source: [How to check that mongo ObjectID is valid in python?](https://stackoverflow.com/questions/28774526/how-to-check-that-mongo-objectid-is-valid-in-python)
+
+#### internal errors are handled gracefully and users are notified of the problem where
+
+appropriate.
+
+## Code Refactoring
+
+#### Use len() function instead of For Loop
+
+```
+initconvId = conversations[len(conversations)-1]['_id']
+```
+
+```
+for conversation in conversations:
+        initconvId = conversation['_id']
+```
+
+Source: [Python len() Function](<https://www.w3schools.com/python/ref_func_len.asp#:~:text=The%20len()%20function%20returns,of%20characters%20in%20the%20string>)
 
 ## Heroku Deployment
 
@@ -806,9 +879,9 @@ References
 
 ### Acknowledgements
 
-- My Mentor Guido Cecilio for his feedback.
+- My Mentor Guido Cecilio for his feedback and guidance
 - Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
-- Fellow learner Mihaela Sandrea took the time to provide user acceptance feedback and testing
+- Fellow learner Mihaela Sandrea who took the time to provide user acceptance feedback and testing
 - Slack community members who provided support to survive the learning journey
 
 ## Disclaimer
