@@ -49,6 +49,11 @@ def get_features():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register User"""
+
+    if is_authenticated():
+        flash("Please Logout First to excute this operation")
+        redirect(url_for("features"))
+
     if request.method == "POST":
 
         username = request.form.get("username").lower()
@@ -152,9 +157,7 @@ def profile():
 @app.route("/get_topics")
 def get_topics():
     """Get Topics"""
-    if 'user' in session and (
-        'roletype' in session) and (
-            session['roletype'] == 'admin'):
+    if is_admin():
         # get topics from database
         topics = list(mongo.db.topics.find().sort("topic_name", 1))
         # pass topics to template
@@ -167,9 +170,7 @@ def get_topics():
 @app.route("/add_topic", methods=["GET", "POST"])
 def add_topic():
     """ Add Topic """
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'admin'):
+    if is_admin():
         if request.method == "POST":
             topic = {
                 "topic_name": request.form.get("topic_name")
@@ -230,7 +231,7 @@ def chatroom(activeconv):
     """Chat Room"""
 
     # If not user in session Redirect to Features
-    if 'user' not in session:
+    if is_authenticated():
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
@@ -281,22 +282,18 @@ def chatlist(activeconv):
     """Chat List"""
 
     # If not user in session Redirect to Features
-    if 'user' not in session:
+    if not is_authenticated():
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'moderator'):
-
-        conversations = list(
-            mongo.db.conversations.find())
+    if is_user_roletype('moderator'):
+        conversations = list(mongo.db.conversations.find())
         # get chats for chatlist to display pending and active chats
         initconvId = conversations[len(conversations)-1]['_id']
 
         # response button function to respond to pending conversation
         # update status and add moderator
-        if activeconv != "":
+        if is_object_id_valid(activeconv):
             print("Review Chat List")
 
             activeconv = mongo.db.conversations.find_one(
@@ -316,8 +313,7 @@ def chatlist(activeconv):
                 session['roletype'] = "moderator"
                 print('Moderator Responded (activeconv):' +
                       session["activeconv"])
-                return redirect(url_for(
-                    "chat", activeconv=activeconv))
+                return redirect(url_for("chat", activeconv=activeconv))
 
         return render_template(
             "chatlist.html", activeconv=activeconv,
@@ -335,7 +331,7 @@ def chat(activeconv):
     """ Chat conversation """
 
     # If not user in session Redirect to Features
-    if 'user' not in session:
+    if not is_authenticated():
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
@@ -382,23 +378,23 @@ def chat(activeconv):
                                    "msgtxt": request.form.get("msgtxt")}},
                  "$set": {"status": "done"}})
 
+            # pop session info
+            session.pop('activeconv', None)
+
             # Redirect and flash message for ended conversation
-            if session["roletype"] == "moderator":
+            if is_user_roletype("moderator"):
                 flash("Ended Conversation")
                 return redirect(url_for("chatlist"))
             else:
                 flash("Ended Conversation")
                 return redirect(url_for("chatroom"))
 
-            # pop session info
-            session.pop('activeconv', None)
-
     # Active conversation in progress
     if activeconv != "":
         print("Display Active Chat")
         # print(activconv)
 
-        if session["roletype"] == "user" and session['convstatus'] == "active":
+        if is_user_roletype("user") and session['convstatus'] == "active":
             # log session info
             print(session['activeconv'])
             print(session['roletype'])
@@ -413,7 +409,7 @@ def chat(activeconv):
                 return redirect(url_for("chatroom"))
             return render_template(
                 "chat.html", activeconv=activeconv)
-        elif (session["roletype"] == "moderator"):
+        elif is_user_roletype("moderator"):
             # if moderator has an active chat session
             if ('convstatus' in session) and (
                     session['convstatus'] == "active"):
@@ -433,7 +429,7 @@ def chat(activeconv):
                 return redirect(url_for("chatlist"))
     else:
         # handle no pending chats
-        if session["roletype"] == "moderator":
+        if is_user_roletype("moderator"):
             print("no active chat redirect to chatlist")
             flash("No Active Chat")
             return redirect(url_for("chatlist"))
@@ -445,14 +441,11 @@ def chat(activeconv):
 def annotatechats(convid):
 
     # If not user in session Redirect to Features
-    if 'user' not in session:
+    if not is_authenticated():
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
-    if ('user' in session) and (
-            'roletype' in session) and (
-                session['roletype'] == 'annotator'):
-
+    if is_user_roletype('annotator'):
         # render ratings from database for selection
         ratings = list(mongo.db.ratings.find().sort("rating", 1))
 
@@ -461,34 +454,34 @@ def annotatechats(convid):
         conversations = list(mongo.db.conversations.find().sort(
             "topic_name", 1))
         # pass conversation to template
-        if session["roletype"] == "annotator":
-
-            if convid == "":
-                print("List Conversations for Annotation")
-                return render_template(
-                    "annotatechats.html",
-                    conversations=conversations,
-                    ratings=ratings)
-            else:
-                # capture rating when button pressed
-                if request.method == "POST":
-                    # log POST triggered
-                    print("POST Triggered")
-                    print("before:" + convid)
-                    rating_name = request.form.get("rating_name")
-                    if request.form['update_button'] == 'Update':
-                        print("after:" + convid)
-                        print("Rating selected: " + rating_name)
-                        print("Update Conversation")
-                        flash("Conversation Annotated")
-                        # log before update
-                        print("before update:" + convid)
-                        mongo.db.conversations.find_one_and_update(
-                            {"_id": ObjectId(convid)},
-                            {"$set": {"status": "annotated",
-                                      "rating": rating_name
-                                      }})
-                    return redirect(url_for("annotatechats"))
+        if convid == "":
+            print("List Conversations for Annotation")
+            return render_template(
+                "annotatechats.html",
+                conversations=conversations,
+                ratings=ratings)
+        else:
+            # capture rating when button pressed
+            if request.method == "POST":
+                # log POST triggered
+                print("POST Triggered")
+                print("before:" + convid)
+                rating_name = request.form.get("rating_name")
+                if request.form['update_button'] == 'Update':
+                    print("after:" + convid)
+                    print("Rating selected: " + rating_name)
+                    print("Update Conversation")
+                    flash("Conversation Annotated")
+                    # log before update
+                    print("before update:" + convid)
+                    mongo.db.conversations.find_one_and_update(
+                        {"_id": ObjectId(convid)},
+                        {"$set": {
+                            "status": "annotated",
+                            "rating": rating_name
+                            }}
+                        )
+                return redirect(url_for("annotatechats"))
     flash("You do not have privileges to Annotate Chats")
     return redirect(url_for("features"))
 
@@ -496,12 +489,8 @@ def annotatechats(convid):
 # Search Conversations by Topic Name for Annotation
 @app.route("/search", methods=["GET", "POST"])
 def search():
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'annotator'):
-
+    if is_user_roletype('annotator'):
         query = request.form.get("query")
-
         # render ratings from database for selection
         ratings = list(mongo.db.ratings.find().sort("rating", 1))
         # get conversations from database
@@ -519,12 +508,11 @@ def search():
 # Delete Conversation
 @app.route("/delchat/<delconvid>")
 def delchat(delconvid):
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'annotator'):
+    if is_user_roletype('annotator') and is_object_id_valid(delconvid):
         # log delete conversation
         print("delete conversation")
         print(delconvid)
+        mongo.db.conversations.find_one_or_404({"_id": ObjectId(delconvid)})
         mongo.db.conversations.remove({"_id": ObjectId(delconvid)})
         flash("Conversation Successfully Deleted")
         return redirect(url_for("annotatechats"))
@@ -532,23 +520,21 @@ def delchat(delconvid):
     return redirect(url_for("features"))
 
 # Custom Error Handling
+
+
 # 404 Error Page not found
-
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
+
 # 500 Error Server Error
-
-
 @app.errorhandler(500)
 def internal_server(error):
     return render_template('500.html'), 500
 
+
 # 405 Error Method
-
-
 @app.errorhandler(405)
 def method_not_allowed(error):
     return render_template('405.html'), 405
