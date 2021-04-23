@@ -147,19 +147,7 @@ def profile():
         return redirect(url_for("login"))
 
 
-# Render topic dashboard
-@app.route("/topic")
-def topic():
-    """Topic Dashboard"""
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'admin'):
-        return render_template("topics.html")
-    flash("You do not have privileges to Access Topics")
-    return redirect(url_for("features"))
-
-
-# Read topics from database
+# Read topics from database and render topic dashboard
 @app.route("/get_topics")
 def get_topics():
     """Get Topics"""
