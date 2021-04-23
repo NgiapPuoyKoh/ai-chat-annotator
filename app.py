@@ -212,12 +212,12 @@ def edit_topic(topic_id):
 @app.route("/delete_topic/<topic_id>")
 def delete_topic(topic_id):
     """ Delete Topic """
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'admin'):
-        mongo.db.topics.remove({"_id": ObjectId(topic_id)})
-        flash("Topic Successfully Deleted")
-        return redirect(url_for("get_topics"))
+    if is_admin():
+        if is_object_id_valid(topic_id):
+            mongo.db.topics.find_one_or_404({"_id": ObjectId(topic_id)})
+            mongo.db.topics.remove({"_id": ObjectId(topic_id)})
+            flash("Topic Successfully Deleted")
+            return redirect(url_for("get_topics"))
     flash("You do not have privileges to Delete Topic")
     return redirect(url_for("features"))
 
@@ -553,6 +553,40 @@ def internal_server(error):
 @app.errorhandler(405)
 def method_not_allowed(error):
     return render_template('405.html'), 405
+
+
+def is_object_id_valid(id_value):
+    """ Validate is the id_value is a valid ObjectId
+    """
+    return id_value != "" and ObjectId.is_valid(id_value)
+
+
+def is_authenticated():
+    """ Ensure that user is authenticated
+    """
+    return 'user' in session
+
+
+def get_user_role():
+    """ Retrieve the user role from session
+    """
+    if 'roletype' in session:
+        return session['roletype']
+    return None
+
+
+def is_user_roletype(roletype):
+    """
+    Checks if the user is authenticated and the role is the expected
+    passed in the parameter roletype.
+    """
+    return is_authenticated() and get_user_role() == roletype
+
+
+def is_admin():
+    """ Check if the current session user has the `admin` role.
+    """
+    return is_authenticated() and get_user_role() == 'admin'
 
 
 if __name__ == "__main__":
