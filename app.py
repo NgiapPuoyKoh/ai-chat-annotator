@@ -231,7 +231,7 @@ def chatroom(activeconv):
     """Chat Room"""
 
     # If not user in session Redirect to Features
-    if is_authenticated():
+    if not is_authenticated():
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
