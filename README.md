@@ -25,6 +25,48 @@ A chat application with conversation data prep to feed into an AI model (not inc
 - Chat Application will include feature description with instructions, self-service, user account creation, user role and access administration
 - MongoDB database schema is API ready for JASON extract for external AI modeling
 
+## Contents
+
+- [Chat with Conversation Annotator](#Chat-with-Conversation-Annotator-for-Chatbot)
+- [UX](<##User-Experience-(UX)>)
+  - [User Stories](##-User-Stories)
+- [Database Model - Chat Annotator](#Database-Model---Chat-Annotator)
+  - [Flexible Schema- Collections](##Flexible-Schema---Collections)
+  - [Embedded Data Document Structure](##Embedded-Data-Document-Structure)
+  - [Single Document](##Single-Document)
+  - [Collections Reference Relationships](###-Collections-Reference-Relationships)
+- [Development Planes](#-Development-Planes)
+  - [Strategy Plane---User Needs and Business Objective](##Strategy-Plane---User-Needs-and-Business-Objective)
+- [Scope Plane](##-Scope-Plane)
+  - [Personas](###Personas)
+  - [Release 1(Current) Features with Database CRUD](<###Release-1(Current)-Features-with-Databse-CRUD>)
+  - [Extended Features for future releases](###Extended-Features-for-future-releases)
+- [Structure Plane](##Structure-Plane)
+  - [MVC Architecture](###MVC-Architecture)
+  - [Access to Functions and Navigation by Role Type](###Access-to-Functions-and-Navigation-by-Role-Type)
+  - [Navigation Routes Map to Business Function](###Navigation-Routes-Map-to-Business-Function)
+- [Skeleton Plane](##Skeleton-Plane)
+  - [Wireframes](###Wireframes)
+  - [Mobile](####Mobile) - [Computers and Tablets Pages](####Computers-and-Tablets-Pages) -[##Surface Plane](##Surface-Plane)
+  - [Defensive Design](###Defensive-Design)
+  - [Notification Flash Messages](####Notification-Flash-Messages)
+  - [Input Validation](####Input-Validation)
+  - [Secure Routes](####Secure-Routes)
+  - [Secure Function Access](####Secure-Function-Access)
+  - [Error Handling](####Error-Handling)
+  - [Code Refactoring](##Code-Refactoring)
+- [Testing](##Testing)
+- [Heroku Deployment](##Heroku-Deployment)
+- [Technologies](##Technologies)
+- [Content](###Content)
+- [Media](###Media)
+- [Tutorial References](##Tutorial-References)
+- [References](##References)
+- [Credits](##Credits)
+- [Acknowledgements](##Acknowledgements)
+- [Disclaimer](##Disclaimer)
+  <br>
+
 ## User Experience (UX)
 
 The purpose is to provide a simple user interface that is intuitive with only the necessary functions for a chat application.
@@ -87,43 +129,6 @@ _Future Enhancements_
 - As an Administrator, I can deactivate any user to revoke access to the application
 - As an Administrator, I can assign roles to a user
 - As an Administrator, I can delete any conversation if requested by the user to comply with GDPR regulation
-
-# Development Planes
-
-## Strategy Plane - User Needs and Business Objective
-
-The primary goal of the application is to capture and annotate actual conversations for training AI conversational models for chatbots. The conversation domain is specific to an organization that utilizes chatbots to assist with providing support and responses to questions from the user community.
-
-The user will be able to get information for a specific product or service. The business will be able to provide accurate and relevant information to the customer with a high rating.
-
-Generic AI models for chatbot conversations do not capture the specific context of a business and the profile of target customers. There will contribute toward the development of explainable AI models.
-
-Usable data to train AI models for specific contexts that are specific to a domain and fine-tune to a specific business use case is likely to yield the best results.
-
-The focus of the project is on data and inspiration was from [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4). The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together.
-
-## Scope Plane
-
-### Personas
-
-- Chat User initiates conversations
-- Chat Moderator respond to conversations
-- Chat Conversation Annotator review and rates conversations
-- Chat Application Admin manages conversation topics
-
-### Release 1(Current) Features with Database updates
-
-- Chat applications using Flask session and routing to support private conversations between a user and a moderator
-- Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
-- Data annotation functionality to review and rank the quality of conversation
-- Access to application functionality will be base on user role type, specifically, user, moderator, annotator, and application administrator
-- The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together
-
-### Extended Features for future releases
-
-- Replace Flask session with [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) to improve reliability, responsiveness, and security
-- Data extraction JASON API for training AI Machine Learning models
-- CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values
 
 # Database Model - Chat Annotator
 
@@ -331,6 +336,42 @@ References: Data Model
 
 </details>
 <br />
+# Development Planes
+
+## Strategy Plane - User Needs and Business Objective
+
+The primary goal of the application is to capture and annotate actual conversations for training AI conversational models for chatbots. The conversation domain is specific to an organization that utilizes chatbots to assist with providing support and responses to questions from the user community.
+
+The user will be able to get information for a specific product or service. The business will be able to provide accurate and relevant information to the customer with a high rating.
+
+Generic AI models for chatbot conversations do not capture the specific context of a business and the profile of target customers. There will contribute toward the development of explainable AI models.
+
+Usable data to train AI models for specific contexts that are specific to a domain and fine-tune to a specific business use case is likely to yield the best results.
+
+The focus of the project is on data and inspiration was from [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4). The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together.
+
+## Scope Plane
+
+### Personas
+
+- Chat User initiates conversations
+- Chat Moderator respond to conversations
+- Chat Conversation Annotator review and rates conversations
+- Chat Application Admin manages conversation topics
+
+### Release 1(Current) Features with Databse CRUD
+
+- Chat applications using Flask session and routing to support private conversations between a user and a moderator
+- Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
+- Data annotation functionality to review and rank the quality of conversation
+- Access to application functionality will be base on user role type, specifically, user, moderator, annotator, and application administrator
+- The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together
+
+### Extended Features for future releases
+
+- Replace Flask session with [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) to improve reliability, responsiveness, and security
+- Data extraction JASON API for training AI Machine Learning models
+- CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values
 
 ## Structure Plane
 
@@ -365,7 +406,7 @@ Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.
 
 <br />
 
-### Navigation Routes
+### Navigation Routes Routes Map to Business Function
 
 <br />
 
@@ -546,7 +587,11 @@ Source:
 
 ### Defensive Design
 
-#### Flash Messages
+#### Notification Flash Messages
+
+#### Secure Routes
+
+#### Secure Function Access
 
 #### Input Validation
 
@@ -565,9 +610,9 @@ bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d')
 
 Source: [How to check that mongo ObjectID is valid in python?](https://stackoverflow.com/questions/28774526/how-to-check-that-mongo-objectid-is-valid-in-python)
 
-#### internal errors are handled gracefully and users are notified of the problem where
+#### Error Handling
 
-appropriate.
+internal errors are handled gracefully and users are notified of the problem where appropriate.
 
 ## Code Refactoring
 
@@ -769,7 +814,65 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 </details>
 <br />
 
-## Tutorials
+## Testing
+
+[Testing Documentation here.](TESTING.md)
+
+## Technologies
+
+### Web Development
+
+- Materialize
+- Flask
+- MongoDB
+- Python
+- Javascript
+- HTML5
+- CSS
+- Font Awesome
+
+### Deployment, Source Code Repository, Version Control and Project Management
+
+- Heroku
+- GitHub
+- GitHub Projects
+
+### Development Tools
+
+- Chrome DEV Tool
+- Firefix Developer Edition
+- Gitpod
+- Visual Studio Code (VSCode)
+- Balsamiq
+- SnagIt
+- [Markdown TOC](https://ecotrust-canada.github.io/markdown-toc/)
+- Microsoft Edge
+
+### Validators
+
+- [CSS Beautifier](https://www.freeformatter.com/css-beautifier.html)
+- [WCAG Color contrast checker](https://chrome.google.com/webstore/detail/wcag-color-contrast-check/plnahcmalebffmaghcpcmpaciebdhgdf?hl=en)
+- [Responsive Design Checker](http://ami.responsivedesign.is/)
+- Chrome Dev Tool
+  - JS loaded using dev tool/network
+- [Jshint](https://jshint.com/)
+
+### Accessibility Audit
+
+- Chrome Dev Tool
+  - Ligthouse Accessibility
+
+## Content
+
+- UX adopted and modified from CI Mini Project- Putting it all together
+- All content and data were created by the developer
+
+## Media
+
+- [Dreamstime chatbot icon](https://thumbs.dreamstime.com/b/chatbot-icon-virtual-assistant-vector-143083940.jpg)
+- All images were created by the developer
+
+## Tutorial References
 
 <br />
 <details>
@@ -867,17 +970,7 @@ References
 </details>
 <br />
 
-### Content
-
-- All content was written by the developer.
-- Psychological properties of colors text in the README.md was found [here](http://www.colour-affects.co.uk/psychological-properties-of-colours)
-
-### Media
-
-- [Dreamstime chatbot icon](https://thumbs.dreamstime.com/b/chatbot-icon-virtual-assistant-vector-143083940.jpg)
-- All images were created by the developer
-
-### Acknowledgements
+## Acknowledgements
 
 - My Mentor Guido Cecilio for his feedback and guidance
 - Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
