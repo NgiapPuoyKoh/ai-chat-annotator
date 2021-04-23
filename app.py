@@ -125,7 +125,7 @@ def login():
 def logout():
 
     # If not user in session Redirect to Features
-    if 'user' not in session:
+    if not is_authenticated():
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
