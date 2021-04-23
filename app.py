@@ -189,6 +189,8 @@ def edit_topic(topic_id):
         'roletype' in session) and (
             session['roletype'] == 'admin'):
         if topic_id != "" and ObjectId.is_valid(topic_id):
+            topic = mongo.db.topics.find_one_or_404(
+                {"_id": ObjectId(topic_id)})
             if request.method == "POST":
                 submit = {
                     "topic_name": request.form.get("topic_name")
@@ -198,11 +200,7 @@ def edit_topic(topic_id):
                 return redirect(url_for("get_topics"))
 
             if request.method == "GET":
-                print(topic_id)
-                if ObjectId.is_valid(topic_id):
-                    topic = mongo.db.topics.find_one(
-                        {"_id": ObjectId(topic_id)})
-                    return render_template("edit_topic.html", topic=topic)
+                return render_template("edit_topic.html", topic=topic)
         # if topic id is invalid valid else return a 404
         else:
             return render_template('404.html'), 404
