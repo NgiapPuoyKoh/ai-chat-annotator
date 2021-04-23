@@ -83,6 +83,10 @@ def register():
 # User Login utilized hash passwords
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if is_authenticated():
+        flash("Please Logout First to excute this operation")
+        redirect(url_for("features"))
+
     if request.method == "POST":
 
         username = request.form.get("username").lower()
@@ -185,10 +189,8 @@ def add_topic():
 @app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])
 def edit_topic(topic_id):
     """ Edit Topic """
-    if ('user' in session) and (
-        'roletype' in session) and (
-            session['roletype'] == 'admin'):
-        if topic_id != "" and ObjectId.is_valid(topic_id):
+    if is_admin():
+        if is_object_id_valid(topic_id):
             topic = mongo.db.topics.find_one_or_404(
                 {"_id": ObjectId(topic_id)})
             if request.method == "POST":
