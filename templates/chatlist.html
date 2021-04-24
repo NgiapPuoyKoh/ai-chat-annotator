@@ -18,9 +18,8 @@
                             <a href="{{ url_for('chatlist', activeconv = conversation._id)}}"
                                 class="btn-small light-blue lighten-1">Respond</a>
                             {% else %}
-                            <!-- button to trigger python function to respond to end Chat -->
-                            <a href="{{ url_for('chatlist', activeconv = conversation._id)}}"
-                                class="btn-small light-blue lighten-1">Done</a>
+                            <!-- button to indicate conversation which have been assigned -->
+                            <div class="btn-small light-blue lighten-1">Assigned</div>
                             {% endif %}
                         </div>
                         <div class="col s12">
