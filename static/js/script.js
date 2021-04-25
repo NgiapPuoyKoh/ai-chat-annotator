@@ -33,7 +33,7 @@ function setPageReload() {
     if (storeText !== "") {
         msgtxt.textContent = storeText;
     }
-    let timer = setTimeout(function () {
+    let timer = setTimeout(() => {
         // Update the localStorage anytime the is a pull
         localStorage.setItem("msgtxt", msgtxt.value);
         location.reload();
