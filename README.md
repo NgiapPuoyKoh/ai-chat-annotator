@@ -1,4 +1,4 @@
-# <h1 align="center">Chat with Conversation Annotator for Chatbot </h1>
+credi# <h1 align="center">Chat with Conversation Annotator for Chatbot </h1>
 
 [View the live project here.](http://flask-ai-chat-annotate.herokuapp.com/)
 
@@ -35,8 +35,11 @@ A chat application with conversation data prep to feed into an AI model (not inc
   - [Embedded Data Document Structure](##Embedded-Data-Document-Structure)
   - [Single Document](##Single-Document)
   - [Collections Reference Relationships](###-Collections-Reference-Relationships)
-- [Development Planes](#-Development-Planes)
-  - [Strategy Plane---User Needs and Business Objective](##Strategy-Plane---User-Needs-and-Business-Objective)
+
+[Development Planes](#-Development-Planes)
+
+- [Strategy Plane---User Needs and Business Objective](##Strategy-Plane---User-Needs-and-Business-Objective)
+  - [Chat and Annotation Workflow](###Chat-and-Annotation-Workflow)
 - [Scope Plane](##-Scope-Plane)
   - [Personas](###Personas)
   - [Release 1(Current) Features with Database CRUD](<###Release-1(Current)-Features-with-Databse-CRUD>)
@@ -44,10 +47,33 @@ A chat application with conversation data prep to feed into an AI model (not inc
 - [Structure Plane](##Structure-Plane)
   - [MVC Architecture](###MVC-Architecture)
   - [Access to Functions and Navigation by Role Type](###Access-to-Functions-and-Navigation-by-Role-Type)
-  - [Navigation Routes Map to Business Function](###Navigation-Routes-Map-to-Business-Function)
+  - [Navigation Routes Map to Business Function](###Navigation-Routes-Routes-Map-to-Business-Function)
+  - [Dynamic Routes and Variable Rules](###Dynamic-Routes-and-Variable-Rules)
+  - [Route HTTP Methods](<###Route-HTTP-Methods-(default-GET,-POST,-PUT)>)
+  - [Navigation Bar Function Access](###Navigation-Bar-Function-Access)
 - [Skeleton Plane](##Skeleton-Plane)
+
+  - [Flask with Python MVC Framework Response Request Cycle](###Flask-with-Python-MVC-Framework---Response-Request-Cycle)
+
   - [Wireframes](###Wireframes)
-  - [Mobile](####Mobile) - [Computers and Tablets Pages](####Computers-and-Tablets-Pages) -[##Surface Plane](##Surface-Plane)
+  - [Mobile](####Mobile)
+  - [Computers and Tablets Pages](####Computers-and-Tablets-Pages)
+  - [Application-Features](##Application-Features)
+    - [Responsive on all device sizes)](###Responsive-on-all-device-sizes)
+    - [Realtime Interactive Chat Form](###Realtime-Interactive-Chat-Form)
+    - [Private Messaging between Moderator and User](###-Private-Messaging-between-Moderator-and-User)
+    - [Managing Session Data with Flask-Session referencing a MongoDB collection document](###Managing-Session-Data-with-Flask-Session-referencing-a-MongoDB-collection-document)
+    - [Chat Conversation History will be stored in a database](###Chat-Conversation-History-will-be-stored-in-a-database)
+    - [Workbench for Conversation Annotation](###Workbench-for-Conversation-Annotation)
+    - [Application Adminstration](###Application-Adminstration)
+    - [User Functions](###User-Functions)
+    - [Navigation Functions by Role Type](###Navigation-Functions-by-Role-Type)
+    - [User Login/Logout Session Management](###User-Login/Logout-Session-Management)
+    - [Chat Session Variables](####Session-Variables)
+    - [MONGODB Conversation Database](###MONGODB-Conversation-Database)
+  - [Future Enhancements](###Future-Enhancements)
+
+- [Surface Plane](##Surface-Plane)
   - [Defensive Design](###Defensive-Design)
   - [Notification Flash Messages](####Notification-Flash-Messages)
   - [Input Validation](####Input-Validation)
@@ -143,15 +169,39 @@ That is, for many scenarios, modeling your data appropriately will minimize the 
 
 Source: [Atomicity and Transactions](https://docs.mongodb.com/manual/core/write-operations-atomicity/)
 
+The product of this AI chat Annotator application is to capture actual conversations that can be extracted to train chat bots models that are available. One example is Chatterbot a machine learning, conversational dialogue engine.
+
+```
+
+from chatterbot.trainers import ListTrainer
+
+trainer = ListTrainer(bot)
+
+trainer.train([
+'How are you?',
+'I am good.',
+'That is good to hear.',
+'Thank you',
+'You are welcome.',
+])
+
+```
+
+Reference:
+[Operational Factors and Data Models](https://docs.mongodb.com/manual/core/data-model-operations/)
+[Chatterbot](https://chatterbot.readthedocs.io/en/stable/examples.html)
+
+A detailed description of the design of the database components applying the principles above to capture the conversations is detailed on the following charts.
+
 ## Flexible Schema - Collections
 
-| Collection    | Description                                                                  | Usage                                                                                                                |
-| ------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Feature       | Operational Feature Name, Description, and Feature Specific User Instruction | Seeded information used on the feature page stored in the database to allow manual updates without code modification |
-| Conversations | Chat conversations between the user and moderator                            | Conversation information and generated messages are stored using the Embedded sub-document structure                 |
-| Topics        | Category tag for a conversation                                              | User selects the topic to classify a conversation at initiation                                                      |
-| Ratings       | Rate the Quality of conversation                                             | Annotator review and rate the quality of the conversation for training chat-bots                                     |
-| Users         | Chat application user role type                                              | Access to application functions are granted based on the user's assigned role type                                   |
+| Collection    | Description                                                                                                         | Usage                                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Feature       | Operational Feature Name, Quick Start Information, Description, and Instructions for each Feature by User role type | Seeded information used on the feature page stored in the database to allow manual updates without code modification |
+| Conversations | Chat conversations between the user and moderator                                                                   | Conversation information and generated messages are stored using the Embedded sub-document structure                 |
+| Topics        | Category tag for a conversation                                                                                     | User selects the topic to classify a conversation at initiation                                                      |
+| Ratings       | Rate the Quality of conversation                                                                                    | Annotator review and rate the quality of the conversation for training chat-bots                                     |
+| Users         | Chat application user role type                                                                                     | Access to application functions are granted based on the user's assigned role type                                   |
 
 ---
 
@@ -162,23 +212,25 @@ Source: [Atomicity and Transactions](https://docs.mongodb.com/manual/core/write-
 ### Conversations
 
 ```
+
 {conversations:{
-    _id:,
-    topic_name:
-    username:
-    timestamp:
-    moderator:
-    status:
-    msg:[
-       {
-         timestamp:
-         username:
-         msgtxt:
-       },
-       {....
-       },
-       ....
-    ]
+_id:,
+topic_name:
+username:
+timestamp:
+moderator:
+status:
+msg:[
+{
+timestamp:
+username:
+msgtxt:
+},
+{....
+},
+....
+]
+
 ```
 
 ### Conversation Embedded Sub-document for messages
@@ -196,21 +248,29 @@ Source: [Atomicity and Transactions](https://docs.mongodb.com/manual/core/write-
 ### Features
 
 ```
+
 features:{
-  _id:
-  feature_name:
-  feature_description:
-  feature_instructions:
+_id:
+feature_name:
+feature_description:
+feature_instructions:
+[
+  0: <string>,
+  1: <string>,
+  ..,
+  ..
+]
 }
+
 ```
 
 ### Features Embedded Sub-document for instructions
 
 <br />
 
-| Feature              | Sub-Document | Elements |
-| -------------------- | ------------ | -------- |
-| feature_instructions | array.object | [#]      |
+| Feature              | Sub-Document | Elements    |
+| -------------------- | ------------ | ----------- |
+| feature_instructions | array.object | #: string.. |
 
 ---
 
@@ -221,29 +281,36 @@ features:{
 ### Users
 
 ```
+
 users:{
-    _id:,
-    password: encrypted
-    roletype:
+_id:,
+username:
+password: encrypted
+roletype:
 }
+
 ```
 
 ### Topics
 
 ```
+
 topics:{
-  _id:,
-  topic_name
+_id:,
+topic_name
 }
+
 ```
 
 ### Ratings
 
 ```
+
 ratings:{
-  _id:,
-  rating_name
+_id:,
+rating_name
 }
+
 ```
 
 ### Collections Reference Relationships
@@ -267,9 +334,11 @@ ratings:{
 <br />
 
 ```
+
 Note: Collections storing the Element list of values are created and seeded manually utilizing CRUD Operations via MongoDB Atlas Data Explorer without any code changes
 
 Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
+
 ```
 
 ### Conversation Status Indicator
@@ -336,6 +405,7 @@ References: Data Model
 
 </details>
 <br />
+
 # Development Planes
 
 ## Strategy Plane - User Needs and Business Objective
@@ -344,11 +414,28 @@ The primary goal of the application is to capture and annotate actual conversati
 
 The user will be able to get information for a specific product or service. The business will be able to provide accurate and relevant information to the customer with a high rating.
 
-Generic AI models for chatbot conversations do not capture the specific context of a business and the profile of target customers. There will contribute toward the development of explainable AI models.
+Generic AI models for chatbot conversations do not capture the specific context of a business and the profile of target customers. This application intends to contribute toward the development of explainable AI models.
 
 Usable data to train AI models for specific contexts that are specific to a domain and fine-tune to a specific business use case is likely to yield the best results.
 
-The focus of the project is on data and inspiration was from [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4). The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together.
+The focus of the project is on data and inspiration was from [Python Chat Bot Tutorial - Chatbot with Deep Learning (Part 1)](https://www.youtube.com/watch?v=wypVcNIH6D4https://www.youtube.com/watch?v=wypVcNIH6D4).
+
+The UX for this application uses Materialize and is adapted from the design decisions for the Mini Project - Putting It All Together.
+
+### Chat and Annotation Workflow
+
+- User selects a topic and initiates conversation from the chat room
+- A conversation is created in the database with the status "pending"
+- A moderator will see the conversation displayed in a chat list pending a response
+- The moderator will respond by selecting a pending chat from the list
+- The user and the moderator will then enter into a chat session and sends messages to each other
+- The user and moderator will carry out a conversation until either one ends the conversation
+- When the conversation ends it is updated to status "Done"
+- The moderator will be redirected to the pending chat list and the user will be redirected to the chat room
+- The annotator can view all done conversations and can search for conversations by topic_name from the done chat list
+- The annotator rates the conversations by selecting a rating and the conversation will be set to "annotated" and be removed from the list
+- The annotator can delete a conversation from the done chat list
+- The administrator manages the topics and can add, edit and delete topics
 
 ## Scope Plane
 
@@ -356,7 +443,7 @@ The focus of the project is on data and inspiration was from [Python Chat Bot Tu
 
 - Chat User initiates conversations
 - Chat Moderator respond to conversations
-- Chat Conversation Annotator review and rates conversations
+- Chat Annotator review and rates conversations
 - Chat Application Admin manages conversation topics
 
 ### Release 1(Current) Features with Databse CRUD
@@ -365,7 +452,7 @@ The focus of the project is on data and inspiration was from [Python Chat Bot Tu
 - Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
 - Data annotation functionality to review and rank the quality of conversation
 - Access to application functionality will be base on user role type, specifically, user, moderator, annotator, and application administrator
-- The UX will be developed using Materialize adapted from the design decisions of the Mini Project - Putting It All Together
+- The UX uses Materialize adapted from the design decisions of the Mini Project - Putting It All Together
 
 ### Extended Features for future releases
 
@@ -413,6 +500,7 @@ Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.
 The concept of routes and attempt at the art of routing has been a challenge and there is still much to learn to understand routing.
 
 ```
+
 Build smart routes to accommodate dynamic applications and APIs
 
 Routes refer to URL patterns e.g. myapp.com/home or myapp.com/about
@@ -423,50 +511,137 @@ Views refer to content to be served at these URLs
 Python decorators are essentially logic which wraps other function and always match the syntax of the link above the function
 
 Name of the view functions hold significance in Flask
+
 ```
 
 Tip: We can handle multiple routes with a single function by simply stacking additional route decorators above any route!
 
 ```
+
 @app.route("/")
 @app.route("/home")
 @app.route("/index")
 def home():
 return "Hello World!"
+
 ```
 
 ```
+
 Mapping URLs to actions
 Reserve URL path associate with a page template (with business logic)
 
 Apps are a medium for data such as user profiles/post
 
 Routes define the ways of access data which is always changing
+
 ```
 
 Source: [The Art of Routing in Flask](https://hackersandslackers.com/flask-routes/)
 
-| Business Function     | Routes                                                                                                                                                                                                                   | Decorator                                                                                                           |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| Features              | @app.route("/") </br> @app.route("/features") </br> @app.route("/get_features")                                                                                                                                          |
-| Register              | @app.route("/register", methods=["GET", "POST"])                                                                                                                                                                         | def features(): </br> def get_features():                                                                           |
-| Login                 | @app.route("/login", methods=["GET", "POST"])                                                                                                                                                                            | def login():                                                                                                        |
-| Logout                | @app.route("/logout")                                                                                                                                                                                                    | def register():                                                                                                     |
-| Profile               | @app.route("/profile", methods=["GET"])                                                                                                                                                                                  | def profile():                                                                                                      |
-| Topic                 | @app.route("/topic") </br> @app.route("/get_topics")</br> @app.route("/add_topic", methods=["GET", "POST"])</br>@app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])</br>@app.route("/delete_topic/<topic_id>") | def topic(): </br> def get_topics(): </br>def add_topic():</br>edit_topic(topic_id):<br>def delete_topic(topic_id): |
-| Chatroom              | @app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])                                                                          | def chatroom(activeconv):                                                                                           |
-| Chatlist              | @app.route("/chatlist", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatlist/<activeconv>", methods=["GET", "POST"])                                                                          | def chatlist(activeconv):                                                                                           |
-| Chat                  | @app.route("/chat", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chat/<activeconv>", methods=["GET", "POST"])                                                                                  | def chat(activeconv):                                                                                               |
-| Annotate Chats        | @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"]) </br>@app.route("/annotatechats/<convid>", methods=["GET", "POST"])                                                                       | def annotatechats(convid):                                                                                          |
-| Search by Topic       | @app.route("/search", methods=["GET", "POST"])                                                                                                                                                                           | def search():                                                                                                       |
-| Delete Topic          | @app.route("/delchat/<delconvid>")                                                                                                                                                                                       | def delchat(delconvid):                                                                                             |
-| Custom Error Handling | @app.errorhandler(404)<br>@app.errorhandler(500)<br>@app.errorhandler(405)                                                                                                                                               | def page_not_found(error):</br>def internal_server(error):</br>def method_not_allowed(error):                       |
+| Business Function     | Routes                                                                                                                                                                                                                   | Decorator                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Features              | @app.route("/") </br> @app.route("/features")                                                                                                                                                                            | features()                                                                                           |
+| Get Features          | @app.route("/get_features")                                                                                                                                                                                              | get_features()                                                                                       |
+| Register              | @app.route("/register", methods=["GET", "POST"])                                                                                                                                                                         | register()                                                                                           |
+| Login                 | @app.route("/login", methods=["GET", "POST"])                                                                                                                                                                            | login()                                                                                              |
+| Logout                | @app.route("/logout")                                                                                                                                                                                                    | logout()                                                                                             |
+| Profile               | @app.route("/profile", methods=["GET"])                                                                                                                                                                                  | profile()                                                                                            |
+| Topic                 | @app.route("/topic") </br> @app.route("/get_topics")</br> @app.route("/add_topic", methods=["GET", "POST"])</br>@app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])</br>@app.route("/delete_topic/<topic_id>") | topic(): </br> get_topics(): </br> add_topic():</br>edit_topic(topic_id):<br>delete_topic(topic_id): |
+| Chatroom              | @app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])                                                                          | chatroom(activeconv)                                                                                 |
+| Chatlist              | @app.route("/chatlist", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatlist/<activeconv>", methods=["GET", "POST"])                                                                          | chatlist(activeconv)                                                                                 |
+| Chat                  | @app.route("/chat", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chat/<activeconv>", methods=["GET", "POST"])                                                                                  | chat(activeconv)                                                                                     |
+| Annotate Chats        | @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"]) </br>@app.route("/annotatechats/<convid>", methods=["GET", "POST"])                                                                       | annotatechats(convid)                                                                                |
+| Search by Topic       | @app.route("/search", methods=["GET", "POST"])                                                                                                                                                                           | search()                                                                                             |
+| Delete Topic          | @app.route("/delchat/<delconvid>")                                                                                                                                                                                       | delchat(delconvid):                                                                                  |
+| Custom Error Handling | @app.errorhandler(404)<br>@app.errorhandler(500)<br>@app.errorhandler(405)                                                                                                                                               | page_not_found(error):</br> internal_server(error):</br> method_not_allowed(error):                  |
 
 ---
 
 </br>
 
+### Route HTTP Methods (default GET, POST, PUT)
+
+| Function        | Route Decorator                                                                                                                                                                                                          | Function                                                                                                | View Template                   | Content Description |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------- | ------------------- |
+| Login           | @app.route("/login", methods=["GET", "POST"])                                                                                                                                                                            | login()                                                                                                 | login.html                      |
+| Topic           | @app.route("/topic") </br> @app.route("/get_topics")</br> @app.route("/add_topic", methods=["GET", "POST"])</br>@app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])</br>@app.route("/delete_topic/<topic_id>") | topic(): </br> def get_topics(): </br>add_topic():</br>edit_topic(topic_id):<br>delete_topic(topic_id): | topics.html</br> add_topic.html |
+| Chatroom        | @app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatroom/<activeconv>", methods=["GET", "POST"]                                                                           | chatroom(activeconv):                                                                                   | chatroom.html                   |
+| Annotate Chats  | @app.route("/annotatechats", defaults={"convid": ""}, methods=["GET", "POST"]) </br>@app.route("/annotatechats/<convid>", methods=["GET", "POST"])                                                                       | annotatechats(convid):                                                                                  | annotatoechats.html             |
+| Search by Topic | @app.route("/search", methods=["GET", "POST"])                                                                                                                                                                           | search():                                                                                               | topics.html                     |
+
+---
+
+</br>
+
+### Dynamic Routes and Variable Rules
+
+Routes with variable rules acccept parameters
+
+```
+
+@app.route('/user/<username>')
+def profile(username):
+#... Logic goes here
+
+@app.route('/<int:year>/<int:month>/<title>')
+def article(year, month, title):
+#... Logic goes here
+
+```
+
+| Function | Route Decorator                                                                                                                                                                                                          | Function                                                                                            |                   | Variables |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- | --------- |
+| Topic    | @app.route("/topic") </br> @app.route("/get_topics")</br> @app.route("/add_topic", methods=["GET", "POST"])</br>@app.route("/edit_topic/<topic_id>", methods=["GET", "POST"])</br>@app.route("/delete_topic/<topic_id>") | topic(): </br> get_topics(): </br>add_topic():</br>edit_topic(topic_id):<br>delete_topic(topic_id): | topics.\_id       |
+| Chatroom | @app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])</br>@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])                                                                          | chatroom(activeconv):                                                                               | conversation.\_id |
+
+---
+
+</br>
+
+### Navigation Bar Function Access
+
+Access to methods are defined in that base.html
+
+- All users can access the application Features desctiption page
+- Users without accounts have access to register an account with roletype "user"
+- Users with accounts and are logged in have access to
+  - Profile
+  - Logout
+- Users with accounts and are logged in will have access to functions by roletype
+
+  | User roletype | Functions       | Page template                    | Usage                                                             |
+  | ------------- | --------------- | -------------------------------- | ----------------------------------------------------------------- |
+  | user          | room            | room.html                        | Select a topic and initiate a conversation                        |
+  | moderator     | Chat List       | chatlist.html                    | View pending conversations and respond to a conversation          |
+  | admin         | Manage Topic    | topics.html <br> edit_topic.html | Manage Topics - Add, Edit, and Delete topics                      |
+  | annotator     | Annotate Chates | annotatechats.html               | Search completed conversation by topic_name and rate conversation |
+
+  ***
+
+  </br>
+
+- Users and moderators when engaged in an active conversation will have access to Active Chat page to send messages to each other. Both the user or the moderator engaged in a conversation can choose to end the converstaion.
+
 ## Skeleton Plane
+
+The chat application information exchange utilizes flask session and session management based on the HTTP Response request Cycle.
+
+This involves capturing the session information and a custom session variable to identify the active conversation and the users that are engaged in the conversation.
+
+Messages are captured in the MongoDB database as they are sent and rendered to the users during the active conversation.
+
+### Flask with Python MVC Framework - Response Request Cycle
+
+Create URLs based on http request-resonse user sessions and conversation database collection for private chats using the Flask MVC framework
+
+![Response Request Cycle](static/images/requestResponseCycle.png)
+![Flask Views](static/images/roleOfViewFunctions.png)
+![Flask Server Receive Request from Client](static/images/flaskServerReceiveRequestFromClient.png)
+![Flask Abort Function](static/images/flaskAbortFunction.png)
+![Flaxk Custom Error-Handler](static/images/flaskCustomErrorHandler.png)
+
+Source: [Building Reliable Flask Applications By Abdul Rehman Yousaf]
 
 ### Wireframes
 
@@ -477,7 +652,7 @@ Source: [The Art of Routing in Flask](https://hackersandslackers.com/flask-route
 Mobile
 </summary>
 <p>
- 
+
 ##### Welcome Page - [View](https://github.com/)
 
 ![Mobile  Chat Welcome Page](static/images/ChatUIWelcome.gif)
@@ -583,7 +758,282 @@ Source:
 </details>
 <br />
 
+## Application Features
+
+### Responsive on all device sizes
+
+- Materialize design responsive front-end framework is utilized to build a clean minimalist look and feel.
+
+### Realtime Interactive Chat Form
+
+- A active chat page will be provided to enable messages to be sent between user and moderator
+
+  Source: [MAKE YOUR OWN CHAT ARENA,using flask, socket io in 7 minute](https://www.linkedin.com/pulse/make-your-own-chat-arenausing-flask-socket-io-7-minutes-suraj-/)
+
+### Private Messaging between Moderator and User
+
+- Private chat session between moderator-user chat for the conversation
+
+  Source: [Flask-SocketIO Session IDs and Private Messages](https://www.youtube.com/watch?v=mX7hPZidPPY)
+
+### Managing Session Data with Flask-Session referencing a MongoDB collection document
+
+- Chat messages will be captured and stored for each conversation
+
+  Source: [Managing Session Data with Flask-Session & Redis](https://hackersandslackers.com/managing-user-session-variables-with-flask-sessions-and-redis/)
+
+### Chat Conversation History will be stored in a database
+
+- Chat conversations will be stored in MongoDB and can be retrieved via direct DB query or custom APIs
+
+  Source: [Adding Chat History to Flask-SocketIO Chat With Flask-SQLAlchemy](https://www.youtube.com/watch?v=pigpDSOBNMc)
+
+### Workbench for Conversation Annotation
+
+- Chat histories in the repository can be viewed and annotated via a chat annotation page
+
+### Application Adminstration
+
+- Conversation Topic Management
+- User management functionality
+  - User Role Type Assignment
+  - registration
+  - login/logout
+  - password reset
+
+### User Functions
+
+- User account registration for 'user' role type
+- Login
+- Logout
+- Chat Room
+- Chat Session
+
+### Navigation Functions by Role Type
+
+- Role type Context Sensitive Navigation Functions
+
+### User Login/Logout Session Management
+
+- Login/Logout session cookie
+
+#### Session Variables
+
+Session variables used to implement business logic for accessing conversations and moving a conversation through its life cycle workflow
+
+```
+session["user"] = username
+session["roletype"] = 'user'
+session['activeconv'] = str(initconvId)
+session['convstatus'] = "active","pending", "done", "annotated"
+```
+
+### MONGODB Conversation database
+
+### Password Hash
+
+Source: [Werkzeug Security Helpers](https://werkzeug.palletsprojects.com/en/1.0.x/utils/#module-werkzeug.security)
+
+### Defensive Modal Windows and Flash Messages
+
+- Modals will be used to confirm user intent for performing deletes and flask flash messages will be displayed to notify uses of action invoked and completed
+
+Source: [Materialize Css Confirm Delete Popup](https://www.tutorialsplane.com/materialize-css-confirm-delete-popup/)
+
+### Future Enhancements
+
+#### Session Reliability and Performance
+
+- Improve reliability and refresh performance by replacing long polling with Flask SocetIO
+
+#### CSRF - Cross-Site Request Forgery
+
+Source: [CSRF Protection in Flask](https://testdriven.io/blog/csrf-flask/)
+
+#### Application Functionality
+
+- User can request or perform password change
+- Profile page to include role type
+- Administrator can update user role type
+- User comes online will trigger an alert (flash message) to a Moderator
+- Moderator who is available will be alerted when a user logins
+- Moderator will manually join a conversation or the system will automatically assign and connect the moderator to the user
+
+#### REST API for loading training conversations
+
+- Custom API to extract conversations for use to train chatbots or analysis
+
+  Source:
+
+  - [Building RESTFUL APIs in Flask (Bruce Van Horn)](https://www.linkedin.com/learning/building-restful-apis-with-flask/)
+  - [Flask JWT secure add endpoint](https://pythonhosted.org/Flask-JWT/)
+  - [Flask JWT extended](https://pypi.org/project/Flask-JWT-Extended/)
+  - [Postman](https://www.guru99.com/postman-tutorial.html)
+  - [Flask MongoAlchemy](https://pythonhosted.org/Flask-MongoAlchemy/)
+  - [MONGODB RESTFUL API WITH FLASK](https://www.bogotobogo.com/python/MongoDB_PyMongo/python_MongoDB_RESTAPI_with_Flask.php)
+    API for JASON extract
+
 ## Surface Plane
+
+## CRUD Functions
+
+Source:
+
+- [Create a CRUD Restful Service API using Flask + Mysql in 7 minutes!](https://www.nintyzeros.com/2019/11/flask-mysql-crud-restful-api.html)
+
+### CREATE
+
+- Conversation
+
+### READ
+
+Update conversatios to render the best responses by topic
+
+- UPDATE Conversations
+- Rank Conversations
+- DELETE
+  Remove poor conversations
+
+  [Building Datagrid for CRUD in Flask with pythonGrid](https://www.codementor.io/@pycr/building-datagrid-for-crud-in-flask-in-pythongrid-16oltg7lr8)
+  [PyMongo](https://pymongo.readthedocs.io/en/stable/tutorial.htmlhttps://pymongo.readthedocs.io/en/stable/tutorial.html)
+  Annotate conversation
+  Rank responses and conversation
+
+## Components
+
+### HTML based User interfaces
+
+### Templates
+
+#### Welcome Start
+
+- Animated Chatbot
+- Start button
+- Redirect login
+
+#### Login
+
+- Login Form
+- Submit button
+- Validate emal
+- Flash message
+- Create Account button or Link
+  - redirect create Account
+- Redirect dashboard
+
+#### Create Account
+
+- Create account Form
+- Submit button
+- Redirect topic dashboard
+
+#### Topic dashboard
+
+- Select topic list
+- Other topic
+- Consider topic user input function
+- Redirect Chat session
+
+#### Chat session for User and Responder
+
+- Display session Conversation
+- Long polling with keydown event page refresh
+- Session Info: user, random variable, variables
+- Enter Message
+- End conversation
+- End conversation button trigger User Rating Fom(Optional user input)
+- Redirect Rating
+
+#### Conversation rating
+
+- Rating form
+- Submit button
+- Done
+- Redirect login
+
+#### Data Annotation
+
+- Search by Conversation attributes, topic, rating and Status
+- Display Conversation
+- Update Conversations Attributes
+- Update/exclude conversation Details (python grid?)
+- Save button
+  - Flash work not save
+- Done button
+- Redirect login
+
+#### Additional templates
+
+##### Update User Profile
+
+## Routes
+
+### Chat Application Workflow Process and CRUD Functionality
+
+##### Chat Welcome (@welcome)
+
+- User with active session redirect to the chatroom
+
+##### Chat Dashboard(@dashboard)
+
+##### User Registration(@registration)
+
+##### Chat Panel (@session/user)
+
+##### Chat Panel (@session/moderator)
+
+##### Annotate Chat Conversation (@chatannotate)
+
+##### Application Administrator (@chatAdmin)
+
+Source [The Art of Routing in Flask](https://hackersandslackers.com/flask-routes/)
+
+## Code components
+
+### Session
+
+### Client
+
+#### Client Fuctions
+
+### Server
+
+#### Server Functions
+
+### Routes
+
+## Events
+
+### Design
+
+- #### Colour Scheme
+  - BLue whit and black
+- #### Typography
+  - The Montserrat font is the main font used throughout the whole website with Sans Serif as the fallback font in case for any reason the font isn't being imported into the site correctly. Montserrat is a clean font used frequently in programming, so it is both attractive and appropriate.
+- #### Imagery
+  - gifs that catch atttension
+
+### Conversations MongoDB Index on Topic Name
+
+![Conversations MongoDB Index on Topic Name](static/images/mongodbIndex.png)
+
+![Create MongoDB Conversations Topic Name Index ](static/images/mongodbIndex.png)
+
+```
+from app import mongo
+
+mongo.db.conversations.create_index([("topic_name", "text")])
+'topic_name_text'
+
+mongo.db.conversations.index_information()
+{'_id_': {'v': 2, 'key': [('_id', 1)]}, 'topic_name_text': {'v': 2, 'key': [('_fts', 'text'), ('_ftsx', 1)], 'weights': SON([('topic_name', 1)]), 'default_language': 'english', 'language_override': 'language', 'textIndexVersion': 3}}
+
+quit()
+```
+
+### CRUD
+
+### Components
 
 ### Defensive Design
 
@@ -592,6 +1042,8 @@ Source:
 #### Secure Routes
 
 #### Secure Function Access
+
+#### Tooltips
 
 #### Input Validation
 
@@ -820,22 +1272,51 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 
 ## Technologies
 
-### Web Development
+### UX
 
-- Materialize
+- [Materialize](https://materializecss.com/)
+  - Build responsive front-end framework for the application
+- [jinja](https://jinja.palletsprojects.com/en/2.11.x/)
+  - Build html templates
+- [HTML5](https://developer.mozilla.org/en-US/docs/Web/HTML)
+- [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
+- [Font Awesome](https://fontawesome.com/icons?d=gallery&p=2)
+  - Icons used for buttons and web pages
+
+### Languages Used
+
+- [Python](https://www.python.org/)
+  - Code functions and business logic with Flask
+- [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+  - Polling and localstorage to capture input and refresh pages
+  - Initialize Materialize Javascript Components
+
+### Database
+
+- [MongoDB](https://www.mongodb.com/)
+  - Document Database to store application data
+- [pymongo](https://pypi.org/project/pymongo/)
+  - Interact with database
+  - Perform CRUD functions
+
+### Frameworks, Libraries & Programs Used
+
 - Flask
-- MongoDB
-- Python
-- Javascript
-- HTML5
-- CSS
-- Font Awesome
+
+  - MVC Modal View Controller framework for developing the application
+
+- [flask-Session](https://flask-session.readthedocs.io/en/latest/)
+- [flask-PyMongo](https://flask-pymongo.readthedocs.io/en/latest/)
+- [flask-login](https://www.youtube.com/redirect?q=https%3A%2F%2Fflask-login.readthedocs.io%2Fen%2Flatest%2F&v=rrIdQJSKiP4&redir_token=QUFFLUhqbFVhQnc0aHRJN1hodnVQTnVtRWR0dUJFd0pRQXxBQ3Jtc0ttY2xBQWZabHRGbndCM3FDcUwtSXNWVWVEMUgwRUNHb0pVX2lCVkNCc2lqMG40MWF3ZWdibzdkU192UWJKQThUdlplNTJCeVhnbW1ueDJ6bFpBaF92Rm02OElYLVFhWHN2WGtqalVBWFNSS0ZDRm5Zaw%3D%3D&event=video_description)
 
 ### Deployment, Source Code Repository, Version Control and Project Management
 
-- Heroku
-- GitHub
-- GitHub Projects
+- [Heroku](https://www.heroku.com/)
+  - Deployed application on a Cloud Application Platform
+- [GitHub](https://github.com/)
+  - Code cloud repository
+- [GitHub Projects](https://github.com/features/project-management/)
+  - Project Management
 
 ### Development Tools
 
@@ -843,9 +1324,12 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 - Firefix Developer Edition
 - Gitpod
 - Visual Studio Code (VSCode)
-- Balsamiq
-- SnagIt
-- [Markdown TOC](https://ecotrust-canada.github.io/markdown-toc/)
+- [Balsamiq](https://balsamiq.com/)
+  - Create Wireframes
+- [SnagIt](https://www.techsmith.com/screen-capture.html)
+  - Screen Capture for document images
+- [Markdown](https://guides.github.com/features/mastering-markdown/)
+  - Create git documents
 - Microsoft Edge
 
 ### Validators
@@ -864,7 +1348,6 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 
 ## Content
 
-- UX adopted and modified from CI Mini Project- Putting it all together
 - All content and data were created by the developer
 
 ## Media
@@ -957,6 +1440,7 @@ References
 
 ##### UX Sources Credits
 
+- CI Mini Project - Putting It All Together
 - [Chat UI Welcome Screen from Vlad Tyzum](https://www.digital22.com/insights/beautiful-chatbot-ui-examples-that-will-definitely-inspire-you#a6)
 - [Dashboard and Chat](https://dribbble.com/shots/10978875-Insurance-app-dashboard-Chat)
 - [Direct Messaging](https://dribbble.com/shots/10831579-013-Direct-Messaging-UI-Challenge)
@@ -970,9 +1454,10 @@ References
 </details>
 <br />
 
-## Acknowledgements
+## Credits
 
-- My Mentor Guido Cecilio for his feedback and guidance
+- Mentor Guido Cecilio for his feedback and guidance on proper session handling, code refactoring and defensive programming
+- Claire Lally who conviced me that Flask-session is achievable and I believed her followed by an eventful MS3 learning journey
 - Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
 - Fellow learner Mihaela Sandrea who took the time to provide user acceptance feedback and testing
 - Slack community members who provided support to survive the learning journey
@@ -980,3 +1465,7 @@ References
 ## Disclaimer
 
 This project is for educational use only
+
+```
+
+```
