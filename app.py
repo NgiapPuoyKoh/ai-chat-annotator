@@ -107,11 +107,6 @@ def login():
                 flash("Welcome, {}".format(username))
                 # set session variables
                 session["roletype"] = existing_user["roletype"]
-                # log session info
-                print("Login")
-                print(existing_user["roletype"])
-                print(session.get("activeconv"))
-
                 # Redirect to features page after successful registration
                 return redirect(url_for("features"))
             else:
@@ -225,9 +220,8 @@ def delete_topic(topic_id):
 # Chatroom where User selects a topic and
 # initiatie and engages in active conversation
 # Create conversations and insert messages into database
-@app.route("/chatroom", defaults={"activeconv": ""}, methods=["GET", "POST"])
-@app.route("/chatroom/<activeconv>", methods=["GET", "POST"])
-def chatroom(activeconv):
+@app.route("/chatroom/", methods=["GET", "POST"])
+def chatroom():
     """Chat Room"""
 
     # If not user in session Redirect to Features
@@ -241,10 +235,6 @@ def chatroom(activeconv):
     # render topics from database for selection
     topics = list(mongo.db.topics.find().sort("topic_name", 1))
 
-    if activeconv != "":
-        activeconv = mongo.db.conversations.find_one(
-            {"_id": ObjectId(activeconv)})
-
     if request.method == "POST":
         conversation = {
             "topic_name": request.form.get("topic_name"),
@@ -257,22 +247,17 @@ def chatroom(activeconv):
         initconv = mongo.db.conversations.insert_one(conversation)
 
         # capture conversationid
-        initconvId = initconv.inserted_id
+        activeconv = initconv.inserted_id
 
         # custom session variable to capture
         # conversationid and conversation status
-        session['activeconv'] = str(initconvId)
-        session['convstatus'] = "active"
-
-        # set up parameter for redirect
-        activeconv = initconvId
+        session["activeconv"] = str(activeconv)
+        session["convstatus"] = "active"
 
         flash("Conversation Initiated Pending Moderator")
-        return redirect(url_for("chat", activeconv=activeconv))
+        return redirect(url_for("chat"))
 
-    return render_template("chatroom.html",
-                           topics=topics,
-                           activeconv=activeconv)
+    return render_template("chatroom.html", topics=topics)
 
 
 # Chatlist for moderator response to user initiated conversations
@@ -289,45 +274,38 @@ def chatlist(activeconv):
     if is_user_roletype('moderator'):
         conversations = list(mongo.db.conversations.find())
         # get chats for chatlist to display pending and active chats
-        initconvId = conversations[len(conversations)-1]['_id']
+        initconv_id = conversations[len(conversations)-1]['_id']
 
         # response button function to respond to pending conversation
         # update status and add moderator
         if is_object_id_valid(activeconv):
-            print("Review Chat List")
-
+            # get conversation id f selected conversation
             activeconv = mongo.db.conversations.find_one(
                 {"_id": ObjectId(activeconv)})
-
+            # update conversation
             if activeconv["status"] == "pending":
                 mongo.db.conversations.find_one_and_update(
                     {"_id": ObjectId(activeconv["_id"])},
                     {"$set": {"moderator": session["user"],
                               "status": 'active'}})
-
                 flash("Moderator Responded")
                 # custom session variable to capture
                 # conversationid and conversation status
-                session['activeconv'] = str(initconvId)
-                session['convstatus'] = "active"
-                session['roletype'] = "moderator"
-                print('Moderator Responded (activeconv):' +
-                      session["activeconv"])
-                return redirect(url_for("chat", activeconv=activeconv))
-
+                session["activeconv"] = str(initconv_id)
+                session["convstatus"] = "active"
+                session["roletype"] = "moderator"
+                return redirect(url_for("chat"))
         return render_template(
             "chatlist.html", activeconv=activeconv,
             conversations=conversations)
-
     else:
-        flash("You do not have privileges to Annotate Chats")
+        flash("You do not have privileges to Annotate")
         return redirect(url_for("features"))
 
 
 # Display active conversation with messages
-@app.route("/chat", defaults={"activeconv": ""}, methods=["GET", "POST"])
-@app.route("/chat/<activeconv>", methods=["GET", "POST"])
-def chat(activeconv):
+@app.route("/chat", methods=["GET", "POST"])
+def chat():
     """ Chat conversation """
 
     # If not user in session Redirect to Features
@@ -335,41 +313,40 @@ def chat(activeconv):
         flash("You are currently not logged in")
         return redirect(url_for('features'))
 
+    # app.pyredirect based on role type
+    if 'activeconv' not in session:
+        flash("No Active Chat")
+        if is_user_roletype("user"):
+            return redirect(url_for("chatroom"))
+        elif is_user_roletype("moderator"):
+            return redirect(url_for("chatlist"))
+        elif is_user_roletype("annotator"):
+            return redirect(url_for("annotatechats"))
+        else:
+            return redirect(url_for("get_topics"))
+
     # capture text messages and update conversation
     if request.method == "POST":
         if request.form['submit_button'] == 'Send':
             # time stamp
             msgtime = datetime.now().strftime("%H:%M:%S")
-
-            # log session info
-            print(session["activeconv"])
-            print(session["user"])
-            print(request.form.get("msgtxt"))
-
+            # capture active conversation id
+            activeconv = session["activeconv"]
             # insert message to conversation
             mongo.db.conversations.find_one_and_update(
-                {"_id": ObjectId(session["activeconv"])},
+                {"_id": ObjectId(activeconv)},
                 {"$push": {"msg": {"timestamp": msgtime,
                                    "username": session["user"],
                                    "msgtxt": request.form.get("msgtxt")}}})
-
             # pass to chat template for rendering
-            activeconvinfo = mongo.db.conversations.find_one(
-                {"_id": ObjectId(session["activeconv"])})
-
-            # log active conversatin info
-            print(activeconvinfo["_id"])
-
-            activeconv = session["activeconv"]
-
+            # activeconvinfo = mongo.db.conversations.find_one(
+            #     {"_id": ObjectId(activeconv)})
             flash("Message Sent")
-            return redirect(url_for("chat", activeconv=activeconv))
+            return redirect(url_for("chat"))
         # user or moderator ends conversation
         elif request.form['submit_button'] == 'End':
-
             # time stamp
             msgtime = datetime.now().strftime("%H:%M:%S")
-
             # capture message text and set status
             mongo.db.conversations.find_one_and_update(
                 {"_id": ObjectId(session["activeconv"])},
@@ -377,10 +354,8 @@ def chat(activeconv):
                                    "username": session["user"],
                                    "msgtxt": request.form.get("msgtxt")}},
                  "$set": {"status": "done"}})
-
             # pop session info
             session.pop('activeconv', None)
-
             # Redirect and flash message for ended conversation
             if is_user_roletype("moderator"):
                 flash("Ended Conversation")
@@ -390,48 +365,31 @@ def chat(activeconv):
                 return redirect(url_for("chatroom"))
 
     # Active conversation in progress
-    if activeconv != "":
-        print("Display Active Chat")
-        # print(activconv)
-
-        if is_user_roletype("user") and session['convstatus'] == "active":
-            # log session info
-            print(session['activeconv'])
-            print(session['roletype'])
-            print(session['convstatus'])
-            # pass to chat template for rendering
-            activeconv = mongo.db.conversations.find_one(
+    if is_user_roletype("user") and session["convstatus"] == "active":
+        # pass to chat template for rendering
+        activeconv = mongo.db.conversations.find_one(
+            {"_id": ObjectId(session["activeconv"])})
+        if activeconv["status"] == 'done':
+            flash("Ended Conversation")
+            # if conversation status is done pop session info
+            session.pop('activeconv', None)
+            return redirect(url_for("chatroom"))
+        return render_template(
+            "chat.html", activeconv=activeconv)
+    elif is_user_roletype("moderator"):
+        # if moderator has an active chat session
+        if ('convstatus' in session) and (session["convstatus"] == "active"):
+            # get active conversation id
+            activeconv = mongo.db.conversations.find_one_or_404(
                 {"_id": ObjectId(session["activeconv"])})
             if activeconv["status"] == 'done':
                 flash("Ended Conversation")
                 # if conversation status is done pop session info
                 session.pop('activeconv', None)
-                return redirect(url_for("chatroom"))
-            return render_template(
-                "chat.html", activeconv=activeconv)
-        elif is_user_roletype("moderator"):
-            # if moderator has an active chat session
-            if ('convstatus' in session) and (
-                    session['convstatus'] == "active"):
-
-                activeconv = mongo.db.conversations.find_one_or_404(
-                    {"_id": ObjectId(session["activeconv"])})
-
-                if activeconv["status"] == 'done':
-                    flash("Ended Conversation")
-                    # if conversation status is done pop session info
-                    session.pop('activeconv', None)
-                    return redirect(url_for("chatlist"))
-                return render_template(
-                    "chat.html", activeconv=activeconv)
-            else:
-                flash("No Active Chat Session")
                 return redirect(url_for("chatlist"))
-    else:
-        # handle no pending chats
-        if is_user_roletype("moderator"):
-            print("no active chat redirect to chatlist")
-            flash("No Active Chat")
+            return render_template("chat.html", activeconv=activeconv)
+        else:
+            flash("No Active Chat Session")
             return redirect(url_for("chatlist"))
 
 
@@ -455,7 +413,7 @@ def annotatechats(convid):
             "topic_name", 1))
         # pass conversation to template
         if convid == "":
-            print("List Conversations for Annotation")
+            # List Conversations for Annotation
             return render_template(
                 "annotatechats.html",
                 conversations=conversations,
@@ -463,24 +421,17 @@ def annotatechats(convid):
         else:
             # capture rating when button pressed
             if request.method == "POST":
-                # log POST triggered
-                print("POST Triggered")
-                print("before:" + convid)
                 rating_name = request.form.get("rating_name")
                 if request.form['update_button'] == 'Update':
-                    print("after:" + convid)
-                    print("Rating selected: " + rating_name)
-                    print("Update Conversation")
                     flash("Conversation Annotated")
-                    # log before update
-                    print("before update:" + convid)
+                    # update conversation with rating
                     mongo.db.conversations.find_one_and_update(
                         {"_id": ObjectId(convid)},
                         {"$set": {
                             "status": "annotated",
                             "rating": rating_name
-                            }}
-                        )
+                        }}
+                    )
                 return redirect(url_for("annotatechats"))
     flash("You do not have privileges to Annotate Chats")
     return redirect(url_for("features"))
@@ -509,9 +460,7 @@ def search():
 @app.route("/delchat/<delconvid>")
 def delchat(delconvid):
     if is_user_roletype('annotator') and is_object_id_valid(delconvid):
-        # log delete conversation
-        print("delete conversation")
-        print(delconvid)
+        # delete conversation
         mongo.db.conversations.find_one_or_404({"_id": ObjectId(delconvid)})
         mongo.db.conversations.remove({"_id": ObjectId(delconvid)})
         flash("Conversation Successfully Deleted")
@@ -520,9 +469,9 @@ def delchat(delconvid):
     return redirect(url_for("features"))
 
 # Custom Error Handling
-
-
 # 404 Error Page not found
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -556,7 +505,7 @@ def get_user_role():
     """ Retrieve the user role from session
     """
     if 'roletype' in session:
-        return session['roletype']
+        return session["roletype"]
     return None
 
 
