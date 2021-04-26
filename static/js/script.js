@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 function setPageReload() {
-    let msgtxt = document.getElementById("msgtxt")
+    let msgtxt = document.getElementById("msgtxt");
 
     // Get the value from the localStorage if there is a value
     let storeText = localStorage.getItem("msgtxt");
