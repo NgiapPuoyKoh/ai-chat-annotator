@@ -57,6 +57,16 @@ A chat application with conversation data prep to feed into an AI model (not inc
     - [Application Features](#--application-features--)
     - [Future Enhancements](#future-enhancements)
   - [Surface Plane](#surface-plane)
+  - [Surface Plane](#surface-plane)
+- [MongoDB Entities CRUD Operations](#mongodb-entities-crud-operations)
+- [UX](#ux)
+- [Features](#features)
+  - [Seeded Data using Atlas Data Explorer](#seeded-data-using-atlas-data-explorer)
+  - [Conversations MongoDB Index on Topic Name](#conversations-mongodb-index-on-topic-name)
+  - [Chat and Annotation Workflow](#chat-and-annotation-workflow)
+  - [Manage Topic Workflow](#manage-topic-workflow)
+  - [Jinja Templates](#jinja-templates)
+- [Error Handling](#error-handling)
   - [Testing](#testing)
   - [Heroku Deployment](#heroku-deployment)
   - [Technologies](#technologies)
@@ -78,25 +88,27 @@ The purpose is to provide a simple user interface that is intuitive with only th
 1. As a User, I want to be able to select a topic for a conversation to speak with an expert
 1. As a User, I want to be able to have a real-time conversation session
 1. As a User, I want to be able to review the entire conversation during the session
-1. As a User, I want to be notified of a Moderator is online and available for a conversation
 1. As a User, I want to be able to end a conversation when completed
 1. As a User, I want to be able to handle one active session at any time
+1. As a user, I want to be able to logout
+1. As a user, I want to be notified when I use the incorrect credentials at login
 1. As a new User, I want to be able to register as a user for the application to participate in a conversation
 1. As a retuning User, I want to be to access the application using registered credentials
 
 _Future Enhancment_
 
 - As a returning user, I want to reset my password
+- As a User, I want to be notified of a Moderator is online and available for a conversation
 - As a User, I want to be able to rate the conversation to provide feedback on whether it was satisfactory
 - As a User, I want to be able to provide feedback on the conversation experience
 
 ### Moderator Response to User
 
+1. As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond
+1. As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators
 1. As a Moderator, I want to be able to respond to questions from a user in real-time to assist the user
 1. As a Moderator, I want to be able to conduct one active conversation session one at any time
 1. As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session
-1. As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond
-1. As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators
 
 _Future Enhancment_
 
@@ -619,9 +631,9 @@ This involves capturing the session information and a custom session variable to
 
 Messages are captured in the MongoDB database as they are sent and rendered to the users during the active conversation.
 
-### Flask with Python MVC Framework - Response Request Cycle
+### Flask with Python MVC Framework - Request-Response Cycle
 
-Create URLs based on http request-resonse user sessions and conversation database collection for private chats using the Flask MVC framework
+Create URLs based on HTTP request-response user sessions and conversation database collection for private chats using the Flask MVC framework
 
 ### Wireframes
 
@@ -748,7 +760,7 @@ Source:
 
 - A active chat page will be provided to enable messages to be sent between user and moderator
 
-  Source: [MAKE YOUR OWN CHAT ARENA,using flask, socket io in 7 minute](https://www.linkedin.com/pulse/make-your-own-chat-arenausing-flask-socket-io-7-minutes-suraj-/)
+  Source: [MAKE YOUR OWN CHAT ARENA, using flask, socket io in 7 minutes](https://www.linkedin.com/pulse/make-your-own-chat-arenausing-flask-socket-io-7-minutes-suraj-/)
 
 ### Private Messaging between Moderator and User
 
@@ -805,7 +817,7 @@ session["convstatus"] = "active","pending", "done", "annotated"
 
 ### Persistent Conversation is stored in MongoDB database
 
-Conversation is stored as a collection in MongoDB
+Conversations are stored as a collection in MongoDB
 
 ### Password Hash
 
@@ -829,7 +841,7 @@ Source: [CSRF Protection in Flask](https://testdriven.io/blog/csrf-flask/)
 
 #### Application Functionality
 
-- User can request or perform password change
+- User can request or perform a password change
 - Profile page to include role type
 - User comes online will trigger an alert (flash message) to a Moderator
 - Moderator who is available will be alerted when a user logins
@@ -860,6 +872,225 @@ Reference Sources
 </br>
 
 ## Surface Plane
+
+## MongoDB Entities CRUD Operations
+
+| Entity        | Role Type     | Create | Read | Update | Delete |
+| ------------- | ------------- | ------ | ---- | ------ | ------ |
+| Users         | User          | Yes    | Yes  | No     | No     | No |
+| Conversations | User          | Yes    | Yes  | Yes    | No     |
+| Conversations | Moderator     | No     | Yes  | Yes    | No     |
+| Conversations | Annotator     | Yes    | Yes  | Yes    | Yes    |
+| Ratings       | Annotator     | No     | Yes  | No     | No     |
+| Topic         | Admin         | Yes    | Yes  | Yes    | Yes    |
+| Features      | Any Role Type | No     | Yes  | No     | No     |
+
+---
+
+</br>
+
+## Session
+
+## Routes
+
+**??How to descibe use of session and routes for real-time chat??**
+
+## UX
+
+The focus of this milestone project is on data to focus and manage the scope a decision was to apply and adapt the UX Material design, color scheme, look and feel is adapted from the Putting It All Together mini-project.
+
+The Chrome Dev Tool Lighthouse accessibility score is 93 is acceptable for a chat application.
+
+The following details Materailized components that were researched and utilized.
+
+## Features
+
+### Features and Quick Start
+
+Materialize Card Reveal is used for the Features page to inform user based on role the navigation bar item the start performing their role
+
+The user can click activator to reveal detailed how-to instruction for each role type
+
+![](static/images/featureCardReveal.png)
+
+### Initiate Chat Select Topic
+
+The user selects a topic and initiate a conversation
+
+![Select Topic Initiate Chat](static/images/mediumDeviceSelecTopicInitiateChat.png)
+
+### Active Chat Page
+
+User and moderator engage in real-time conversations and the messages are displayed in the Materialize collections text area
+
+![Active Chat Page](static/images/mediumDeviceActiveChatPage.png)
+
+### Menu Bar Items by Role Type
+
+#### User
+
+![User Nav Menu](static/images/userMenu.png)
+
+#### Moderator
+
+![Moderator NavMenu](static/images/moderatorMenu.png)
+
+</br>
+
+### Register Account
+
+- Register template
+- Submit button
+- Redirect feature page
+- Render User Roletype Navigation Menu
+
+### Initiate Conversation
+
+### Flask Session baseed Active Chat
+
+#### Chat session for User and Moderator
+
+- Display session Conversation
+- Long polling with keydown event page refresh
+- Session Info: user, random variable, variables
+- Enter Message
+- End conversation
+- End conversation button trigger User Rating Fom(Optional user input)
+- Redirect Rating
+
+### Annotate Conversations assign rating and Delete conversations
+
+#### Data Annotation
+
+- Search by Conversation attributes, topic, rating and Status
+- Display Conversation
+- Update Conversations Attributes
+- Update/exclude conversation Details (python grid?)
+- Save button
+  - Flash work not save
+- Done button
+- Redirect login
+
+### Topic Management
+
+#### Topic dashboard
+
+- Select topic list
+- Other topic
+- Consider topic user input function
+- Redirect Chat session
+
+### Login and Logout
+
+#### Login
+
+- Login Form
+- Submit button
+- Validate emal
+- Flash message
+- Create Account button or Link
+  - redirect create Account
+- Redirect dashboard
+
+#### Notification Flash Messages
+
+#### Tooltips
+
+### Seeded Data using Atlas Data Explorer
+
+features
+ratings
+user roletypes
+moderator accounts
+update user roletype
+
+### Conversations MongoDB Index on Topic Name
+
+![Conversations MongoDB Index on Topic Name](static/images/mongodbIndex.png)
+
+![Create MongoDB Conversations Topic Name Index](static/images/createIndex.png)
+
+```
+from app import mongo
+
+mongo.db.conversations.create_index([("topic_name", "text")])
+'topic_name_text'
+
+mongo.db.conversations.index_information()
+{'_id_': {'v': 2, 'key': [('_id', 1)]}, 'topic_name_text': {'v': 2, 'key': [('_fts', 'text'), ('_ftsx', 1)], 'weights': SON([('topic_name', 1)]), 'default_language': 'english', 'language_override': 'language', 'textIndexVersion': 3}}
+
+quit()
+```
+
+### Chat and Annotation Workflow
+
+| Actor              | Action                                                            | Conversation Status |
+| ------------------ | ----------------------------------------------------------------- | ------------------- |
+| User               | Select tpoci andInitiate Conversation                             | pending             |
+| System             | Create Conversation in MongoDB                                    | pending             |
+| System             | Capture Session Information and conversation Object Id and status | pending             |
+| Moderator          | Search pending conversations and respond to a conversation        | active              |
+| System             | converstiaon status is update                                     | active              | Moderator and User | Engage in active conversation send messages | active |
+| System             | Update conversation with messages                                 | active              |
+| User or Moderation | End conversation                                                  | done                |
+| System             | Update Conversation status                                        | done                |
+| System             | Pop session information                                           | done                |
+| System             | Moderator redirected to chat List                                 | N/A                 |
+| System             | User redirected to Chat Room                                      | N/A                 |
+| Annotator          | Search by topic name, Review, and rate completed conversation     | Annotated           |
+| System             | Update conversation to annotated                                  | annotated           |
+| Annotator          | Delete done conversation                                          | N/A                 |
+| System             | Removes conversation from collection                              | N/A                 |
+
+---
+
+</br>
+
+### Manage Topic Workflow
+
+</br>
+
+| Actor  | Action                   |
+| ------ | ------------------------ |
+| Admin  | Add topic                |
+| System | Create topic in database |
+| Admin  | Update topic             |
+| System | Update topic in database |
+| Admin  | Delete topic             |
+| System | Delete topic in database |
+
+---
+
+</br>
+
+### Jinja Templates
+
+| Jinja Templates |
+| --------------- |
+| base            |
+| login           |
+| register        |
+| profile         |
+| features        |
+| topics          |
+| edit_topic      |
+| chatrom         |
+| chatlist        |
+| chat            |
+
+---
+
+## Error Handling
+
+internal errors are handled gracefully and users are notified of the problem where appropriate.
+
+| Internal Errors    | Error Handlers         |
+| ------------------ | ---------------------- |
+| page not found     | @app.errorhandler(404) |
+| internal server    | @app.errorhandler(500) |
+| method not allowed | @app.errorhandler(405) |
+
+---
 
 ## Testing
 
