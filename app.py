@@ -52,7 +52,7 @@ def register():
     """Register User"""
 
     if is_authenticated():
-        flash("Please Logout First to excute this operation")
+        flash("Please Logout First to execute this operation")
         redirect(url_for("features"))
 
     if request.method == "POST":
@@ -415,7 +415,6 @@ def chat():
         # pass to chat template for rendering
         activeconv = mongo.db.conversations.find_one_or_404(filter)
         if activeconv["status"] == 'done':
-            flash("Ended Conversation")
             # if conversation status is done pop session info
             remove_conversation_from_session()
             if is_user_roletype("moderator"):
