@@ -24,18 +24,9 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
-# Render feature description and where to start
-# based on user access role type
 
-
+# Read and reder Feature description and details steps from database
 @app.route("/")
-@app.route("/features")
-def features():
-    """Main Features Page"""
-    return redirect(url_for("get_features"))
-
-
-# Read Feature description and details steps from database
 @app.route("/get_features")
 def get_features():
     """Get Features"""
@@ -53,7 +44,7 @@ def register():
 
     if is_authenticated():
         flash("Please Logout First to execute this operation")
-        redirect(url_for("features"))
+        redirect(url_for("get_features"))
 
     if request.method == "POST":
 
@@ -91,7 +82,7 @@ def register():
 def login():
     if is_authenticated():
         flash("Please Logout First to excute this operation")
-        redirect(url_for("features"))
+        redirect(url_for("get_features"))
 
     if request.method == "POST":
 
@@ -112,7 +103,7 @@ def login():
                 app.logger.info('Current after login session=%s', session)
 
                 # Redirect to features page after successful registration
-                return redirect(url_for("features"))
+                return redirect(url_for("get_features"))
             else:
                 # invalid password match
                 flash("Incorrect Username and/or Password")
@@ -131,7 +122,7 @@ def logout():
     # If not user in session Redirect to Features
     if not is_authenticated():
         flash("You are currently not logged in")
-        return redirect(url_for('features'))
+        return redirect(url_for('get_features'))
 
     # remove user from session cookies
     flash("You have been logged out")
@@ -142,7 +133,7 @@ def logout():
 
     app.logger.info('Current after logout session=%s', session)
 
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Read Session User Profile Name from database
@@ -162,13 +153,18 @@ def profile():
 @app.route("/get_topics")
 def get_topics():
     """Get Topics"""
+    # If not user in session Redirect to Features
+    if not is_authenticated():
+        flash("You are currently not logged in")
+        return redirect(url_for('get_features'))
+
     if is_admin():
         # get topics from database
         topics = list(mongo.db.topics.find().sort("topic_name", 1))
         # pass topics to template
         return render_template("topics.html", topics=topics)
     flash("You do not have privileges to Access Topics")
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Create new topic
@@ -185,7 +181,7 @@ def add_topic():
             return redirect(url_for("get_topics"))
         return render_template("add_topic.html")
     flash("You do not have privileges to Add Topic")
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Update topic
@@ -210,7 +206,7 @@ def edit_topic(topic_id):
         else:
             return render_template('404.html'), 404
     flash("You do not have privileges to Edit Topic")
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Delete topic from database
@@ -224,7 +220,7 @@ def delete_topic(topic_id):
             flash("Topic Successfully Deleted")
             return redirect(url_for("get_topics"))
     flash("You do not have privileges to Delete Topic")
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Chatroom where User selects a topic and
@@ -237,7 +233,7 @@ def chatroom():
     # If not user in session Redirect to Features
     if not is_authenticated():
         flash("You are currently not logged in")
-        return redirect(url_for('features'))
+        return redirect(url_for('get_features'))
 
     # initiate chat session
     starttime = datetime.now().strftime("%H:%M:%S")
@@ -280,7 +276,7 @@ def chatlist(activeconv):
     # If not user in session Redirect to Features
     if not is_authenticated():
         flash("You are currently not logged in")
-        return redirect(url_for('features'))
+        return redirect(url_for('get_features'))
 
     if is_user_roletype('moderator'):
         conversations = list(mongo.db.conversations.find())
@@ -317,7 +313,7 @@ def chatlist(activeconv):
             conversations=conversations)
     else:
         flash("You do not have privileges to Annotate")
-        return redirect(url_for("features"))
+        return redirect(url_for("get_features"))
 
 
 # Display active conversation with messages
@@ -330,7 +326,7 @@ def chat():
     # If not user in session Redirect to Features
     if not is_authenticated():
         flash("You are currently not logged in")
-        return redirect(url_for('features'))
+        return redirect(url_for("get_features"))
 
     # app.pyredirect based on role type
     if 'activeconv' not in session:
@@ -437,7 +433,7 @@ def annotatechats(convid):
     # If not user in session Redirect to Features
     if not is_authenticated():
         flash("You are currently not logged in")
-        return redirect(url_for('features'))
+        return redirect(url_for("get_features"))
 
     if is_user_roletype('annotator'):
         # render ratings from database for selection
@@ -470,12 +466,17 @@ def annotatechats(convid):
                     )
                 return redirect(url_for("annotatechats"))
     flash("You do not have privileges to Annotate Chats")
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Search Conversations by Topic Name for Annotation
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    # If not user in session Redirect to Features
+    if not is_authenticated():
+        flash("You are currently not logged in")
+        return redirect(url_for("get_features"))
+
     if is_user_roletype('annotator'):
         query = request.form.get("query")
         # render ratings from database for selection
@@ -489,7 +490,7 @@ def search():
                                ratings=ratings)
     else:
         flash("You do not have privileges to Annotate conversations")
-        return redirect(url_for("features"))
+        return redirect(url_for("get_features"))
 
 
 # Delete Conversation
@@ -502,7 +503,7 @@ def delchat(delconvid):
         flash("Conversation Successfully Deleted")
         return redirect(url_for("annotatechats"))
     flash("You do not have privileges to Delete conversations")
-    return redirect(url_for("features"))
+    return redirect(url_for("get_features"))
 
 
 # Custom Error Handling
