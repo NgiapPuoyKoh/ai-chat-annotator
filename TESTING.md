@@ -20,7 +20,6 @@
 ## Contents
 
 [Chat Annotator Testing](#chat-annotator-testing)
-
 - [General Scenario](#general-scenario)
 - [End to End Chat Session Test Matrix](#end-to-end-chat-session-test-matrix)
 - [Functional User Stories Role Type Test Matrix](#functional-user-stories-role-type-test-matrix)
@@ -31,7 +30,7 @@
 - [Known Issues](#known-issues)
 - [Code Refactoring](#code-refactoring)
 - [Validators](#validators)
-- [Browsers and Devices](#Browsersand-Devices)
+- [Browsers and Devices](#Browsers-and-Devices)
 
 </br>
 
@@ -388,9 +387,9 @@ This issue is especially disruptive on smaller devices.
 Future Enhancement:
 Fine-tune the refresh timing duration and improve the custom function
 
-## Moderators can only handle response to pending chat that is listed last
+## Moderators can only handle a response to pending chat that is listed last
 
-Issue: When there more than one pending conversation in the chat list moderators can respond to the last pending chat listed.
+Issue: When there is more than one pending conversation in the chat list moderators can only respond to the last pending chat listed. If a moderator responds to chats listed other than the last one it will throw a 404 error.
 
 This is related to the improper implementation of private sessions which is an advanced topic to be addressed in future releases
 
