@@ -208,6 +208,7 @@ Test Case Screen Capture
 | Page     | Page Link | Expected Result         | Actual Result |
 | -------- | --------- | ----------------------- | ------------- |
 | Register | Log In    | Redirects to Login Page | Pass          |
+| Log In   | Register  | Redirects to Register Page | Pass       |
 
 ## Responsiveness
 
