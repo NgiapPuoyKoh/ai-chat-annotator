@@ -405,6 +405,22 @@ for conversation in conversations:
 initconvId = conversation['_id']
 Source: Python len() Function
 
+#### Input Validation
+
+- Edit_topic decorator function does not handle invalid ObjectId
+
+Issue: Invalid ObjectId renders bson-errors.invalidis
+Resolution:
+bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d6c9')
+=> True
+bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d')
+=> False
+
+![Not a valid ObjectID](static/images/notValidObjectId.png)
+
+Source: [How to check that mongo ObjectID is valid in python?](https://stackoverflow.com/questions/28774526/how-to-check-that-mongo-objectid-is-valid-in-python)
+
+
 # Validators
 
 ## DevTool Lighthouse
@@ -442,25 +458,9 @@ Source: Python len() Function
 
 ## Responsive Web Page
 
-[Ami Responsive Checker](http://ami.responsivedesign.is/)
 ![Responsive](static/images/chatAnnotateResponsiveMultiDevices.png)
 
-#### Input Validation
-
-all input data is validated (e.g. presence check, format check, range check)
-
-- Edit_topic decorator fucntion does not handle invalid ObjectId
-
-Issue: Invalid ObjectId renders bson-errors.invalidid
-Resolution:
-bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d6c9')
-=> True
-bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d')
-=> False
-
-![Not a valid ObjectID](static/images/notValidObjectId.png)
-
-Source: [How to check that mongo ObjectID is valid in python?](https://stackoverflow.com/questions/28774526/how-to-check-that-mongo-objectid-is-valid-in-python)
+[Ami Responsive Checker](http://ami.responsivedesign.is/)
 
 # Browsers and Devices
 
