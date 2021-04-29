@@ -181,7 +181,7 @@ Test Case Screen Capture
 ## Route Redirects and Internal Errors
 
 | Test Case                               | Expected                       | Actual                                                         |
-|---|---|---|
+| --------------------------------------- | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
 | Unauthorised acces to chat conversation | /chat/608483da12743097778c99e2 | 404                                                            | 404.html rendered                                              |
 | Unauthorised acces to chat              | /chat                          | 404                                                            | flash "You are currently not logged in" redirected to features |
 | User not logged in chat                 | /chat                          | flash "You are currently not logged in" redirected to features |
@@ -205,10 +205,10 @@ Test Case Screen Capture
 
 ## Validate Page Links
 
-| Page     | Page Link | Expected Result         | Actual Result |
-| -------- | --------- | ----------------------- | ------------- |
-| Register | Log In    | Redirects to Login Page | Pass          |
-| Log In   | Register  | Redirects to Register Page | Pass       |
+| Page     | Page Link | Expected Result            | Actual Result |
+| -------- | --------- | -------------------------- | ------------- |
+| Register | Log In    | Redirects to Login Page    | Pass          |
+| Log In   | Register  | Redirects to Register Page | Pass          |
 
 ## Responsiveness
 
@@ -420,7 +420,7 @@ for conversation in conversations:
 initconvId = conversation['_id']
 Source: Python len() Function
 
-#### Input Validation
+### Input Validation
 
 - Edit_topic decorator function does not handle invalid ObjectId
 
