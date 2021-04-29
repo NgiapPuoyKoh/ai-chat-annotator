@@ -1,8 +1,8 @@
-## End to End Testing
+# Chat Annotator Testing
 
 **Important Testing Notes**
 
-- To test the chat functionality it will be necessary to use different browsers and/or different devices when logged in as a persona (Chrome/Firefox/Edge). The reason is that it utilizes flask session
+- To test the chat functionality it will be necessary to use different browsers and/or different devices when logged in as a persona (Chrome/Firefox/Edge). The reason is that it utilizes sessions
 - Avoid clearing browser cache so that sessions remain active for returning users. Clearing browser cache may be necessary to start over active chat sessions. This is a known limitation for the initial release of the application.
 - Registration of user account is only for role type user.
 - To create accounts as moderator, admin, and annotator register as you would as a user. Provide me with the username and the role type and I will have to update it directly using MongoDB data explorer
@@ -13,72 +13,173 @@
 - Each User and Moderator can only engage in one active conversation at any time.
 - The conversations are initiated by the user and once a session is ended it cannot be continued
 - The user or moderator will be able to continue conversations if the browser session is not deleted.
-- A moderator login and can review and respond to chats that are pending a response
+- A moderator login and can review and respond to a chat that is pending a response
 - User can engage in a real-time conversation with the moderator
 - Annotator will review and rate completed conversations
 
 ## Contents
 
-- [End to End Testing](#end-to-end-testing)
+[Chat Annotator Testing](#chat-annotator-testing)
+
 - [General Scenario](#general-scenario)
-- [Contents](#contents)
 - [End to End Chat Session Test Matrix](#end-to-end-chat-session-test-matrix)
 - [Functional User Stories Role Type Test Matrix](#functional-user-stories-role-type-test-matrix)
-- [Confirmations before deletes](#confirmations-before-deletes)
 - [Route Redirects and Internal Errors](#route-redirects-and-internal-errors)
 - [Validate Page Links](#validate-page-links)
 - [Responsiveness](#responsiveness)
+- [Unit Testing](#unit-testing)
+- [Known Issues](#known-issues)
+- [Code Refactoring](#code-refactoring)
+- [Validators](#validators)
+- [Browsers and Devices](#Browsersand-Devices)
 
-* [Unit Testing](#unit-testing)
-  - [Unable to trigger a POST to perform an update](#unable-to-trigger-a-post-to-perform-an-update)
-  - [Collapsible Accordian](#collapsible-accordian)
-  - [MongoDB find_one_and_update syntax to combine $set and $push](#mongodb-find-one-and-update-syntax-to-combine--set-and--push)
-  - [Unsecure chat url to unathorized conversation by moderator and user](#unsecure-chat-url-to-unathorized-conversation-by-moderator-and-user)
-  - [Chat Interface](#chat-interface)
-* [Known Issues](#known-issues)
-  - [Code Refactoring](#code-refactoring)
-* [Validators](#validators)
+</br>
 
 ## End to End Chat Session Test Matrix
 
-| Test Case # | Test Case                                                                                                 | User Story                                                                                                               | Feature                                                                             | Expected Result                                                                              | Actual Result                                                                                                 |
-| ----------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| 1.1         | Chat Features                                                                                             | As a user, I want to know how to start using the application                                                             | Feature Page                                                                        | Direct user to quick start link by role type                                                 | Card panels provide quick- start info and when clicked provides more details on what each feature does        |
-| 1.2         | Initiate Conversation                                                                                     | As a user, I want to select a topic and initiate a conversation                                                          | Click on Room Link                                                                  | Renders Page for user to select topic and click start chat                                   | User is redirected to Active chat page with a flash message that conversation is pending Moderator's response |
-| 1.2.1       | As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond      |
-| 1.2.2       | As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators |
-| 1.2.3       | As a Moderator, I want to be able to conduct one active conversation session one at any time              |
-| 1.3         | Send message                                                                                              | As a user, I want to be able to send a message during an active conversation                                             | Message text area and send button captures message entered by user                  | The message entered by the user will appear in the display text area with a timestamp        | Page refresh and displays all messages entered by the user or moderator of the conversation                   |
-| 1.3.1       |                                                                                                           | As a Moderator, I want to be able to respond to questions from a user in real-time to assist the user                    |
-| 1.4         | End Conversation                                                                                          | As a user, I want to end the conversation                                                                                | Use clicks on the end button                                                        | User will be redirected to Chat Room. Flash message render to confirm conversation has ended | User is redirected to chat room                                                                               |
-| 1.4.1       |                                                                                                           | As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session |
-| 1.5         | User sees moderator response                                                                              | As a user, I want to be able to see moderator responses as they are entered in real-timee                                | Messages entered by the moderator will be displayed in the active chat message area | Messages are displayed when entered in real-time                                             | Page refresh with messages deisplayed when no keys are pressed                                                |
-| 1.6         | As a User, I want to be able to handle one active session at any time                                     | When a user initiates a conversation user is redirected from the chat room to active chat page                           | The user selects a topic and is directed to active chat page                        |
-| 1.7         | As a user, I want to be able to logout                                                                    | User clicks on Logout                                                                                                    | Successful logout                                                                   | Redirected to login page                                                                     | Flash Message "You have been logged out" and redirected to Login                                              |
+| Test Case | Test Case | User Story | Feature | Expected Result | Actual Result |
+| --------- | --------- | ---------- | ------- | --------------- | ------------- |
+| 1.1 | Chat Features | As a user, I want to know how to start using the application | Feature Page | Direct user to quick start link by role type , Card panels provide quick-start info and when clicked provides more details on what each feature does | Pass |
+| 1.2 | Initiate Conversation | As a user, I want to select a topic and initiate a conversation | Chat Room | Click on Chat Room on the menu, Renders page for the user to select a topic and click start chat. User is redirected to Active chat page with a flash message that conversation is pending Moderator's response | Pass |
+| 1.2.1 | Review Pending Chats | As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond | Chat List | Moderator click on Chat List on Navigation Menu, redirect to the chat list and renders the list of Pending Chats are labeled "RESPOND" | Pass |
+| 1.2.2 | Review Active Chats | As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators | Active Chat | Moderator clicks on Chat List on Navigation Menu, redirect to chatlist. Active Chats are labeled "ASSIGNED" | Pass |
+| 1.2.3 | Respond to Chat | As a Moderator, I want to be able to conduct one active conversation session one at any time | Active Chat | Moderator Click on Respond and is redirected to Active Chat Page with Flash message "Moderator Responded" | Pass |
+| 1.3 | Send message | As a user, I want to be able to send a message during an active conversation | Active Chat | User input message in the text area and send button captures message entered by the user. The message entered by the user will appear in the display text area with a timestamp. Page refresh and displays all messages entered by the user or moderator of the conversation | Pass |
+| 1.3.1 | Send Message | As a Moderator, I want to be able to respond to questions from a user in real-time to assist the user | Active Chat | Moderator message in the text area and send button captures message entered by the moderator. The message entered by the user will appear in the display text area with a timestamp. Page refresh and displays all messages entered by the user or moderator of the conversation | Pass |
+| 1.4 | End Conversation | As a user, I want to end the conversation | Active Chat | The user clicks on the end button. User will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to chat room | Pass |
+| 1.4.1 | End Conversation | As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session | Active Chat | The Modearator clicks on the "END" button. The moderator will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to Chat List | Pass |
+| 1.5 | User sees moderator response | As a user, I want to be able to see moderator responses as they are entered in real-time | Active Chat | Messages entered by the moderator will be displayed in the active chat message area. Messages are displayed when entered in real-time. Page refresh with messages displayed when no keys are pressed | Pass |
+| 1.6 | User Initiate Chat | As a User, I want to be able to handle one active session at any time | Chat Room | When a user initiates a conversation user is redirected from the chat room to the active chat page The user selects a topic and is directed to active chat page | Pass |
+| 1.7 | Logout | As a user, I want to be able to logout | Logout | | User clicks on Logout on navigation menu | Successful logout. User is redirected to features page with Flash Message "You have been logged out" and redirected to Login | Pass |
 
 ---
 
+</br>
+
+<details>
+<summary>
+Test Case Screen Capture
+</summary>
+<p>
 ### 1.2 Initiate Chat
 
-![Selec Topic Initiate Chat](static/images/mediumDeviceSelecTopicInitiateChat.png)
+![Select Topic Initiate Chat](static/images/mediumDeviceSelecTopicInitiateChat.png)
 
 ![Chat Initiated](static/images/mediumDeviceChatInitiated.png)
 
+### 1.2.1 Pending Chats
+
+![Pending Chat List](static/images/moderatorPendingList.png)
+
+### 1.2.3 Moderator Respond
+
+![Moderator Respond](static/images/moderatorRespond.png)
+
+### 1.3 User Send Message
+
+![User Send Message](static/images/userSendMessage.png)
+
+### 1.3.1 Moderator Send Message
+
+![Moderator Send Message](static/images/moderatorSendMessage.png)
+
+### 1.4 User Ends Conversation
+
+![User Ends Conversation](static/images/userEndConversation.png)
+
+### 1.4.1 Moderator End Conversation
+
+![](static/images/moderatorEndConversation.png)
+
+### 1.7 Logout
+
+![Logout Sucessful](static/images/logoutSuccessful.png)
+
+</details>
+
 ## Functional User Stories Role Type Test Matrix
 
-| Test Case | User Story                                                                         | Feature                                 | Expected Result                           | Actual Result                                                          |
-| --------- | ---------------------------------------------------------------------------------- | --------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------- |
-| 2.1       | As a user, I want to register a user account                                       | Register Account                        | Successful registration                   | Directed to User with access to user navbar functions                  |
-| 2.2       | As a returning user, I can login using credentials used to register a user account | Successful Login                        | Directed to Chat Room                     | Directed to Chat Room                                                  | Flash Message "Welcome username" redirect features page |
-| 2.3       | As a user, I want to be notified when I use the incorrect credentials at login     | User enterd incorrect login credentials | User is informed of incorrect credentials | Flash message "Incorrect Username and/or Password" stays on login page |
+| Test Case | User                                                                                 | Feature                                  | Expected Result                                                                                                                                                                       | Actual Result           |
+| --------- | ------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| 2.1       | As a user, I want to register a user account                                         | Register Account                         | Directed to User with access to user navbar functions                                                                                                                                 | Successful registration |
+| 2.2       | As a returning user, I can login using credentials used to register a user account   | Successful Login                         | Login with credentials. Redirected to Features Page with Flash "Welcome username"                                                                                                     | pass                    |
+| 2.3       | As a user, I want to be notified when I use the incorrect credentials at login       | User entered incorrect login credentials | User is informed of incorrect credentials, Flash message "Incorrect Username and/or Password" stays on login page                                                                     | Pass                    |
+| 2.4       | As a new user, I want to be notified if user name already exists during registration | Username exists                          | User registers using a username that is not in the database, User register with a name that already exists in the database. Flash message "User Name already exists" on register page | Pass                    |
+| 2.5       | As a user, I want to be notified when registration is successful                     | Registers with valid credentials         | User register using a name that is not in the database, Redirected to the users' Profile page with a flash message "Registration Successful"                                          | Pass                    |
 
 ---
+
+</br>
+
+2.2 Returning User Successful Login
+![Login Successful](static/images/logoutSuccessful.png)
+
+2.4 User Name already exists during registration
+
+![User Name Already Exists](static/images/userAlreadyExists.png)
+
+2.5 User Registration Successful
+
+![Registration Successful](static/images/registrationSucessful.png)
+
+</br>
+
+### Chat Conversation Annotator
+
+- Review and Rate Conversations
+
+| Test Case | User Story                                                                       | Feature                      | Expected Result                                                                                                                                                      | Actual Result |
+| --------- | -------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| 3.1       | As an Annotator I want to view a list of conversations that need to be annotated | Review Chatlist              | Chat List rendered                                                                                                                                                   | passed        |
+| 3.2       | As an Annotator, I want to be able to search conversations by topic name         | Search Conversations         | Enter a text string to get conversation with the string found in the topic name. List of conversations with the search string found in the topic name be renderd     | Pass          |
+| 3.3       | As an Annotator, I want to be able to search conversations by topic name         | Reset Search String          | Click reset button to clear search string input. Input text screen is removed                                                                                        | Pass          |
+| 3.4       | As an Annotator, I want to be able to review and rate conversation               | Review and Rate Conversation | Click to expand accordian for conversation to review details, select a rating and click update. Page renders and the conversation annotated is removed from the list | Pass          |
+
+---
+
+</br>
+
+3.1 View Annotate Chat List
+![Annotate Chat List](static/images/annotateChatList.png)
+3.2 Search Annotate Chat List by Topic Name
+3.3 Annotate chat by selecting a Rating
+![](static/images/annotateChats.png)
+3.4 Review and Rate Conversation
+![](static/images/annotateChatDetails.png)
+
+### Conversation Topic Management
+
+| Test Case | User Story                                     | Feature      | Expected Result                                                                                                                                                                                                                                                                                                                                     | Actual Result                                                                                                            |
+| --------- | ---------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---- |
+| 4.1       | As an Administrator, I want to add a new topic | Add Topic    | The administrator clicks on the Add Topic button to redirect to the Add Topic page. Input the topic name and click Add Topic button. The Administrator is redirected to the Manage Topic page with a flash message "New Topic Added"                                                                                                                | Pass                                                                                                                     |
+| 4.2       | As an Administrator, I want to edit topic      | Edit Topic   | The administrator clicks on the Edit button for the card with the Topic name. A modal is rendered with the current topic name. User edits the topic name and clicks Save                                                                                                                                                                            | The administrator is redirected to the topics page and the edited topic name will be displayed and replaces the old name | Pass |
+| 4.3       | As an Administrator, I want to delete topic    | Delete Topic | The administrator clicks on the Delete button for the card with the Topic name to delete. A modal is rendered to confirm deletion or cancel. Click on delete and the administrator is redirected to the Manage Topic page with a Flash message "Topic Successfully Deleted" and the card with the deleted Topic name no longer displays on the page | Pass                                                                                                                     |
+
+---
+
+</br>
+
+![Manage Topic](static/images/topicManage.png)
+
+4.1 Add Topic
+
+![Add Topic](static/images/topicAdd.png)
+
+![Topic Added](static/images/topicAdded.png)
+
+4.2 Edit Topic
+![Edti Topic](static/images/topicEdit.png)
+
+4.3 Delete Topic
+
+![Confirm Delete](static/images/topicDeleteConfirm.png)
+![Delete Topic](static/images/topicDelete.png)
 
 ## Confirmations before deletes
 
 ## Route Redirects and Internal Errors
 
-| Test Case                               |                                | Expected                                                       | Actual                                                         |
+| Test Case                               | Expected                       | Actual                                                         |
 | --------------------------------------- | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
 | Unauthorised acces to chat conversation | /chat/608483da12743097778c99e2 | 404                                                            | 404.html rendered                                              |
 | Unauthorised acces to chat              | /chat                          | 404                                                            | flash "You are currently not logged in" redirected to features |
@@ -192,13 +293,13 @@ Resolved:
 
 ```
 
-Source: [How do I setandpush in single update with MongoDB?](https://www.tutorialspoint.com/how-do-i-set-and-push-in-single-update-with-mongodb)
+Source: [How do I set and push in a single update with MongoDB?](https://www.tutorialspoint.com/how-do-i-set-and-push-in-single-update-with-mongodb)
 
-## Unsecure chat url to unathorized conversation by moderator and user
+## Secure chat URL access to authorized moderator and user
 
-Issue: Moderator is able to access active conversation by using the url initiated by user
+Issue: Unauthorized moderator can access active conversation by using the URL initiated by a user
 
-Fix: Validate if moderator has an active chat session and access to conversation
+Fix: Validate if a moderator has an active chat session and authorized access to conversation
 
 ```
             # if moderator has an active chat session for active conversation
@@ -206,6 +307,22 @@ Fix: Validate if moderator has an active chat session and access to conversation
                     session['convstatus'] == "active") and (
                         'activconv' in session):
 ```
+
+## Polling removes message text if on key-down pressed and timeout are delayed
+
+Message entered by User if Send is not clicked and there are no key-down events detected within a few seconds it will be lost
+
+Issue: Limitation of Polling with the key-down event time limit
+
+Fix: Created a custom function setPageReload to store the entered text in localstorage with a set timeout to rerender the text on refresh
+
+## Active chat sessions lose association with the user
+
+Active chat session of a different user is rendered when there are multiple active chat session at any one time
+
+Issue: Active chat session is not properly tied to the user and moderator engaging in the conversation
+
+Fix: Use AJAX for session management and chat filtering to the user and moderator of an active chat
 
 ## Chat Interface
 
@@ -256,7 +373,7 @@ Attempts to fix error:
 Issue: Monderator using url to a conversation that is done renders a KeyError: 'activeconv'
 ![ModeratorAccessDoneConv](static/images/moderatorAccessDoneConversationError.png)
 
-## Active Conversations Not Accessible if Sessions is no longer available
+## Active Conversations Not Accessible if Browser Session is no longer available
 
 Issue: If the browser session information is deleted there is currently no function available
 to track and enable users to access and continue the conversation
@@ -264,21 +381,25 @@ to track and enable users to access and continue the conversation
 Enhancement for Future Release:
 Replace session and polling with Flask-Socket IO or custom functions to remove dependency on session
 
-## Polling removes message text if on key-down pressed and timeout are delayed.
+## Custom text capture input during page reloads results in page jumps
 
-Message entered by User if Send is not clicked and there are no key-down events detected within a few seconds it will be lost
+Issue: During message text input the page refresh the page jumps and the position of the page components changes momentarily.
 
-Issue: Limitation of Polling with key-down event time limit
+The results in the invoking buttons that are not intentional while entering message text.
 
-Future Enhancement:
-Reimplement solution using Flask-SocketIO or alternative async methods or custom javascript function
-
-## Custom text capture input interferes with message text entry
-
-Issue: During message text input the page refresh and interrupt the entry
+This issue is especially disruptive on smaller devices.
 
 Future Enhancement:
 Fine-tune the refresh timing duration and improve the custom function
+
+## Moderators can only handle response to pending chat that is listed last
+
+Issue: When there more than one pending conversation in the chat list moderators can respond to the last pending chat listed.
+
+This is related to the improper implementation of private sessions which is an advanced topic to be addressed in future releases
+
+Future Enhancement:
+Need to determine how to secure sessions to render to the user and moderators engaged in the active conversation.
 
 <br>
 
@@ -293,21 +414,34 @@ for conversation in conversations:
 initconvId = conversation['_id']
 Source: Python len() Function
 
-### Use len() function instead of For Loop
-
 # Validators
+
+## DevTool Lighthouse
+
+![Lighthouse Report](static/images/lighthouseValidate.png)
+
+## Python
+
+![PEP8 Report](static/images/pep8Validate.png)
+[PEP8](http://pep8online.com/)
 
 ## Javascript
 
-- [JSHint Configured for New JavaScript features (ES6)](https://jshint.com/)
+![JavaScript Report](static/images/jhintValidate.png)
+
+[JSHint Configured for New JavaScript features (ES6)](https://jshint.com/)
 
 ## CSS
 
-- [CSS Validation Service](https://jigsaw.w3.org/css-validator/#validate_by_input)
+![CSS Report ](static/images/cssValidation.png)
 
-![](static/images/cssValidation.png)
+[CSS Validation Service](https://jigsaw.w3.org/css-validator/#validate_by_input)
+[Autoprefixer is a PostCSS plugin which parses your CSS and adds vendor prefixes](https://autoprefixer.github.io/)
 
-- [Autoprefixer is a PostCSS plugin which parses your CSS and adds vendor prefixes](https://autoprefixer.github.io/)
+### HTML Validator
+
+![HTML Report](static/images/htmlValidate.png)
+[HTML Validtor](https://validator.w3.org/)
 
 ## Accessibility
 
@@ -315,13 +449,10 @@ Source: Python len() Function
 
 ![Accessible color palette builder](static/images/accessibleColorPalette.jpg)
 
-- Chrome Dev Tool Lighthouse Accessibility Report
-  Contrast Known Issue to be resolved in future Releases
-  ![Contrast Known Issue to be resolved in future Releases](static/images/accessibilityLoghthouse.png)
+## Responsive Web Page
 
-- Responsive Web Page
-  [Ami Responsive Checker](http://ami.responsivedesign.is/)
-  ![Responsive](static/images/chatAnnotateResponsiveMultiDevices.png)
+[Ami Responsive Checker](http://ami.responsivedesign.is/)
+![Responsive](static/images/chatAnnotateResponsiveMultiDevices.png)
 
 #### Input Validation
 
@@ -339,3 +470,20 @@ bson.objectid.ObjectId.is_valid('54f0e5aa313f5d824680d')
 ![Not a valid ObjectID](static/images/notValidObjectId.png)
 
 Source: [How to check that mongo ObjectID is valid in python?](https://stackoverflow.com/questions/28774526/how-to-check-that-mongo-objectid-is-valid-in-python)
+
+# Browsers and Devices
+
+## Browsers
+
+- Google Chrome
+- Microsoft Edge
+
+## Devices
+
+- Samsung Galaxy S7
+- Lenovo TB-X304F Android version 7.1.1
+
+## PC
+
+- Acer Aspire A317
+- Lenovo L421
