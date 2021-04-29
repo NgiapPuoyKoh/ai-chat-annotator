@@ -884,7 +884,7 @@ Access to application functionality is controlled by the role type associated wi
 </br>
 
 | Entity        | Role Type     | Create | Read | Update | Delete |
-| ------------- | ------------- | ------ | ---- | ------ | ------ | --- |
+| ------------- | ------------- | ------ | ---- | ------ | ------ |
 | Users         | User          | Yes    | Yes  | No     | No     | No  |
 | Conversations | User          | Yes    | Yes  | Yes    | No     |
 | Conversations | Moderator     | No     | Yes  | Yes    | No     |
