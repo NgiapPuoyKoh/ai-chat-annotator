@@ -1,8 +1,7 @@
 <h1 align="center">Chat with Conversation Annotator for Chatbot </h1>
 
 [View the live project here.](http://flask-ai-chat-annotate.herokuapp.com/)
-
-!chatAnnotateResponsive.png](static/images/chatAnnotateResponsive.png)
+![chatAnnotateResponsive.png](static/images/chatAnnotateResponsive.png)
 
 This is a chat application interface with a conversation data annotation feature. It is designed to capture actual conversations via the chatbot with annotation to improve the accuracy and quality of the bot conversations.
 
@@ -22,7 +21,7 @@ A chat application with conversation data prep to feed into an AI model (not inc
 - Using Flask Session and python to process conversations and store them in a non-relational database using MongoDB
 - The MongoDB schema will support annotating the CRUD functions including classifying, rating, editing and, removing conversations
 - A form interface will allow for a data analyst to annotate the conversations
-- Real-time chat functionality will be implemented using Flask session and be replace by Flask.socketIO as a future enhancement
+- Real-time chat functionality will be implemented using Flask session with AJAX and be replace by Flask.socketIO as a future enhancement
 - A minimally viable UX is intentional and will be developed using Materialize with Flask frame to focus the initial version of the application on data
 - Chat Application will include feature description with instructions, self-service, user account creation, user role and access administration
 - MongoDB database schema is API ready for JASON extract for external AI modeling
@@ -30,14 +29,16 @@ A chat application with conversation data prep to feed into an AI model (not inc
 ## Contents
 
 - [Operational Features](#operational-features)
+- [User Experience (UX)](#user-experience--ux-)
 - [User Stories](#user-stories)
-- [Database Model - Chat Annotator](#database-model---chat-annotator)
+
+* [Database Model - Chat Annotator](#database-model---chat-annotator)
   - [Flexible Schema - Collections](#flexible-schema---collections)
   - [Embedded Data Document Structure](#embedded-data-document-structure)
   - [Single Document](#single-document)
   - [Collections Reference Relationships](#collections-reference-relationships)
   - [Collection Element - List of Values](#collection-element---list-of-values)
-- [Development Planes](#development-planes)
+* [Development Planes](#development-planes)
   - [Strategy Plane - User Needs and Business Objective](#strategy-plane---user-needs-and-business-objective)
     - [Chat and Annotation Workflow](#chat-and-annotation-workflow)
   - [Scope Plane](#scope-plane)
@@ -50,27 +51,24 @@ A chat application with conversation data prep to feed into an AI model (not inc
     - [Routes Map to Business Function](#routes-map-to-business-function)
     - [Application Function Access](#application-function-access)
   - [Skeleton Plane](#skeleton-plane)
-    - [Flask with Python MVC Framework - Response Request Cycle](#flask-with-python-mvc-framework---response-request-cycle)
+    - [Flask with Python MVC Framework - Request-Response Cycle](#flask-with-python-mvc-framework---request-response-cycle)
     - [Wireframes](#wireframes)
       - [Mobile](#mobile)
       - [Computers and Tablets Pages](#computers-and-tablets-pages)
     - [Application Features](#--application-features--)
     - [Future Enhancements](#future-enhancements)
-  - [Surface Plane](#surface-plane)
-  - [Surface Plane](#surface-plane)
-- [MongoDB Entities CRUD Operations](#mongodb-entities-crud-operations)
-- [UX](#ux)
-- [Features](#features)
-  - [Seeded Data using Atlas Data Explorer](#seeded-data-using-atlas-data-explorer)
-  - [Conversations MongoDB Index on Topic Name](#conversations-mongodb-index-on-topic-name)
-  - [Chat and Annotation Workflow](#chat-and-annotation-workflow)
-  - [Manage Topic Workflow](#manage-topic-workflow)
-  - [Jinja Templates](#jinja-templates)
-- [Error Handling](#error-handling)
+  * [Surface Plane](#surface-plane)
+    - [MongoDB Entities CRUD Operations by Role Type](#mongodb-entities-crud-operations-by-role-type)
+    - [Application Feature Highlights](#application-feature-highlights)
+    - [Chat Application Features](#chat-application-features)
+    - [Seeded Data using Atlas Data Explorer](#seeded-data-using-atlas-data-explorer)
+    - [Conversations MongoDB Index on Topic Name](#conversations-mongodb-index-on-topic-name)
+    - [Chat and Annotation Workflow](#chat-and-annotation-workflow-1)
+    - [Error Handling](#error-handling)
   - [Testing](#testing)
   - [Heroku Deployment](#heroku-deployment)
   - [Technologies](#technologies)
-  - [Content](#content)
+  - [Content Credits](#content-credits)
   - [Media](#media)
   - [Tutorial References](#tutorial-references)
   - [References](#references)
@@ -327,7 +325,7 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 
 ```
 
-#### Conversation Status Indicator
+### Conversation Status Indicator
 
 | Conversation Status | Usage                                                                        |
 | ------------------- | ---------------------------------------------------------------------------- |
@@ -340,7 +338,7 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 
 <br />
 
-#### Rating
+### Rating
 
 | Rating Name | Rating Values                         |
 | ----------- | ------------------------------------- |
@@ -350,7 +348,7 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 
 <br />
 
-#### User Role Type
+### User Role Type
 
 | Role Type | Role Description                                    |
 | --------- | --------------------------------------------------- |
@@ -363,7 +361,7 @@ Future Enhancement: Develop CI/CD CLI scripts to seed and modify the data
 
 <br />
 
-#### Topics
+### Topics
 
 | Topic (Initial Values) | Description                |
 | ---------------------- | -------------------------- |
@@ -434,7 +432,7 @@ The UX for this application uses Materialize and is adapted from the design deci
 
 ### Release 1(Current) Features with Databse CRUD
 
-- Chat applications using Flask session and routing to support private conversations between a user and a moderator
+- Chat applications using Flask session with AJAX and routing to support private conversations between a user and a moderator
 - Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
 - Data annotation functionality to review and rank the quality of conversation
 - Access to application functionality will be base on user role type, specifically, user, moderator, annotator, and application administrator
@@ -442,6 +440,7 @@ The UX for this application uses Materialize and is adapted from the design deci
 
 ### Extended Features for future releases
 
+- Chatlist can handle moderators responding to more than one pending chat at any one time
 - Replace Flask session with [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) to improve reliability, responsiveness, and security
 - Data extraction JASON API for training AI Machine Learning models
 - CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values
@@ -483,8 +482,7 @@ Source: [How Model-View-Controller Architecture Works](https://www.freecodecamp.
 
 | Route                         | Description                                                                      |
 | ----------------------------- | -------------------------------------------------------------------------------- |
-| /features                     | Quick Start and How to instructions by Role Type                                 |
-| /get_features                 | Navigate to Features page                                                        |
+| /get_features                 | Quick Start and How to instructions by Role Type                                 |
 | /register                     | Register for New Account                                                         |
 | /login                        | Login to application                                                             |
 | /logout                       | Logout of applications                                                           |
@@ -589,16 +587,17 @@ Access to content is controlled by session states that is used across all the te
 
   </br>
 
-- Users with accounts and are logged in have access to
-  | User Role Type | Function | Template |
-  | -------------- | --------------- | -------------------------------- |
-  | Authenticated users logged in| Profile </br> Logout | profile.htm </br> logout.html |
+- Users with accounts and are logged in have access to Profile Information
+
+  | User Role Type                | Function             | Template                      |
+  | ----------------------------- | -------------------- | ----------------------------- |
+  | Authenticated users logged in | Profile </br> Logout | profile.htm </br> logout.html |
 
   ***
 
   </br>
 
-- Content Access by Role Type
+- Function Access by Role Type
 
   - Users with accounts and are logged in will have access to functions by roletype
 
@@ -613,7 +612,8 @@ Access to content is controlled by session states that is used across all the te
 
   </br>
 
-  - Users and moderators when engaged in an active conversation will have access to Active Chat
+- Users and moderators when engaged in an active conversation will have access to Active Chat
+  </br>
 
   | User Role Type       | Functions | Page template | Usage                                                                       |
   | -------------------- | --------- | ------------- | --------------------------------------------------------------------------- |
@@ -625,13 +625,15 @@ Access to content is controlled by session states that is used across all the te
 
 ## Skeleton Plane
 
-The chat application information exchange utilizes flask session and session management based on the HTTP Response request Cycle.
+The chat application information exchange utilizes flask session with AJAX and session management based on the HTTP Response request Cycle.
 
-This involves capturing the session information and a custom session variable to identify the active conversation and the users that are engaged in the conversation.
+This involves capturing the session information and custom session variables to identify the active conversation and the users that are engaged in the conversation.
 
 Messages are captured in the MongoDB database as they are sent and rendered to the users during the active conversation.
 
 ### Flask with Python MVC Framework - Request-Response Cycle
+
+</br>
 
 Create URLs based on HTTP request-response user sessions and conversation database collection for private chats using the Flask MVC framework
 
@@ -750,7 +752,7 @@ Source:
 </details>
 <br />
 
-### **Application Features**
+## **Application Features**
 
 ### Responsive on all device sizes
 
@@ -768,7 +770,7 @@ Source:
 
   Source: [Flask-SocketIO Session IDs and Private Messages](https://www.youtube.com/watch?v=mX7hPZidPPY)
 
-### Managing Session Data with Flask-Session referencing a MongoDB collection document
+### Managing Session Data with Flask-Session with AJAX referencing a MongoDB collection document
 
 - Chat messages will be captured and stored for each conversation
 
@@ -829,30 +831,32 @@ Source: [Werkzeug Security Helpers](https://werkzeug.palletsprojects.com/en/1.0.
 
 Source: [Materialize Css Confirm Delete Popup](https://www.tutorialsplane.com/materialize-css-confirm-delete-popup/)
 
-### Future Enhancements
+## Future Enhancements
 
-#### Session Reliability and Performance
+### Session Reliability and Performance
 
 - Improve reliability and refresh performance by replacing long polling with Flask SocetIO
 
-#### CSRF - Cross-Site Request Forgery
+### CSRF - Cross-Site Request Forgery
 
-Source: [CSRF Protection in Flask](https://testdriven.io/blog/csrf-flask/)
+- Implement CSRF functionality
+  Source: [CSRF Protection in Flask](https://testdriven.io/blog/csrf-flask/)
 
-#### Application Functionality
+### Application Functionality
 
 - User can request or perform a password change
 - Profile page to include role type
 - User comes online will trigger an alert (flash message) to a Moderator
 - Moderator who is available will be alerted when a user logins
 - Moderator will manually join a conversation or the system will automatically assign and connect the moderator to the user
+- Moderators can respond to multiple pending chat on the chat list in separate private sessions
 - Application Administrator
   - User Role Type Assignment
   - User registration
   - User Account activation and deactivation
   - Password reset
 
-#### REST API for loading training conversations
+### REST API for loading training conversations
 
 - Custom API to extract conversations for use to train chatbots or analysis
 
@@ -861,23 +865,27 @@ Source: [CSRF Protection in Flask](https://testdriven.io/blog/csrf-flask/)
 Reference Sources
 </summary>
 <p>
-  - [Building RESTFUL APIs in Flask (Bruce Van Horn)](https://www.linkedin.com/learning/building-restful-apis-with-flask/)
-  - [Flask JWT secure add endpoint](https://pythonhosted.org/Flask-JWT/)
-  - [Flask JWT extended](https://pypi.org/project/Flask-JWT-Extended/)
-  - [Postman](https://www.guru99.com/postman-tutorial.html)
-  - [Flask MongoAlchemy](https://pythonhosted.org/Flask-MongoAlchemy/)
-  - [MONGODB RESTFUL API WITH FLASK](https://www.bogotobogo.com/python/MongoDB_PyMongo/python_MongoDB_RESTAPI_with_Flask.php)
-    API for JASON extract
+
+- [Building RESTFUL APIs in Flask (Bruce Van Horn)](https://www.linkedin.com/learning/building-restful-apis-with-flask/)
+- [Flask JWT secure add endpoint](https://pythonhosted.org/Flask-JWT/)
+- [Flask JWT extended](https://pypi.org/project/Flask-JWT-Extended/)
+- [Postman](https://www.guru99.com/postman-tutorial.html)
+- [Flask MongoAlchemy](https://pythonhosted.org/Flask-MongoAlchemy/)
+- [MONGODB RESTFUL API WITH FLASK](https://www.bogotobogo.com/python/MongoDB_PyMongo/python_MongoDB_RESTAPI_with_Flask.php)
 </details>
 </br>
 
 ## Surface Plane
 
-## MongoDB Entities CRUD Operations
+## MongoDB Entities CRUD Operations by Role Type
+
+</br>
+Access to application functionality is controlled by the role type associated with the user account. 
+</br>
 
 | Entity        | Role Type     | Create | Read | Update | Delete |
-| ------------- | ------------- | ------ | ---- | ------ | ------ |
-| Users         | User          | Yes    | Yes  | No     | No     | No |
+| ------------- | ------------- | ------ | ---- | ------ | ------ | --- |
+| Users         | User          | Yes    | Yes  | No     | No     | No  |
 | Conversations | User          | Yes    | Yes  | Yes    | No     |
 | Conversations | Moderator     | No     | Yes  | Yes    | No     |
 | Conversations | Annotator     | Yes    | Yes  | Yes    | Yes    |
@@ -889,23 +897,17 @@ Reference Sources
 
 </br>
 
-## Session
-
-## Routes
-
-**??How to descibe use of session and routes for real-time chat??**
-
 ## UX
 
-The focus of this milestone project is on data to focus and manage the scope a decision was to apply and adapt the UX Material design, color scheme, look and feel is adapted from the Putting It All Together mini-project.
+The focus of this milestone project is on data. The decision was to apply and adapt the UX Material design, color scheme, look and feel is adapted from the Putting It All Together mini-project. This is necessary to manage the scope of the project.
 
 The Chrome Dev Tool Lighthouse accessibility score is 93 is acceptable for a chat application.
 
-The following details Materailized components that were researched and utilized.
+## Application Feature Highlights
 
-## Features
+The following features use Materialize components that were researched for this application.
 
-### Features and Quick Start
+## Features and Quick Start Page
 
 Materialize Card Reveal is used for the Features page to inform user based on role the navigation bar item the start performing their role
 
@@ -913,17 +915,13 @@ The user can click activator to reveal detailed how-to instruction for each role
 
 ![](static/images/featureCardReveal.png)
 
-### Initiate Chat Select Topic
-
-The user selects a topic and initiate a conversation
-
-![Select Topic Initiate Chat](static/images/mediumDeviceSelecTopicInitiateChat.png)
-
-### Active Chat Page
+## Active Chat Page
 
 User and moderator engage in real-time conversations and the messages are displayed in the Materialize collections text area
 
 ![Active Chat Page](static/images/mediumDeviceActiveChatPage.png)
+
+## Chat Application Features
 
 ### Menu Bar Items by Role Type
 
@@ -939,70 +937,76 @@ User and moderator engage in real-time conversations and the messages are displa
 
 ### Register Account
 
-- Register template
-- Submit button
-- Redirect feature page
-- Render User Roletype Navigation Menu
+A user can navigate to the login page via a page link. Once the user successfully logins user is redirected to the user's profile page with a message confirming successful registration
 
-### Initiate Conversation
+![Register](static/images/registerPage.png)
 
-### Flask Session baseed Active Chat
+### Logout
 
-#### Chat session for User and Moderator
+User clicks logout on the navigation menu and will be redirected to feature page with Flash message
+
+![logout](static/images/logoutSuccessful.png)
+
+### Login
+
+User clicks login on the naigation menu and will be redirected to the Login page. There is a page link to Register Account.
+
+![Login Page](static/images/loginPage.png)
+
+Upon login succesfully the user is redirected to the Features Page with a Flash message welcoming the user
+
+![Login Successful](static/images/logoutSuccessful.png)
+
+## Active Chat Session
+
+### User Initiate a Conversation
+
+The user selects a topic and initiate a conversation
+
+![Select Topic Initiate Chat](static/images/mediumDeviceSelecTopicInitiateChat.png)
+
+#### Chat Session for User and Moderator
 
 - Display session Conversation
-- Long polling with keydown event page refresh
+- Long polling with localstorge and timer to capture and reder input text on refresh
 - Session Info: user, random variable, variables
 - Enter Message
 - End conversation
 - End conversation button trigger User Rating Fom(Optional user input)
 - Redirect Rating
 
-### Annotate Conversations assign rating and Delete conversations
+### Flask AJAX Session for Active Chat
 
-#### Data Annotation
+- Active chat session is private to the user and moderator engaged in the conversation
+- The current limitation is that the application supports one active session at any one time
+- When there are multiple active chats do not render correctly to the user and moderator engaged in the conversation
+- Private session management is an advanced topic to be addressed in future releases
+
+## Annotation Chat
 
 - Search by Conversation attributes, topic, rating and Status
+- Annotate Conversations assign rating and
 - Display Conversation
-- Update Conversations Attributes
-- Update/exclude conversation Details (python grid?)
-- Save button
-  - Flash work not save
-- Done button
-- Redirect login
+- Rate Conversation
+- Delete conversations
+
+![Annotate Chats](static/images/annotateChats.png)
 
 ### Topic Management
 
-#### Topic dashboard
+The manage topic page provides administrator to Add, Edit and Delete topics.
 
-- Select topic list
-- Other topic
-- Consider topic user input function
-- Redirect Chat session
-
-### Login and Logout
-
-#### Login
-
-- Login Form
-- Submit button
-- Validate emal
-- Flash message
-- Create Account button or Link
-  - redirect create Account
-- Redirect dashboard
-
-#### Notification Flash Messages
-
-#### Tooltips
+![Manage Topics](static/images/topicManage.png)
 
 ### Seeded Data using Atlas Data Explorer
 
-features
-ratings
-user roletypes
-moderator accounts
-update user roletype
+#### features
+
+![features](static/images/featuresCollection.png)
+
+#### ratings
+
+![Ratings](static/images/ratingsCollection.png)
 
 ### Conversations MongoDB Index on Topic Name
 
@@ -1026,21 +1030,22 @@ quit()
 
 | Actor              | Action                                                            | Conversation Status |
 | ------------------ | ----------------------------------------------------------------- | ------------------- |
-| User               | Select tpoci andInitiate Conversation                             | pending             |
+| User               | Select topic and Initiate Conversation                            | pending             |
 | System             | Create Conversation in MongoDB                                    | pending             |
 | System             | Capture Session Information and conversation Object Id and status | pending             |
 | Moderator          | Search pending conversations and respond to a conversation        | active              |
-| System             | converstiaon status is update                                     | active              | Moderator and User | Engage in active conversation send messages | active |
+| System             | Conversation status is updated                                    | active              |
+| Moderator and User | Engage in active conversation send messages                       | active              |
 | System             | Update conversation with messages                                 | active              |
 | User or Moderation | End conversation                                                  | done                |
 | System             | Update Conversation status                                        | done                |
 | System             | Pop session information                                           | done                |
-| System             | Moderator redirected to chat List                                 | N/A                 |
-| System             | User redirected to Chat Room                                      | N/A                 |
+| System             | Moderator redirected to chat List                                 | Not Applicable      |
+| System             | User redirected to Chat Room                                      | Not Applicable      |
 | Annotator          | Search by topic name, Review, and rate completed conversation     | Annotated           |
 | System             | Update conversation to annotated                                  | annotated           |
-| Annotator          | Delete done conversation                                          | N/A                 |
-| System             | Removes conversation from collection                              | N/A                 |
+| Annotator          | Delete done conversation                                          | Not Applicable      |
+| System             | Removes conversation from collection                              | Not Applicable      |
 
 ---
 
@@ -1063,7 +1068,7 @@ quit()
 
 </br>
 
-### Jinja Templates
+### Templates
 
 | Jinja Templates |
 | --------------- |
@@ -1317,6 +1322,19 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 - [flask-Session](https://flask-session.readthedocs.io/en/latest/)
 - [flask-PyMongo](https://flask-pymongo.readthedocs.io/en/latest/)
 - [flask-login](https://www.youtube.com/redirect?q=https%3A%2F%2Fflask-login.readthedocs.io%2Fen%2Flatest%2F&v=rrIdQJSKiP4&redir_token=QUFFLUhqbFVhQnc0aHRJN1hodnVQTnVtRWR0dUJFd0pRQXxBQ3Jtc0ttY2xBQWZabHRGbndCM3FDcUwtSXNWVWVEMUgwRUNHb0pVX2lCVkNCc2lqMG40MWF3ZWdibzdkU192UWJKQThUdlplNTJCeVhnbW1ueDJ6bFpBaF92Rm02OElYLVFhWHN2WGtqalVBWFNSS0ZDRm5Zaw%3D%3D&event=video_description)
+- [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX)
+
+  - Dynamic update of the chat using Ajax call instead of using full page reload
+  <details>
+  <summary>
+  How AJAX works
+  </summary>
+  <p>
+
+  ![](static/images/howAJAXWorks.png)
+  Source: [AJAX Introduction](https://www.w3schools.com/xml/ajax_intro.asp)
+
+  </details>
 
 ### Deployment, Source Code Repository, Version Control and Project Management
 
@@ -1355,7 +1373,7 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 - Chrome Dev Tool
   - Ligthouse Accessibility
 
-## Content
+## Content Credits
 
 - All content and data were created by the developer
 
@@ -1465,7 +1483,7 @@ References
 
 ## Credits
 
-- Mentor Guido Cecilio for his feedback and guidance on proper session handling, code refactoring and defensive programming
+- Mentor Guido Cecilio for his feedback and guidance on proper session handling with AJAX, code refactoring, and defensive programming
 - Claire Lally who conviced me that Flask-session is achievable and I believed her followed by an eventful MS3 learning journey
 - Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
 - Fellow learner Mihaela Sandrea who took the time to provide user acceptance feedback and testing
@@ -1474,7 +1492,3 @@ References
 ## Disclaimer
 
 This project is for educational use only
-
-```
-
-```
