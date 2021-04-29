@@ -49,7 +49,7 @@
 | 1.4.1 | End Conversation | As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session | Active Chat | The Modearator clicks on the "END" button. The moderator will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to Chat List | Pass |
 | 1.5 | User sees moderator response | As a user, I want to be able to see moderator responses as they are entered in real-time | Active Chat | Messages entered by the moderator will be displayed in the active chat message area. Messages are displayed when entered in real-time. Page refresh with messages displayed when no keys are pressed | Pass |
 | 1.6 | User Initiate Chat | As a User, I want to be able to handle one active session at any time | Chat Room | When a user initiates a conversation user is redirected from the chat room to the active chat page The user selects a topic and is directed to active chat page | Pass |
-| 1.7 | Logout | As a user, I want to be able to logout | Logout | | User clicks on Logout on navigation menu | Successful logout. User is redirected to features page with Flash Message "You have been logged out" and redirected to Login | Pass |
+| 1.7 | Logout | As a user, I want to be able to logout | Logout | User clicks on Logout on navigation menu. Successful logout. User is redirected to features page with Flash Message "You have been logged out" and redirected to Login | Pass |
 
 ---
 
@@ -100,8 +100,8 @@ Test Case Screen Capture
 
 | Test Case | User                                                                                 | Feature                                  | Expected Result                                                                                                                                                                       | Actual Result           |
 | --------- | ------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| 2.1       | As a user, I want to register a user account                                         | Register Account                         | Directed to User with access to user navbar functions                                                                                                                                 | Successful registration |
-| 2.2       | As a returning user, I can login using credentials used to register a user account   | Successful Login                         | Login with credentials. Redirected to Features Page with Flash "Welcome username"                                                                                                     | pass                    |
+| 2.1       | As a user, I want to register a user account                                         | Register Account                         | Directed to User with access to user navbar functions                                                                                                                                 | Pass|
+| 2.2       | As a returning user, I can login using credentials used to register a user account   | Successful Login                         | Login with credentials. Redirected to Features Page with Flash "Welcome username"                                                                                                     | Pass                    |
 | 2.3       | As a user, I want to be notified when I use the incorrect credentials at login       | User entered incorrect login credentials | User is informed of incorrect credentials, Flash message "Incorrect Username and/or Password" stays on login page                                                                     | Pass                    |
 | 2.4       | As a new user, I want to be notified if user name already exists during registration | Username exists                          | User registers using a username that is not in the database, User register with a name that already exists in the database. Flash message "User Name already exists" on register page | Pass                    |
 | 2.5       | As a user, I want to be notified when registration is successful                     | Registers with valid credentials         | User register using a name that is not in the database, Redirected to the users' Profile page with a flash message "Registration Successful"                                          | Pass                    |
@@ -111,6 +111,7 @@ Test Case Screen Capture
 </br>
 
 2.2 Returning User Successful Login
+
 ![Login Successful](static/images/logoutSuccessful.png)
 
 2.4 User Name already exists during registration
@@ -129,7 +130,7 @@ Test Case Screen Capture
 
 | Test Case | User Story                                                                       | Feature                      | Expected Result                                                                                                                                                      | Actual Result |
 | --------- | -------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| 3.1       | As an Annotator I want to view a list of conversations that need to be annotated | Review Chat list              | Chat List rendered                                                                                                                                                   | passed        |
+| 3.1       | As an Annotator I want to view a list of conversations that need to be annotated | Review Chat list              |Pass                                                                                                                                                   | Pass       |
 | 3.2       | As an Annotator, I want to be able to search conversations by topic name         | Search Conversations         | Enter a text string to get conversations with the string found in the topic name. List of conversations with the search string found in the topic name be rendered    | Pass          |
 | 3.3       | As an Annotator, I want to be able to search conversations by topic name         | Reset Search String          | Click the "Reset" button to clear search string input. Input text screen is removed                                                                                        | Pass          |
 | 3.4       | As an Annotator, I want to be able to review and rate conversation               | Review and Rate Conversation | Click to expand accordion for conversation to review details, select a rating and click update. Page renders and the conversation annotated is removed from the list | Pass          |
@@ -149,7 +150,7 @@ Test Case Screen Capture
 | Test Case | User Story | Feature | Expected Result | Actual Result |
 |----|----|----|----|----|
 | 4.1       | As an Administrator, I want to add a new topic | Add Topic    | The administrator clicks on the Add Topic button to redirect to the Add Topic page. Input the topic name and click Add Topic button. The Administrator is redirected to the Manage Topic page with a flash message "New Topic Added"                                                                                                                | Pass                                                                                                                     |
-| 4.2       | As an Administrator, I want to edit topic      | Edit Topic   | The administrator clicks on the Edit button for the card with the Topic name. A modal is rendered with the current topic name. User edits the topic name and clicks Save                                                                                                                                                                            | The administrator is redirected to the topics page and the edited topic name will be displayed and replaces the old name | Pass |
+| 4.2       | As an Administrator, I want to edit topic      | Edit Topic   | The administrator clicks on the Edit button for the card with the Topic name. A modal is rendered with the current topic name. User edits the topic name and clicks Save. The administrator is redirected to the topics page and the edited topic name will be displayed and replaces the old name | Pass |
 | 4.3       | As an Administrator, I want to delete topic    | Delete Topic | The administrator clicks on the Delete button for the card with the Topic name to delete. A modal is rendered to confirm deletion or cancel. Click on delete and the administrator is redirected to the Manage Topic page with a Flash message "Topic Successfully Deleted" and the card with the deleted Topic name no longer displays on the page | Pass                                                                                                                     |
 ---
 </br>
@@ -205,11 +206,12 @@ Test Case Screen Capture
 
 ## Responsiveness
 
-| Test Case # | Media Size | Component            | Expected Result             | Actual Result |
+| Test Case | Media Size | Component            | Expected Result             | Actual Result |
 | ----------- | ---------- | -------------------- | --------------------------- | ------------- |
 | R1          | Medium     | Navigation Menu Icon | Menu Icon invokes Side Menu | Pass          |
 | R2          | Medimu     | Side Navigation Menu | Menu Icon invokes Side Menu | Pass          |
-| ---         |
+---
+</br>
 
 ### R1 Navigation Menu Icon
 
@@ -318,12 +320,6 @@ Active chat session of a different user is rendered when there are multiple acti
 Issue: Active chat session is not properly tied to the user and moderator engaging in the conversation
 
 Fix: Use AJAX for session management and chat filtering to the user and moderator of an active chat
-
-## Chat Interface
-
-### Polling
-
-### Text Area for Message
 
 </br>
 
