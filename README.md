@@ -29,7 +29,7 @@ A chat application with conversation data prep to feed into an AI model (not inc
 ## Contents
 
 - [Operational Features](#operational-features)
-- [User Experience (UX)](#user-experience--ux-)
+- [User Experience (UX)](<##User-Experience-(UX)>)
 - [User Stories](#user-stories)
 
 * [Database Model - Chat Annotator](#database-model---chat-annotator)
@@ -43,7 +43,7 @@ A chat application with conversation data prep to feed into an AI model (not inc
     - [Chat and Annotation Workflow](#chat-and-annotation-workflow)
   - [Scope Plane](#scope-plane)
     - [Personas](#personas)
-    - [Release 1(Current) Features with Databse CRUD](#release-1-current--features-with-databse-crud)
+    - [Release 1(Current) Features with Database CRUD](<###Release-1(Current)-Features-with-Database-CRUD>)
     - [Extended Features for future releases](#extended-features-for-future-releases)
   - [Structure Plane](#structure-plane)
     - [MVC Architecture](#mvc-architecture)
@@ -430,7 +430,7 @@ The UX for this application uses Materialize and is adapted from the design deci
 - Chat Annotator review and rates conversations
 - Chat Application Admin manages conversation topics
 
-### Release 1(Current) Features with Databse CRUD
+### Release 1(Current) Features with Database CRUD
 
 - Chat applications using Flask session with AJAX and routing to support private conversations between a user and a moderator
 - Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
