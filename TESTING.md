@@ -181,7 +181,7 @@ Test Case Screen Capture
 ## Route Redirects and Internal Errors
 
 | Test Case                               | Expected                       | Actual                                                         |
-| --------------------------------------- | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
+|---|---|---|
 | Unauthorised acces to chat conversation | /chat/608483da12743097778c99e2 | 404                                                            | 404.html rendered                                              |
 | Unauthorised acces to chat              | /chat                          | 404                                                            | flash "You are currently not logged in" redirected to features |
 | User not logged in chat                 | /chat                          | flash "You are currently not logged in" redirected to features |
