@@ -81,7 +81,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if is_authenticated():
-        flash("Please Logout First to excute this operation")
+        flash("Please Logout First to execute this operation")
         redirect(url_for("get_features"))
 
     if request.method == "POST":
