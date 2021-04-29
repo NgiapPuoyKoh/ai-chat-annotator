@@ -176,8 +176,6 @@ Test Case Screen Capture
 ![Confirm Delete](static/images/topicDeleteConfirm.png)
 ![Delete Topic](static/images/topicDelete.png)
 
-## Confirmations before deletes
-
 ## Route Redirects and Internal Errors
 
 | Test Case                               | Expected                       | Actual                                                         |
@@ -209,6 +207,18 @@ Test Case Screen Capture
 | -------- | --------- | -------------------------- | ------------- |
 | Register | Log In    | Redirects to Login Page    | Pass          |
 | Log In   | Register  | Redirects to Register Page | Pass          |
+---
+</br>
+
+## Page Reload
+
+| Page     | Expected Result            | Actual Result |
+| -------- | -------------------------- | ------------- |
+| Chat | Page Reloads stores and renders input text entered by user    | Pass          |
+| Chat List | Page Reloads renders new initiate conversation     | Pass          |
+
+---
+</br>
 
 ## Responsiveness
 
