@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chat Annotator">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/botfavicon.png') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
         integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
@@ -24,7 +25,7 @@
         <nav class="nav-extended text-shadow light-blue darken-2">
             <div class="nav-wrapper">
                 <a href="{{ url_for('get_features') }}" class="brand-logo">AI Chat</a>
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+                <a href="#" aria-label="side menu" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="{{ url_for('get_features') }}">Features</a></li>
                     {% if session.user %}
@@ -53,7 +54,6 @@
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
                     <li><a href="{{ url_for('register') }}">Register</a></li>
                     {% endif %}
-        
                 </ul>
             </div>
         </nav>
@@ -61,7 +61,7 @@
         <!-- mobile sidenav  -->
         <ul class="sidenav" id="mobile-demo">
             <li>
-                <h4 class="center-align light-blue-text text-darken 4">AI Chat</h4>
+                <h4 class="center-align light-blue-text text-darken-4">AI Chat</h4>
             </li>
             <li><a href="{{ url_for('get_features') }}">Features</a></li>
             {% if session.user %}
