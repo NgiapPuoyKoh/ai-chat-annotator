@@ -130,13 +130,11 @@ Test Case Screen Capture
 
 | Test Case | User Story                                                                       | Feature                      | Expected Result                                                                                                                                                      | Actual Result |
 | --------- | -------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| 3.1       | As an Annotator I want to view a list of conversations that need to be annotated | Review Chatlist              | Chat List rendered                                                                                                                                                   | passed        |
-| 3.2       | As an Annotator, I want to be able to search conversations by topic name         | Search Conversations         | Enter a text string to get conversation with the string found in the topic name. List of conversations with the search string found in the topic name be renderd     | Pass          |
-| 3.3       | As an Annotator, I want to be able to search conversations by topic name         | Reset Search String          | Click reset button to clear search string input. Input text screen is removed                                                                                        | Pass          |
-| 3.4       | As an Annotator, I want to be able to review and rate conversation               | Review and Rate Conversation | Click to expand accordian for conversation to review details, select a rating and click update. Page renders and the conversation annotated is removed from the list | Pass          |
-
+| 3.1       | As an Annotator I want to view a list of conversations that need to be annotated | Review Chat list              | Chat List rendered                                                                                                                                                   | passed        |
+| 3.2       | As an Annotator, I want to be able to search conversations by topic name         | Search Conversations         | Enter a text string to get conversations with the string found in the topic name. List of conversations with the search string found in the topic name be rendered    | Pass          |
+| 3.3       | As an Annotator, I want to be able to search conversations by topic name         | Reset Search String          | Click the "Reset" button to clear search string input. Input text screen is removed                                                                                        | Pass          |
+| 3.4       | As an Annotator, I want to be able to review and rate conversation               | Review and Rate Conversation | Click to expand accordion for conversation to review details, select a rating and click update. Page renders and the conversation annotated is removed from the list | Pass          |
 ---
-
 </br>
 
 3.1 View Annotate Chat List
@@ -149,14 +147,12 @@ Test Case Screen Capture
 
 ### Conversation Topic Management
 
-| Test Case | User Story                                     | Feature      | Expected Result                                                                                                                                                                                                                                                                                                                                     | Actual Result                                                                                                            |
-| --------- | ---------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---- |
+| Test Case | User Story | Feature | Expected Result | Actual Result |
+|----|----|----|----|----|
 | 4.1       | As an Administrator, I want to add a new topic | Add Topic    | The administrator clicks on the Add Topic button to redirect to the Add Topic page. Input the topic name and click Add Topic button. The Administrator is redirected to the Manage Topic page with a flash message "New Topic Added"                                                                                                                | Pass                                                                                                                     |
 | 4.2       | As an Administrator, I want to edit topic      | Edit Topic   | The administrator clicks on the Edit button for the card with the Topic name. A modal is rendered with the current topic name. User edits the topic name and clicks Save                                                                                                                                                                            | The administrator is redirected to the topics page and the edited topic name will be displayed and replaces the old name | Pass |
 | 4.3       | As an Administrator, I want to delete topic    | Delete Topic | The administrator clicks on the Delete button for the card with the Topic name to delete. A modal is rendered to confirm deletion or cancel. Click on delete and the administrator is redirected to the Manage Topic page with a Flash message "Topic Successfully Deleted" and the card with the deleted Topic name no longer displays on the page | Pass                                                                                                                     |
-
 ---
-
 </br>
 
 ![Manage Topic](static/images/topicManage.png)
@@ -179,8 +175,8 @@ Test Case Screen Capture
 
 ## Route Redirects and Internal Errors
 
-| Test Case                               | Expected                       | Actual                                                         |
-| --------------------------------------- | ------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------- |
+|Test Case|Expected|Actual|
+|---|---|---|
 | Unauthorised acces to chat conversation | /chat/608483da12743097778c99e2 | 404                                                            | 404.html rendered                                              |
 | Unauthorised acces to chat              | /chat                          | 404                                                            | flash "You are currently not logged in" redirected to features |
 | User not logged in chat                 | /chat                          | flash "You are currently not logged in" redirected to features |
