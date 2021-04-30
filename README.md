@@ -55,7 +55,7 @@ A chat application with conversation data prep to feed into an AI model (not inc
     - [Wireframes](#wireframes)
       - [Mobile](#mobile)
       - [Computers and Tablets Pages](#computers-and-tablets-pages)
-    - [Application Features](#--application-features--)
+    - [Application Features](#application-features)
     - [Future Enhancements](#future-enhancements)
   * [Surface Plane](#surface-plane)
     - [MongoDB Entities CRUD Operations by Role Type](#mongodb-entities-crud-operations-by-role-type)
@@ -753,7 +753,7 @@ Source:
 </details>
 <br />
 
-## **Application Features**
+## Application Features
 
 ### Responsive on all device sizes
 
