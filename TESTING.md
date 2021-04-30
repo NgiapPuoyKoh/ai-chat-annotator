@@ -6,6 +6,7 @@
 - After a user or moderator log out any active chat session cannot be resumed in subsequent login. This is a known limitation for the initial release of the application.
 - Registration of user account is only for role type user.
 - To create accounts as moderator, admin, and annotator register as you would as a user. Provide me with the username and the role type and I will have to update it directly using MongoDB data explorer
+- There are several known issues, these have been listed in the [Known Issues](#known-issues) section of this document. They will be addressed in a future release.
 
 ## General Scenario
 
@@ -39,18 +40,18 @@
 
 | Test Case | Test Case                    | User Story                                                                                                               | Feature      | Expected Result                                                                                                                                                                                                                                                                  | Actual Result |
 | --------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| 1.1       | Chat Features                | As a user, I want to know how to start using the application                                                             | Feature Page | Direct user to quick start link by role type , Card panels provide quick-start info and when clicked provides more details on what each feature does                                                                                                                             | Pass          |
+| 1.1       | Chat Features                | As a user, I want to know how to start using the application                                                             | Feature Page | Direct user to quick start link by role type, Card panels provide quick-start info and when clicked provides more details on what each feature does                                                                                                                             | Pass          |
 | 1.2       | Initiate Conversation        | As a user, I want to select a topic and initiate a conversation                                                          | Chat Room    | Click on Chat Room on the menu, Renders page for the user to select a topic and click start chat. User is redirected to Active chat page with a flash message that conversation is pending Moderator's response                                                                  | Pass          |
-| 1.2.1     | Review Pending Chats         | As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond                     | Chat List    | Moderator click on Chat List on Navigation Menu, redirect to the chat list and renders the list of Pending Chats are labeled "RESPOND"                                                                                                                                           | Pass          |
-| 1.2.2     | Review Active Chats          | As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators                | Active Chat  | Moderator clicks on Chat List on Navigation Menu, redirect to chatlist. Active Chats are labeled "ASSIGNED"                                                                                                                                                                      | Pass          |
+| 1.2.1     | Review Pending Chats         | As a Moderation, I want to be able to view the list of chats that are pending a moderator to respond                     | Chat List    | Moderator click on Chat List on Navigation Menu, redirected to the chat list, and renders the list of Pending Chats are labeled "RESPOND"                                                                                                                                           | Pass          |
+| 1.2.2     | Review Active Chats          | As a Moderator, I want to be able to view a list of chats that are currently assigned to other moderators                | Active Chat  | Moderator clicks on Chat List on Navigation Menu, redirect to chat list. Active Chats are labeled "ASSIGNED"                                                                                                                                                                      | Pass          |
 | 1.2.3     | Respond to Chat              | As a Moderator, I want to be able to conduct one active conversation session one at any time                             | Active Chat  | Moderator Click on Respond and is redirected to Active Chat Page with Flash message "Moderator Responded"                                                                                                                                                                        | Pass          |
 | 1.3       | Send message                 | As a user, I want to be able to send a message during an active conversation                                             | Active Chat  | User input message in the text area and send button captures message entered by the user. The message entered by the user will appear in the display text area with a timestamp. Page refresh and displays all messages entered by the user or moderator of the conversation     | Pass          |
 | 1.3.1     | Send Message                 | As a Moderator, I want to be able to respond to questions from a user in real-time to assist the user                    | Active Chat  | Moderator message in the text area and send button captures message entered by the moderator. The message entered by the user will appear in the display text area with a timestamp. Page refresh and displays all messages entered by the user or moderator of the conversation | Pass          |
-| 1.4       | End Conversation             | As a user, I want to end the conversation                                                                                | Active Chat  | The user clicks on the end button. User will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to chat room                                                                                                                  | Pass          |
-| 1.4.1     | End Conversation             | As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session | Active Chat  | The Modearator clicks on the "END" button. The moderator will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to Chat List                                                                                                 | Pass          |
+| 1.4       | End Conversation             | As a user, I want to end the conversation                                                                                | Active Chat  | The user clicks on the end button. The user will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to chat room                                                                                                                  | Pass          |
+| 1.4.1     | End Conversation             | As a Moderator, I want to be able to terminate a conversation session to indicate completion of the conversation session | Active Chat  | The Moderator clicks on the "END" button. The moderator will be redirected to Chat Room. Flash message render to confirm conversation has ended User is redirected to Chat List                                                                                                 | Pass          |
 | 1.5       | User sees moderator response | As a user, I want to be able to see moderator responses as they are entered in real-time                                 | Active Chat  | Messages entered by the moderator will be displayed in the active chat message area. Messages are displayed when entered in real-time. Page refresh with messages displayed when no keys are pressed                                                                             | Pass          |
 | 1.6       | User Initiate Chat           | As a User, I want to be able to handle one active session at any time                                                    | Chat Room    | When a user initiates a conversation user is redirected from the chat room to the active chat page The user selects a topic and is directed to active chat page                                                                                                                  | Pass          |
-| 1.7       | Logout                       | As a user, I want to be able to logout                                                                                   | Logout       | User clicks on Logout on navigation menu. Successful logout. User is redirected to features page with Flash Message "You have been logged out" and redirected to Login                                                                                                           | Pass          |
+| 1.7       | Logout                       | As a user, I want to be able to logout                                                                                   | Logout       | User clicks on Logout on the navigation menu. Successful logout. User is redirected to features page with Flash Message "You have been logged out" and redirected to Login                                                                                                           | Pass          |
 
 ---
 
@@ -134,7 +135,7 @@ Test Case Screen Capture
 | 3.1       | As an Annotator I want to view a list of conversations that need to be annotated | Review Chat list             | Pass                                                                                                                                                                 | Pass          |
 | 3.2       | As an Annotator, I want to be able to search conversations by topic name         | Search Conversations         | Enter a text string to get conversations with the string found in the topic name. List of conversations with the search string found in the topic name be rendered   | Pass          |
 | 3.3       | As an Annotator, I want to be able to search conversations by topic name         | Reset Search String          | Click the "Reset" button to clear search string input. Input text screen is removed                                                                                  | Pass          |
-| 3.4       | As an Annotator, I want to be able to review and rate conversation               | Review and Rate Conversation | Click to expand accordion for conversation to review details, select a rating and click update. Page renders and the conversation annotated is removed from the list | Pass          |
+| 3.4       | As an Annotator, I want to be able to review and rate conversation               | Review and Rate Conversation | Click to expand accordion for conversation to review details, select a rating, and click update. Page renders and the conversation annotated is removed from the list | Pass          |
 
 ---
 
@@ -180,8 +181,8 @@ Test Case Screen Capture
 
 | Test Case                               | Expected                       | Actual                                                         |
 |---|---|---|
-| Unauthorised acces to chat conversation | /chat/608483da12743097778c99e2 | 404                                                            | 404.html rendered                                              |
-| Unauthorised acces to chat              | /chat                          | 404                                                            | flash "You are currently not logged in" redirected to features |
+| Unauthorised access to chat conversation | /chat/608483da12743097778c99e2 | 404                                                            | 404.html rendered                                              |
+| Unauthorised access to chat              | /chat                          | 404                                                            | flash "You are currently not logged in" redirected to features |
 | User not logged in chat                 | /chat                          | flash "You are currently not logged in" redirected to features |
 | User not logged in chat room            | /chatroom                      | flash "You are currently not logged in" redirected to features |
 | User not logged in chat list            | /chatlist                      | flash "You are currently not logged in" redirected to features |
@@ -260,7 +261,7 @@ Remove the required attribute from the select for rating list
 <select id="rating_name" name="rating_name" class="validate" >
 ```
 
-## Collapsible Accordian
+## Collapsible Accordion
 
 Records are displayed using a materialize collapsible accordion each with a select list and button. The id of the first record is being picked up instead of the record selected for updated
 
@@ -314,7 +315,7 @@ Source: [How do I set and push in a single update with MongoDB?](https://www.tut
 
 Issue: Unauthorized moderator can access active conversation by using the URL initiated by a user
 
-Fix: Validate if a moderator has an active chat session and authorized access to conversation
+Fix: Validate if a moderator has an active chat session and authorized access to the conversation
 
 ```
             # if moderator has an active chat session for active conversation
@@ -403,7 +404,7 @@ Fine-tune the refresh timing duration and improve the custom function
 
 ## Moderators can only handle a response to pending chat that is listed last
 
-Issue: When there is more than one pending conversation in the chat list moderators can only respond to the last pending chat listed. If a moderator responds to chats listed other than the last one it will throw a 404 error.
+Issue: When there is more than one pending conversation in the chat list moderators can only respond to the last pending chat listed. If a moderator responds to chats listed other than the last one it will throw a 404 error. When this happens the moderator needs to log out to clear the session and log in to access the chat list.
 
 This is related to the improper implementation of private sessions which is an advanced topic to be addressed in future releases
 
