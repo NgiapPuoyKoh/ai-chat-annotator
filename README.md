@@ -21,7 +21,7 @@ A chat application with conversation data prep to feed into an AI model (not inc
 - Using Flask Session and python to process conversations and store them in a non-relational database using MongoDB
 - The MongoDB schema will support annotating the CRUD functions including classifying, rating, editing and, removing conversations
 - A form interface will allow for a data analyst to annotate the conversations
-- Real-time chat functionality will be implemented using Flask session with AJAX and be replace by Flask.socketIO as a future enhancement
+- Real-time chat functionality will be implemented using Flask session and be replace by Flask.socketIO as a future enhancement
 - A minimally viable UX is intentional and will be developed using Materialize with Flask frame to focus the initial version of the application on data
 - Chat Application will include feature description with instructions, self-service, user account creation, user role and access administration
 - MongoDB database schema is API ready for JASON extract for external AI modeling
@@ -886,7 +886,7 @@ Access to application functionality is controlled by the role type associated wi
 
 | Entity        | Role Type     | Create | Read | Update | Delete |
 | ------------- | ------------- | ------ | ---- | ------ | ------ |
-| Users         | User          | Yes    | Yes  | No     | No     | No  |
+| Users         | User          | Yes    | Yes  | No     | No     | No |
 | Conversations | User          | Yes    | Yes  | Yes    | No     |
 | Conversations | Moderator     | No     | Yes  | Yes    | No     |
 | Conversations | Annotator     | Yes    | Yes  | Yes    | Yes    |
