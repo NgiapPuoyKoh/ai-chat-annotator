@@ -432,7 +432,7 @@ The UX for this application uses Materialize and is adapted from the design deci
 
 ### Release 1(Current) Features with Database CRUD
 
-- Chat applications using Flask session with AJAX and routing to support private conversations between a user and a moderator
+- Chat applications using Flask session and routing to support private conversations between a user and a moderator
 - Capture conversations categorized by topic utilizing MongoDB Embedded Data Document Structure
 - Data annotation functionality to review and rank the quality of conversation
 - Access to application functionality will be base on user role type, specifically, user, moderator, annotator, and application administrator
@@ -442,6 +442,7 @@ The UX for this application uses Materialize and is adapted from the design deci
 
 - Chatlist can handle moderators responding to more than one pending chat at any one time
 - Replace Flask session with [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) to improve reliability, responsiveness, and security
+- Implement dynamic update of the chat using Ajax call instead of using full page reload
 - Data extraction JASON API for training AI Machine Learning models
 - CI/CD configuration scripts to replace MongoDB Data Explorer install manually seeded administrator and superuser accounts and lists of values
 
@@ -625,7 +626,7 @@ Access to content is controlled by session states that is used across all the te
 
 ## Skeleton Plane
 
-The chat application information exchange utilizes flask session with AJAX and session management based on the HTTP Response request Cycle.
+The chat application information exchange utilizes flask session and session management based on the HTTP Response request Cycle.
 
 This involves capturing the session information and custom session variables to identify the active conversation and the users that are engaged in the conversation.
 
@@ -770,7 +771,7 @@ Source:
 
   Source: [Flask-SocketIO Session IDs and Private Messages](https://www.youtube.com/watch?v=mX7hPZidPPY)
 
-### Managing Session Data with Flask-Session with AJAX referencing a MongoDB collection document
+### Managing Session Data with Flask-Session referencing a MongoDB collection document
 
 - Chat messages will be captured and stored for each conversation
 
@@ -975,7 +976,7 @@ The user selects a topic and initiate a conversation
 - End conversation button trigger User Rating Fom(Optional user input)
 - Redirect Rating
 
-### Flask AJAX Session for Active Chat
+### Flask Session for Active Chat
 
 - Active chat session is private to the user and moderator engaged in the conversation
 - The current limitation is that the application supports one active session at any one time
@@ -1322,19 +1323,6 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 - [flask-Session](https://flask-session.readthedocs.io/en/latest/)
 - [flask-PyMongo](https://flask-pymongo.readthedocs.io/en/latest/)
 - [flask-login](https://www.youtube.com/redirect?q=https%3A%2F%2Fflask-login.readthedocs.io%2Fen%2Flatest%2F&v=rrIdQJSKiP4&redir_token=QUFFLUhqbFVhQnc0aHRJN1hodnVQTnVtRWR0dUJFd0pRQXxBQ3Jtc0ttY2xBQWZabHRGbndCM3FDcUwtSXNWVWVEMUgwRUNHb0pVX2lCVkNCc2lqMG40MWF3ZWdibzdkU192UWJKQThUdlplNTJCeVhnbW1ueDJ6bFpBaF92Rm02OElYLVFhWHN2WGtqalVBWFNSS0ZDRm5Zaw%3D%3D&event=video_description)
-- [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX)
-
-  - Dynamic update of the chat using Ajax call instead of using full page reload
-  <details>
-  <summary>
-  How AJAX works
-  </summary>
-  <p>
-
-  ![](static/images/howAJAXWorks.png)
-  Source: [AJAX Introduction](https://www.w3schools.com/xml/ajax_intro.asp)
-
-  </details>
 
 ### Deployment, Source Code Repository, Version Control and Project Management
 
@@ -1452,6 +1440,9 @@ References
 #### Flask-Session
 
 - [Flask-Session](https://flask-session.readthedocs.io/en/latest/#version-0-4)
+- [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX)
+  ![](static/images/howAJAXWorks.png)
+- [AJAX Introduction](https://www.w3schools.com/xml/ajax_intro.asp)
 
 #### Documentation
 
@@ -1483,7 +1474,7 @@ References
 
 ## Credits
 
-- Mentor Guido Cecilio for his feedback and guidance on proper session handling with AJAX, code refactoring, and defensive programming
+- Mentor Guido Cecilio for his feedback and guidance on proper session handling, code refactoring, and defensive programming
 - Claire Lally who conviced me that Flask-session is achievable and I believed her followed by an eventful MS3 learning journey
 - Tutor Tim Nelson over and beyond for guidance and technical support and encouragement to take on the daunting code challenges
 - Fellow learner Mihaela Sandrea who took the time to provide user acceptance feedback and testing
