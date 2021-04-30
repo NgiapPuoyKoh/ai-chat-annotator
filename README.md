@@ -29,7 +29,7 @@ A chat application with conversation data prep to feed into an AI model (not inc
 ## Contents
 
 - [Operational Features](#operational-features)
-- [User Experience (UX)](<##User-Experience-(UX)>)
+- [User Experience (UX)](##User-Experience-(UX))
 - [User Stories](#user-stories)
 
 * [Database Model - Chat Annotator](#database-model---chat-annotator)
